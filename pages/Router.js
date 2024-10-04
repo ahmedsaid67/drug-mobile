@@ -18,6 +18,9 @@ import { API_ROUTES } from '../utils/constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import notifee, { EventType } from '@notifee/react-native';
+import NidSearchPage from "./Search/[nid]";
+import MedicineDetail from "./Medicine/[nid]";
+import SicknessDetail from  "./Sickness/[nid]";
 
 
 
@@ -189,6 +192,10 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="ReminderSearch" component={ReminderSearch} />
         <Stack.Screen name="ReminderCreate" component={ReminderCreate} />
+        <Stack.Screen name="NidSearchPage" component={NidSearchPage} />
+        <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
+        <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
+
       </Stack.Navigator>
     </Layout>
   );

@@ -3,7 +3,7 @@ import { colors } from './colors'; // Adjust the import path as necessary
 
 const styles = StyleSheet.create({
   bottomBar: {
-    position: 'absolute',
+    position: 'static',
     bottom: 0,
     left: 0,
     right: 0,
