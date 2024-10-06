@@ -11,6 +11,9 @@ const Input = ({ id, ilacId, hastalikId }) => {
   const [explanation, setExplanation] = useState(''); // Açıklama
   const [error, setError] = useState('');           // Hata mesajı
   const [second, setSecond] = useState(false);
+  const [kiloValue, setKiloValue] = useState('');
+  const [showKiloInput, setShowKiloInput] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCalculate = async () => {
     try {
@@ -46,42 +49,28 @@ const Input = ({ id, ilacId, hastalikId }) => {
           break;
         // Hastalıklı-yasa-baglı-azalan-kilo-doz	FALSE	5 burası özel durum içine alınmalı iki aşamalı bir durum var burada.
         case 5:
-          setSecond(true);
-        apiUrl = API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT_DATA_AGE;
-        params = { ilac_id: ilacId, hastalik_id: hastalikId };
-
-        try {
-          // İlk isteği gönderiyoruz
-          const response = await axios.get(apiUrl, { params });
-
-          // Yaş kontrolü
-          if (parseInt(inputValue) >= response.data.threshold_age) {
-            // Yaş threshold_age'e eşit veya büyükse, kilo bilgisi olmadan istek yapıyoruz
-            console.log("geliyor");
-            setSecond(true);
-
-            const responseWithoutKilo = await axios.get('http://192.168.1.202:8000/api/appname/hastalikhemyasahemkiloyabagliazalandoz/get-hastalik-azalan-doz-hem-kilo-hem-yas/', {
-              params: {
-                age: inputValue,
-                ilac_id: ilacId,
-                hastalik_id: hastalikId,
-              }
-            });
-            console.log("Response Without Kilo:", responseWithoutKilo.data);
-            setExplanation(responseWithoutKilo.data.message);
-
-          } else {
-            
-            // bak burada yapmanı istediğim şey ana kodu 
-            
+          const ageWeightData = await axios.get(API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT_DATA_AGE, {
+            params: {
+              ilac_id: ilacId,
+              hastalik_id: hastalikId,
+              age: inputValue
+            }
+          });
+          const { threshold_age } = ageWeightData.data;
+          if (parseInt(inputValue) < threshold_age) {
+            setShowKiloInput(true);
+            setLoading(false);
+            setError('Lütfen kilo bilgisini girin.'); // Kullanıcıya kilo girmesi için uyarı
+            return;
           }
-        } catch (error) {
-          console.error("Hata:", error);
-          setMessage('Bir hata oluştu, lütfen tekrar deneyin.');
-        }
-
-        break;
-
+          // Eğer yaş kontrolü geçilirse, sadece yaş bilgisi ile istek at
+          apiUrl = API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT;
+          params = {
+            age: inputValue,
+            ilac_id: ilacId,
+            hastalik_id: hastalikId
+          };
+          break;
 
         // Hastalık-Yaş	FALSE	6    
         case 6:
@@ -101,7 +90,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
           return; // useEffect tetiklediği için butonla işlem olmayacak
          // hastalıklı artan kilo	FALSE	8
         case 8:
-          apiUrl = API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AND_WEIGHT;
+          apiUrl = API_ROUTES.GET_INCREASING_DOSAGE_BY_DISEASE_AND_WEIGHT;
           params = {kilo: inputValue, ilac_id: ilacId, hastalik_id: hastalikId}
           break;
         default:
@@ -110,7 +99,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
       }
 
       
-     
+      
       
       if(!second){
          // API isteği gönderiliyor
@@ -153,6 +142,35 @@ const Input = ({ id, ilacId, hastalikId }) => {
     setResult('');
     setExplanation('');
     setError('');
+    setKiloValue(''); // Kilo değerini sıfırla
+    setShowKiloInput(false); // Kilo giriş alanını gizle
+  };
+
+  // Kilo bilgisi ile istek atma
+  const handleKiloSubmit = async () => {
+    if (!kiloValue) {
+      setError('Kilo girilmedi');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      // Kilo ve yaş bilgisi ile istek at
+      const response = await axios.get(API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT, {
+        params: {
+          age: inputValue,
+          kilo: kiloValue, // Kilo bilgisi burada kullanılıyor
+          ilac_id: ilacId,
+          hastalik_id: hastalikId
+        }
+      });
+      setResult(response.data.message); // Sonuç mesajını ayarla
+      setShowKiloInput(false); // Kilo giriş alanını gizle
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -170,7 +188,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
               onChangeText={setInputValue}
             />
           </View>
-        ) : id === 1 || id === 5 || id === 6|| id === 8 ? (
+        ) : (id === 1 || id === 5 || id === 6 || id === 8) && !showKiloInput ? ( // Yaş giriş alanını gizle
           <View style={styles.inputRow}>
             <Text style={styles.inputLabel}>Yaş Girin:</Text>
             <TextInput
@@ -182,12 +200,33 @@ const Input = ({ id, ilacId, hastalikId }) => {
             />
           </View>
         ) : null}
+        {showKiloInput && (
+          <View style={styles.inputRow}>
+            <Text style={styles.inputLabel}>Kg Girin:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Kg"
+              keyboardType="numeric"
+              value={kiloValue}
+              onChangeText={setKiloValue}
+            />
+          </View>
+        )}
       </View>
 
       {/* Butonlar */}
       {id !== 7 && (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleCalculate}>
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => {
+              if (showKiloInput) {
+                handleKiloSubmit(); // Kilo girişi varsa kilo hesapla
+              } else {
+                handleCalculate(); // Kilo girişi yoksa hesapla
+              }
+            }}
+          >
             <Text style={styles.buttonText}>Hesapla</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleReset}>
@@ -195,7 +234,6 @@ const Input = ({ id, ilacId, hastalikId }) => {
           </TouchableOpacity>
         </View>
       )}
-
 
       {/* Hata Mesajı */}
       {error ? (
@@ -215,6 +253,30 @@ const Input = ({ id, ilacId, hastalikId }) => {
       {explanation ? (
         <View style={styles.explanationContainer}>
           <Text style={styles.explanationText}>{explanation}</Text>
+        </View>
+      ) : null}
+
+      {/* Kilo Giriş Alanı */}
+      {showKiloInput ? (
+        <View style={styles.kiloInputContainer}>
+          <Text style={styles.kiloInputLabel}>Kilo Girin:</Text>
+          <TextInput
+            style={styles.kiloInput}
+            placeholder="Kilo"
+            keyboardType="numeric"
+            value={kiloValue}
+            onChangeText={setKiloValue}
+          />
+          <TouchableOpacity style={styles.kiloButton} onPress={handleKiloSubmit}>
+            <Text style={styles.kiloButtonText}>Hesapla</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
+      {/* Yükleniyor */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Yükleniyor...</Text>
         </View>
       ) : null}
     </View>
