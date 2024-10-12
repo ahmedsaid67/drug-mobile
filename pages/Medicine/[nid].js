@@ -1,77 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import styles from '../../styles/MedicineStyles';
 import { useNavigation } from '@react-navigation/native';
 import Input from '../../components/Input';
+import { API_ROUTES } from '../../utils/constant';
+import axios from 'axios';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; // Get selected item
   const [inputValue, setInputValue] = useState('');
+  const [data,setData] = useState([]);
   const [databaseResults, setDatabaseResults] = useState([]); // Example state for database outputs
+  const [fetchedData, setFetchedData] = useState(null); // Yeni durum
   const navigate = useNavigation();
 
-  console.log(item);
-  const handleCalculate = () => {
-    // Handle calculation logic here
-  };
 
-  const handleReset = () => {
-    setInputValue('');
-    setDatabaseResults([]); // Reset database results
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (item && item.id) {
+          const response = await axios.get(`${API_ROUTES.MEDICINE_BY_ID}${item.id}`);
+          
+          setData(response.data); // Gelen veriyi duruma kaydet
+        }
+      } catch (error) {
+        console.error('API isteği sırasında hata oluştu:', error);
+      }
+    };
+  
+    fetchData();
+  }, [item]);
 
-  console.log(item)
+  
+  
 
-  const renderDatabaseResults = () => {
-    // Render database results (example)
-    return (
-      <View style={styles.resultsContainer}>
-        {databaseResults.map((result, index) => (
-          <View key={index} style={styles.resultItem}>
-            <Text>{result.title}</Text>
-            <Text>{result.title}</Text>
-            <Text>{result.details}</Text>
-          </View>
-        ))}
-      </View>
-    );
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Reklam Alanı */}
+      {/* Reklam Alanı
       <View style={styles.adContainer}>
         <Text style={styles.adText}>Reklam Alanı</Text>
       </View>
-
+ */}
       <View style={styles.infoContainer}>
-        <Text style={styles.medText}>{item.name}</Text>
-        {/* <Text style={styles.ingredientText}>{item.hastaliklar.name}</Text>
-        <Text style={styles.ingredientText}>{item.etken_madde}</Text>
-        <Text style={styles.ingredientText}>{item.ilac_kategori.name}</Text> */}
+        <Text style={styles.medText}>{data.name}</Text>
+        
+        {item.hastaliklar && item.hastaliklar.name && (
+            <Text style={styles.ingredientText}>{item.hastaliklar.name} hastalığı için</Text>
+          )}
+          {data.etken_madde && (
+            <Text style={styles.ingredientText}>{data.etken_madde}</Text>
+          )}
+          {data.ilac_kategori && data.ilac_kategori.name && (
+            <Text style={styles.ingredientText}>{data.ilac_kategori.name}</Text>
+          )}
+
+        
+         
 
       </View>
 
-      <Input id={item.hassasiyet_turu.id} ilacId={item.id} hastalikId={item.hastaliklar.id}/>
+      {data && data.hassasiyet_turu ? (
+        <Input 
+          id={data.hassasiyet_turu.id} 
+          ilacId={data.id} 
+          hastalikId={item.hastaliklar  ? item.hastaliklar.id : null} 
+          // Eğer hastaliklar varsa ilk hastalığın id'sini alıyoruz, yoksa null
+        />
+      ) : (
+        <Text>Loading...</Text> // Veriler yüklenene kadar gösterilen mesaj
+      )}
 
       
 
       {/* Usage Instructions Button */}
       <TouchableOpacity 
-      style={styles.instructionsButton} 
-      onPress={() => {
-        if (item.document) {
-          // Belgeye yönlendirme işlemi
-          console.log('Kullanım Talimatlarına gidiliyor...');
-          // Örneğin, navigation veya link ile yönlendirme yapılabilir
-          // navigation.navigate('DocumentScreen', { document: item.document });
-        } else {
-          console.log('Belge bulunamadı.');
-        }
-      }}
-    >
-      <Text style={styles.instructionsButtonText}>Kullanım Talimatları</Text>
-    </TouchableOpacity>
+        style={styles.instructionsButton} 
+        onPress={() => {
+          if (data.document) {
+            navigate.navigate('PdfViewer', { documentUrl: data.document });
+
+          } else {
+            console.log('Belge bulunamadı.');
+          }
+        }}
+      >
+        <Text style={styles.instructionsButtonText}>Kullanım Talimatları</Text>
+      </TouchableOpacity>
+
 
     </ScrollView>
   );

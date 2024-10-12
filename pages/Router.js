@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AnaSayfa from './AnaSayfa';
-import Arama from './Arama';
+import Arama from './Search/Arama';
 import Bildirimler from './Bildirimler';
 import Hatirlaticilar from './Hatirlaticilar';
 import Login from './Login';
@@ -21,6 +21,7 @@ import notifee, { EventType } from '@notifee/react-native';
 import NidSearchPage from "./Search/[nid]";
 import MedicineDetail from "./Medicine/[nid]";
 import SicknessDetail from  "./Sickness/[nid]";
+import PdfViewer from "./PdfViewer.js";
 
 
 
@@ -195,6 +196,7 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="NidSearchPage" component={NidSearchPage} />
         <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
         <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
+        <Stack.Screen name="PdfViewer" component={PdfViewer} />
 
       </Stack.Navigator>
     </Layout>

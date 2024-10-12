@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from '../styles/MedicineStyles';
 import { API_ROUTES } from "../utils/constant"
 import axios from 'axios';
+import { Alert } from 'react-native'; // Added import for Alert
 
 
 const Input = ({ id, ilacId, hastalikId }) => {
@@ -22,6 +23,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
       let params = {};
       let response;
 
+     
 
       // ID'ye göre API rotasını belirle ve parametreleri ayarla
       switch (id) {
@@ -85,7 +87,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
           response = await axios.get(apiUrl, { params });
           if (response?.data) {
             setResult(`Sonuç: ${response.data.bilgi}`);
-            setExplanation(`Açıklama: ${response.data.message}`);
+            console.log(response.data);
           }
           return; // useEffect tetiklediği için butonla işlem olmayacak
          // hastalıklı artan kilo	FALSE	8
@@ -97,9 +99,6 @@ const Input = ({ id, ilacId, hastalikId }) => {
           setError('Geçersiz ID');
           return;
       }
-
-      
-      
       
       if(!second){
          // API isteği gönderiliyor
@@ -107,14 +106,52 @@ const Input = ({ id, ilacId, hastalikId }) => {
           console.log(response.data);
 
           if (response?.data) {
-            setResult(`Sonuç: ${response.data.doz}`);
-            setExplanation(`Açıklama: ${response.data.message}`);
-          } 
-          else {
+            // Check uyarı kontrolü
+            if (response.data.check_uyari) {
+              // Popup gösterme
+              Alert.alert(
+                "Uyarı",
+                response.data.check_uyari,
+                [
+                  {
+                    text: "İptal",
+                    onPress: () => handleReset(), // İptal edilirse resetle
+                    style: "cancel"
+                  },
+                  {
+                    text: "Tamam",
+                    onPress: () => {
+                      // Uyarıyı kabul ederse sonuçları ayarla
+                      let resultMessage = '';
+
+                      if (response.data.doz) {
+                        resultMessage += `Önerilen doz: ${response.data.doz}`;
+                      }
+                      if (response.data.message) {
+                        resultMessage += `Önerilen doz: ${response.data.message}`;
+                      }
+
+                      setResult(resultMessage || 'Sonuç bulunamadı');
+                    }
+                  }
+                ]
+              );
+            } else {
+              // Check uyarı yoksa sonuçları ayarla
+              let resultMessage = '';
+
+              if (response.data.doz) {
+                resultMessage += `Doz: ${response.data.doz}`;
+              }
+              if (response.data.message) {
+                resultMessage += `\nAçıklama: ${response.data.message}`;
+              }
+
+              setResult(resultMessage || 'Sonuç bulunamadı');
+            }
+          } else {
             setError('API çağrısı başarısız oldu');
           }
-
-
       }
       
 
@@ -245,7 +282,25 @@ const Input = ({ id, ilacId, hastalikId }) => {
       {/* Sonuçlar */}
       {result ? (
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>{result}</Text>
+          {/* Sonuçları işleme */}
+          {typeof result === 'string' ? (
+            <Text style={styles.resultText}>{result}</Text>
+          ) : (
+            <>
+              {result.message && (
+                <Text style={styles.resultText}>Doz Miktarı: {result.message}</Text>
+              )}
+              {result.kullanim_sikligi && (
+                <Text style={styles.resultText}>Kullanım Sıklığı: {result.kullanim_sikligi}</Text>
+              )}
+              {result.doz && (
+                <Text style={styles.resultText}>{result.doz}</Text>
+              )}
+              {result.bilgi && (
+                <Text style={styles.resultText}>{result.bilgi}</Text>
+              )}
+            </>
+          )}
         </View>
       ) : null}
 
@@ -256,22 +311,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
         </View>
       ) : null}
 
-      {/* Kilo Giriş Alanı */}
-      {showKiloInput ? (
-        <View style={styles.kiloInputContainer}>
-          <Text style={styles.kiloInputLabel}>Kilo Girin:</Text>
-          <TextInput
-            style={styles.kiloInput}
-            placeholder="Kilo"
-            keyboardType="numeric"
-            value={kiloValue}
-            onChangeText={setKiloValue}
-          />
-          <TouchableOpacity style={styles.kiloButton} onPress={handleKiloSubmit}>
-            <Text style={styles.kiloButtonText}>Hesapla</Text>
-          </TouchableOpacity>
-        </View>
-      ) : null}
+     
 
       {/* Yükleniyor */}
       {loading ? (

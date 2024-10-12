@@ -1,69 +1,57 @@
 import { StyleSheet } from 'react-native';
 import { colors } from './colors';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.MainContainerBackground,
   },
   searchBoxContainer: {
-    color: "black",
     padding: 16,
   },
   searchBox: {
-    color: "black",
-    height: 40,
-    borderColor: '#ccc',
+    height: 45,
+    borderColor: '#e0e0e0',
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 8,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    backgroundColor: '#f9f9f9',
+    marginVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,  // Android shadow
   },
   popularSearchesContainer: {
     padding: 16,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20, // Font boyutunu artırarak daha belirgin hale getirme
     fontWeight: 'bold',
     marginBottom: 8,
   },
   popularSearchItem: {
     fontSize: 16,
     marginBottom: 8,
-  },
-  adContainer: {
-    height: 100,
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ccc',
-    alignSelf: 'center', // Orta hizalamak için
-    marginVertical: 20,
-  },
-  adText: {
-    fontSize: 18,
-    color: '#333',
-    textAlign: 'center', // Metni ortalamak için
+    color: '#6200ee', // Modern bir renk
   },
   searchResultsContainer: {
     flex: 1,
   },
-  divider: {
-    width: '100%',  // Çizginin genişliği %80 olsun
-    height: 2,     // Çizginin kalınlığı
-    backgroundColor: '#ccc',
-    alignSelf: 'center', // Çizgiyi ortalar
-    marginTop: 8, // İlaç adından sonra biraz boşluk
-  },
   medicineItem: {
-    width: '100%',  // Tüm container genişliğini %100 yap
+    width: '100%',
     padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee', // Daha açık bir çizgi rengi
   },
   medicineContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   medicineName: {
-    fontSize: 16,
+    fontSize: 18, // Font boyutunu artırarak daha okunabilir hale getirme
     color: "black",
     flex: 1,
   },
@@ -72,10 +60,10 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
-  bottomLine: {
-    width: '80%',  // Çizginin genişliğini %80 yap
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: '#ccc',
     marginTop: 8,
   },
 });

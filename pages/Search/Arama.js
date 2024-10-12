@@ -1,28 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, ScrollView, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/SearchPageStyles'; // Stillerin içe aktarılması
+import { API_ROUTES } from '../../utils/constant';
+import { useNavigation } from '@react-navigation/native'; // navigate fonksiyonu için
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [medicines, setMedicines] = useState([]);
+  const navigation = useNavigation(); // useNavigation kullanımı
 
+  useEffect(() => {
+    const fetchMedicines = async () => {
+      try {
+        const response = await fetch(API_ROUTES.COMBINED);
+        const data = await response.json();
+        setMedicines(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Veri çekme hatası:', error);
+      }
+    };
 
-  
-
-
-  const medicines = [
-    { id: 1, name: 'İlaç 1', activeIngredient: 'Etken Madde 1' },
-    { id: 2, name: 'İlaç 2', activeIngredient: 'Etken Madde 2' },
-    { id: 3, name: 'İlaç 3', activeIngredient: 'Etken Madde 3' },
-    { id: 4, name: 'İlaç 4', activeIngredient: 'Etken Madde 4' },
-    { id: 5, name: 'İlaç 5', activeIngredient: 'Etken Madde 5' },
-    { id: 6, name: 'İlaç 6', activeIngredient: 'Etken Madde 6' },
-    { id: 7, name: 'İlaç 7', activeIngredient: 'Etken Madde 7' },
-    { id: 8, name: 'İlaç 8', activeIngredient: 'Etken Madde 8' },
-    { id: 9, name: 'İlaç 9', activeIngredient: 'Etken Madde 9' },
-    { id: 10, name: 'İlaç 10', activeIngredient: 'Etken Madde 10' }
-  ];
+    fetchMedicines(); // Veri çekme fonksiyonu çağrılıyor
+  }, []);
 
   const popularSearches = [
     'İlaç 1',
@@ -37,26 +39,76 @@ const App = () => {
     'İlaç 10'
   ];
 
+  // Türkçe karakterleri standart hale getiren yardımcı fonksiyon
+  const normalizeString = (str) => {
+    return str
+      .replace(/ç/g, 'c')
+      .replace(/ğ/g, 'g')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ş/g, 's')
+      .replace(/ü/g, 'u')
+      .replace(/Ç/g, 'C')
+      .replace(/Ğ/g, 'G')
+      .replace(/İ/g, 'I')
+      .replace(/Ö/g, 'O')
+      .replace(/Ş/g, 'S')
+      .replace(/Ü/g, 'U');
+  };
+
+  // Sembolleri temizlemek için yardımcı fonksiyon
+  const cleanString = (str) => {
+    return str.replace(/[^\w\sğüşıöçĞÜŞİÖÇ]/g, '').trim(); // Türkçe karakterleri koruyarak sembolleri temizler
+  };
+
+  // Arama işlemi için filtreleme
   const filteredMedicines = medicines.filter(medicine => 
-    medicine.name.toLowerCase().includes(searchTerm.toLowerCase())
+    normalizeString(cleanString(medicine.name.toLowerCase().replace(/\s+/g, ''))) // Boşlukları kaldır ve normalleştir
+      .includes(normalizeString(cleanString(searchTerm.toLowerCase().replace(/\s+/g, '')))) // Boşlukları kaldır ve normalleştir
   );
 
   const handleSearchInput = text => {
     setSearchTerm(text);
-    if (text.length > 0) {
-      setIsSearching(true);
-    } else {
-      setIsSearching(false);
-    }
+    setIsSearching(text.length > 0);
   };
 
   const handleSearchComplete = () => {
     if (searchTerm.trim() === '') {
       setIsSearching(false);
-      setSearchTerm(''); // Arama terimini temizle
-      Keyboard.dismiss(); // Klavyeyi kapat
+      setSearchTerm('');
+      Keyboard.dismiss();
     }
   };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => {
+        // bura hastalıklar yerine hassasiyet ıd olarak decğiştirilecek
+        // hastaliklar dizisinin dolu olup olmadığını kontrol et
+        console.log(item);
+        console.log(item.hassasiyet_turu_id);
+        if(item.sayfa === "ilac"){
+          const id = item.hassasiyet_turu_id;
+          if ([1, 2, 4, 7, 8].includes(id)) {
+            navigation.navigate('MedicineDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+          } else if ([3, 5, 6].includes(id)) {
+            navigation.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
+          }
+        }
+      }}
+      
+    >
+      <View style={styles.medicineItem}>
+        <View style={styles.medicineContent}>
+          <Text style={styles.medicineName}>{item.name}</Text>
+          <Ionicons name="chevron-forward-outline" size={30} color="#000" />
+        </View>
+        <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
+        <View style={styles.divider} />
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -77,32 +129,22 @@ const App = () => {
             <Text style={styles.sectionTitle}>Popüler Aramalar</Text>
             {popularSearches.map((term, index) => (
               <TouchableOpacity key={index} onPress={() => {
-                setSearchTerm(term); 
-                setIsSearching(true); // Arama sonuçlarını göstermek için arama modunu aç
+                setSearchTerm(term);
+                setIsSearching(true);
               }}>
                 <Text style={styles.popularSearchItem}>{term}</Text>
               </TouchableOpacity>
             ))}
           </View>
-          
         </ScrollView>
       )}
 
       {searchTerm && isSearching && (
         <FlatList
           style={styles.searchResultsContainer}
-          data={filteredMedicines}
+          data={filteredMedicines} // data prop'u FlatList'e eklenmeli
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.medicineItem}>
-              <View style={styles.medicineContent}>
-                <Text style={styles.medicineName}>{item.name}</Text>
-                <Ionicons name="chevron-forward-outline" size={30} color="#000" />
-              </View>
-              <Text style={styles.activeIngredient}>{item.activeIngredient}</Text>
-              <View style={styles.divider} />
-            </View>
-          )}
+          renderItem={renderItem}
         />
       )}
     </View>

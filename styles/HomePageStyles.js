@@ -1,4 +1,3 @@
-
 import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from './colors';
 
@@ -8,82 +7,110 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.MainContainerBackground,
-    padding: 10,
+    padding: 15,
   },
   navbar: {
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#6200ee',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   navbarTitle: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   searchBox: {
-    height: 40,
-    borderColor: '#ccc',
+    height: 45,
+    borderColor: '#e0e0e0',
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    backgroundColor: '#f9f9f9',
+    marginVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,  // Android shadow
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginVertical: 10,
+    fontSize: 24,
+    fontWeight: '600',
+    marginVertical: 12,
+    color: '#333',
   },
   card: {
-    width: width * 0.33,  // Kart genişliği ekranın %38'i
-    marginRight: 10,
-    backgroundColor: '#f0f0f0', // Kartın arka plan rengi
-    borderRadius: 10,
-    justifyContent: 'flex-start', // Kart içindeki elemanlar yukarı hizalanacak
-    alignItems: 'center',         // Elemanlar yatayda ortaya hizalanacak
+    width: width * 0.38,  // Kart genişliği %38
+    height: width * 0.38,  // Kart yüksekliği %38
+    marginRight: 15,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+    paddingTop: 10,  // Üstten boşluk eklendi
   },
-  // Kart listesinin içindeki resim
   image: {
-    width: '100%',
-    padding: 40,        // Kartın tüm genişliğini kaplayacak
-    height: 80,          // Sabit resim yüksekliği
-    resizeMode: 'cover',  // Resmin kartı tamamen kaplamasını sağla
+    width: '90%',  // Resim genişliği kartın %90'ı
+    height: '70%',  // Resim yüksekliği kartın %70'i, böylece metin için daha fazla alan kalır
+    resizeMode: 'contain',  // Resim, kartın içinde orantılı bir şekilde yer alacak
   },
-  // Kartın altındaki metin
   cardText: {
-    padding: 10,          // Resmin altına boşluk
-    fontSize: 16,         // Yazı boyutu
-    fontWeight: 'bold',   // Yazı kalınlığı
-    textAlign: 'center',  // Metni ortala
-    color: '#333',        // Metin rengi, arka plana göre kontrastlı olsun
+    padding: 14,  // Metin için daha az padding
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#444',
+    width: '100%',  // Metin alanının kart genişliğinin tamamını kaplamasını sağla
   },
+  
+  
+  
   adContainer: {
-    height: 120,
-    backgroundColor: '#ccc',
+    height: 140,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 4,
   },
   adText: {
     fontSize: 18,
-    color: '#333',
+    color: '#555',
   },
   reminderButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 70,
-    width: "60%",
+    height: 60,
+    width: '70%',
     backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 15,
+    padding: 12,
+    borderRadius: 25,
     justifyContent: 'center',
-    marginTop: 20,
+    shadowColor: '#6200ee',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    marginTop: 30,
   },
   reminderText: {
     color: '#fff',
-    fontSize: 20,
-    marginRight: 5,
+    fontSize: 18,
+    marginRight: 8,
   },
 });
 

@@ -9,6 +9,7 @@ import { API_ROUTES } from '../utils/constant';
 
 const { width } = Dimensions.get('window');
 
+
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -60,6 +61,7 @@ const HomePage = () => {
     { id: 10, name: 'Katagori 10',data:"vitamins", image: 'https://via.placeholder.com/500' }
   ]);
 
+  
   const renderCard = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => navigateToNidPage(item)}>
       <Image source={{ uri: item.image }} style={styles.image} />

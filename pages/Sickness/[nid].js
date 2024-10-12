@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from '../../styles/SicknessStyles';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { API_ROUTES } from '../../utils/constant';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; // Get selected item
-  const hastaliklar = item.hastaliklar || []; // Eğer hastalıklar boşsa boş liste kullan
+  const [hastaliklar, setHastaliklar] = useState([]); // Eğer hastalıklar boşsa boş liste kullan
   const navigation = useNavigation();
+  const [data,setData] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (item && item.id) {
+          const response = await axios.get(`${API_ROUTES.MEDICINE_BY_ID}${item.id}`);
+          setHastaliklar(response.data.hastaliklar);
+        }
+      } catch (error) {
+        console.error('API isteği sırasında hata oluştu:', error);
+      }
+    };
+  
+    fetchData();
+  }, [item]);
   
   // Seçilen hastalıkla MedicineDetail'e yönlendirme işlevi
   const handleHastalikSec = (hastalik) => {

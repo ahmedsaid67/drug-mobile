@@ -1,10 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/SearchPageStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_ROUTES } from '../../utils/constant';
+
+// Sembolleri temizlemek için yardımcı fonksiyon
+const cleanString = (str) => {
+  return str.replace(/[^\w\sğüşıöçĞÜŞİÖÇ]/g, '').trim(); // Türkçe karakterleri koruyarak sembolleri temizler
+};
+
+// Türkçe karakterleri standart hale getiren yardımcı fonksiyon
+const normalizeString = (str) => {
+  return str
+    .replace(/ç/g, 'c')
+    .replace(/ğ/g, 'g')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ş/g, 's')
+    .replace(/ü/g, 'u')
+    .replace(/Ç/g, 'C')
+    .replace(/Ğ/g, 'G')
+    .replace(/İ/g, 'I')
+    .replace(/Ö/g, 'O')
+    .replace(/Ş/g, 'S')
+    .replace(/Ü/g, 'U');
+};
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params;
@@ -27,7 +49,6 @@ const NidSearchPage = ({ route }) => {
         );
         setDataNoPagination(noPaginationResponse.data);
         
-
         // İlk sayfa verisini al
         await fetchPaginationData(1); // İlk sayfayı yükle
       } catch (error) {
@@ -60,27 +81,41 @@ const NidSearchPage = ({ route }) => {
   };
 
   // Arama işlemi için filtreleme
-  const filteredData = dataNoPagination.filter(dataItem =>
-    dataItem.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = useMemo(() => {
+    const cleanedSearchTerm = normalizeString(cleanString(searchTerm).toLowerCase().replace(/\s+/g, '')); // Boşlukları kaldır ve normalleştir
+    return dataNoPagination.filter(dataItem => {
+      const cleanedDataItemName = normalizeString(cleanString(dataItem.name).toLowerCase().replace(/\s+/g, '')); // Boşlukları kaldır ve normalleştir
+      return cleanedDataItemName.includes(cleanedSearchTerm); // Temizlenmiş veriyi arama terimi ile karşılaştır
+    });
+  }, [dataNoPagination, searchTerm]);
 
   const handleSearchInput = text => {
     setSearchTerm(text);
     setIsSearching(text.length > 0);
+    
+    // Arama kutusu temizlendiğinde pagination verilerine geri dön
+    if (text.length === 0) {
+      setPage(1); // Sayfa numarasını sıfırla
+      setDataPagination([]); // Pagination verilerini temizle
+      fetchPaginationData(1); // İlk sayfayı yeniden yükle
+    }
   };
 
   const navigate = useNavigation();
-
+ 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => {
+        // bura hastalıklar yerine hassasiyet ıd olarak decğiştirilecek
         // hastaliklar dizisinin dolu olup olmadığını kontrol et
-        if (item.hastaliklar && item.hastaliklar.length > 0) {
-          navigate.navigate('SicknessDetail', { item }); // hastalık varsa buraya yönlendirilir
-        } else {
-          navigate.navigate('MedicineDetail', { item }); // hastalık yoksa ilaca yönlendirilir
-        }
+        
+        const id = item.hassasiyet_turu?.id;
+          if ([1, 2, 4, 7, 8].includes(id)) {
+            navigate.navigate('MedicineDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+          } else if ([3, 5, 6].includes(id)) {
+            navigate.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
+          }
       }}
     >
       <View style={styles.medicineItem}>
