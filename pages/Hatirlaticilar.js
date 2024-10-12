@@ -24,9 +24,6 @@ const Hatirlaticilar = () => {
   const navigation = useNavigation();
 
 
-
-
-
   moment.locale('tr');
 
   const screenWidth = Dimensions.get('window').width;
@@ -35,6 +32,7 @@ const Hatirlaticilar = () => {
     navigation.navigate('ReminderSearch');
   };
 
+  
   const getDates = () => {
     let dates = [];
     for (let i = -30; i <= 30; i++) {
@@ -131,7 +129,9 @@ const Hatirlaticilar = () => {
               ))}
             </Text>
             <Text style={styles.reminderDetails}>
-              {`${formattedStartDate} - ${formattedEndDate}`}
+              {startDate.isSame(endDate, 'day') 
+                ? formattedStartDate 
+                : `${formattedStartDate} - ${formattedEndDate}`}
             </Text>
           </View>
         </View>
@@ -140,7 +140,7 @@ const Hatirlaticilar = () => {
         </TouchableOpacity>
       </View>
     );
-  };
+};
 
   const handleEndReached = () => {
     if (hasMore && !loading) {
@@ -190,11 +190,11 @@ const Hatirlaticilar = () => {
         data={reminders}
         renderItem={renderReminder}
         keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
-        ListEmptyComponent={!loading ? <NoReminders onAddReminder={handlePress} /> : null}
+        ListEmptyComponent={!loading ? <NoReminders /> : null}
         ListFooterComponent={loading ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null}
       />
 

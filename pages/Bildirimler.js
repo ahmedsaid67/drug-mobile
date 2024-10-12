@@ -46,10 +46,11 @@ function Bildirimler() {
 
   const renderNotification = ({ item }) => {
     const formattedTime = item.saat.split(':').slice(0, 2).join(':'); 
+    const formattedDate = item.tarih.split('-').reverse().join('.');
     return (
       <View key={item.id} style={styles.notificationCard}>
         <Text style={styles.description}>{item.explanations}</Text>
-        <Text style={styles.date}>{item.tarih} - {formattedTime}</Text> 
+        <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
       </View>
     );
   };
@@ -62,7 +63,7 @@ function Bildirimler() {
           data={notifications}
           renderItem={renderNotification}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.05}
