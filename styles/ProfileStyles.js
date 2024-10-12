@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, // Reduced padding for a more compact look
     paddingVertical: 16,   // Reduced padding for a more compact look
   },
+  loadingConatiner:{
+    flex:1,
+    justifyContent:"center"
+  },
   profileContainer: {
     alignItems: 'center',
     marginBottom: 16,      // Reduced margin
@@ -50,30 +54,20 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    paddingVertical: 8,   // Reduced padding for a slimmer input field
-    marginVertical: 6,     // Reduced margin
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-    fontSize: 14,          // Smaller font size
-    color: colors.text,
-  },
-  emailInput: {
-    width: '100%',
-    paddingVertical: 8,   // Reduced padding for a slimmer input field
-    marginVertical: 6,     // Reduced margin
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#f2f2f2', // Grey background for uneditable field
-    fontSize: 14,          // Smaller font size
+    padding: 15,   // Reduced padding for a slimmer input field
+    marginTop: 10,     // Reduced margin
+    borderWidth: 1,     // Kenar çizgisi kalınlığı
+    borderColor: colors.border,
+    borderRadius: 5,
+    fontSize: 16,          // Smaller font size
     color: colors.text,
   },
   updateButton: {
     backgroundColor: colors.uygulamaRengi,
-    paddingVertical: 10,   // Reduced padding for a smaller button
-    borderRadius: 6,       // Slightly smaller corner radius
+    padding: 15,   // Reduced padding for a smaller button
+    borderRadius: 5,       // Slightly smaller corner radius
     alignItems: 'center',
-    marginTop: 12,         // Reduced margin
+    marginTop: 20,         // Reduced margin
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,   // Softer shadow
@@ -81,24 +75,25 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     color: colors.secondText,
-    fontSize: 14,          // Smaller font size
-    fontWeight: '500',    // Slightly lighter font weight
+    fontSize: 16,          // Smaller font size
+    fontWeight: 'bold',    // Slightly lighter font weight
   },
   logoutButton: {
     backgroundColor: '#FF3B30',
-    paddingVertical: 10,   // Reduced padding for a smaller button
+    padding: 15,   // Reduced padding for a smaller button
     borderRadius: 6,       // Slightly smaller corner radius
     alignItems: 'center',
-    marginTop: 12,         // Reduced margin
+    marginTop: 10,       // Reduced margin
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,   // Softer shadow
     shadowRadius: 1.5,
+    fontWeight: 'bold',
   },
   logoutButtonText: {
     color: colors.secondText,
-    fontSize: 14,          // Smaller font size
-    fontWeight: '500',    // Slightly lighter font weight
+    fontSize: 16,          // Smaller font size
+    fontWeight: 'bold',
   },
   removeIcon: {
     position: 'absolute',

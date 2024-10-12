@@ -18,7 +18,7 @@ export const API_ROUTES = {
   RESET_PASSWORD : API_KEY +'/password-reset/reset-password/' ,
   GOGLE_LOGIN: API_KEY + '/google/',
 
-
+  MEDICINE_BY_ID : API_KEY + 'ilac/',
   MEDICINE : API_KEY + '/ilac/?page=currentPage',  // --> pagination'ludur, tüm ilaçları 20'şer 20'şer döndürür.
   MEDICINE_BY_CATEGORY : API_KEY + '/ilac/medications-by-category/?page=currentPage', // --> pagination'ludur, kategoriye ait ilaçları 20'şer 20'şer döndürür.
   MEDICINE_BY_CATEGORY_NO_PAGINATION: API_KEY + '/ilac/medications-by-category-no-pagination/',  // --> paginationsuzdur. kategirye ait tüm ilaçları döndürür. kategori sayfalarının searchboxu ıcın kullanaılacak endpoint. 
@@ -28,6 +28,8 @@ export const API_ROUTES = {
   MEDICINE_FORM : API_KEY + '/form/',
   MEDICINE_FORM_NO_PAGINATIONS : API_KEY + '/ilac/medications-by-form-no-pagination/?form_id=',
   MEDICINE_FORM_PAGINATIONS : API_KEY + '/ilac/medications-by-form/?form_id=',
+
+  FORM :API_KEY + '/form/',
 
 
   GET_DOSAGE_BY_AGE : API_KEY + '/yasdoz/get-dosage-by-age',  // yaş doz
@@ -53,6 +55,11 @@ export const API_ROUTES = {
   SUPPLEMENT : API_KEY + '/supplements/', // BESİN TAKVİYELERİ
   SUPPLEMENT_BY_PRODUCT_CATEGORY : API_KEY + '/productcategory/list-categories-by-supplement/',  // BESİN TAKVİYESİNE GORE ÜRÜN KATEGORİLERİ  -- VİTAMİNLERE DİAR KATEGORİLERİ GETİRİ
   PRODUCT_CATEGORY_BY_PRODUCT : API_KEY + '/products/list-products-by-category/', // ÜRÜN KATEGORİSİNE GÖRE ÜRÜNLER -- A VİTAMİNİN DAİR ÜRÜNLERİ GETİRİR
+  PRODUCT_CATEGORY_BY_PRODUCT_NO_PAGINATIONS : API_KEY + '/products/list-products-by-category-no-paginations/', // paginationssuz aramada kullanılır.
+
+
+
+  COMBINED : API_KEY + '/combined/',
 
   REMINDERS : API_KEY + '/reminders/',
   REMINDER_STOPED : API_KEY + '/reminders/data/stoped/',
@@ -60,6 +67,8 @@ export const API_ROUTES = {
   USER_REMINDER_INACTIVE : API_KEY + '/reminders/user-inactive-reminders/?page=currentPage',
   REMINDER_HOURS : API_KEY +'/reminder-hours/',
   NOTIFICATIONS : API_KEY +'/notifications/',
+  NOTIFICATIONS_USER_LIST : API_KEY + '/notifications/notifications_user_list/',
+  NOTIFICATIONS_CREATE : API_KEY + '/notifications/notifications_list_create/',
 
 
 

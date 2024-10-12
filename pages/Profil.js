@@ -12,6 +12,7 @@ import styles from '../styles/ProfileStyles';
 import { Keyboard } from 'react-native';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { colors } from '../styles/colors';
+import { setUser } from '../context/features/user/userSlice';
 
 function Profil() {
   const user = useSelector((state) => state.user);
@@ -24,12 +25,12 @@ function Profil() {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  console.log("user:",user)
 
   useEffect(() => {
     const getProfil = async () => {
       try {
         const res = await axios.get(API_ROUTES.GET_PROFIL.replace("data", user.id));
-        console.log("res:", res.data);
         setProfil(res.data);
         setFirstName(res.data.user?.first_name || '');
         setLastName(res.data.user?.last_name || '');
@@ -159,6 +160,13 @@ function Profil() {
             last_name: lastName,
           },
         }));
+        dispatch(
+          setUser({
+            ...user,
+            first_name: firstName,
+            last_name: lastName,
+          })
+        );
         Alert.alert("Başarıyla Güncellendi", "Profil bilgileriniz başarıyla güncellendi.");
       })
       .catch(error => {
@@ -179,7 +187,10 @@ function Profil() {
       <ProfilHeader />
       <View style={styles.container}>
       {loading ? ( // Show loading indicator if loading is true
-          <ActivityIndicator size="small" color={colors.uygulamaRengi} />
+          <View style={styles.loadingConatiner}>
+            <ActivityIndicator size="medium" color={colors.uygulamaRengi} />
+          </View>
+          
         ) : (
           <>
         <View style={styles.profileContainer}>

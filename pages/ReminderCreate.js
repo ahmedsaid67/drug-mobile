@@ -1,5 +1,5 @@
 import React, { useState, useRef,useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, TextInput, ScrollView,InteractionManager, SafeAreaView, Button, Alert, Linking, Platform, PermissionsAndroid, Keyboard  } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, TextInput, ScrollView,InteractionManager, ActivityIndicator, Alert, Linking, Platform, PermissionsAndroid, Keyboard  } from 'react-native';
 import ReminderCreateHead from '../components/ReminderCreateHead';
 import styles from '../styles/ReminderCreateStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,7 +8,6 @@ import axios from 'axios';
 import FormModel from '../components/FormModel';
 import HatirlatmaSaatleriModel from '../components/HatirlatmaSaatleriModel';
 import DateTimePickerModal from 'react-native-modal-datetime-picker'; 
-import { colors } from '../styles/colors';
 import moment from 'moment';
 import 'moment/locale/tr';
 import notifee, { AndroidImportance, TriggerType ,EventType} from '@notifee/react-native';
@@ -32,6 +31,8 @@ const ReminderCreate = ({ route, navigation }) => {
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false); // Tarih Seçici için
     const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false); // Bitiş Tarihi Seçici
+
+    const [loading,setLoading] = useState(false)
 
     const units = ['ml', 'IU', '%', 'mcg', 'mg','g','adet']; 
     const inputRef = useRef(null); // TextInput için referans oluşturun
@@ -82,6 +83,7 @@ const ReminderCreate = ({ route, navigation }) => {
 
 
     const handleReminderSave = async () => {
+        setLoading(true);
         try {
             // Bildirim izni kontrolü
             const hasPermission = await requestNotificationPermission();
@@ -196,6 +198,8 @@ const ReminderCreate = ({ route, navigation }) => {
             } else {
                 console.error("Beklenmedik hata:", error);
             }
+        }finally {
+            setLoading(false); // İşlem tamamlandığında loading'i kapat
         }
     };
     
@@ -481,10 +485,14 @@ const ReminderCreate = ({ route, navigation }) => {
                         styles.button,
                         (!(kuvvet && form && firstDate && lastDate) || (zamanlama.length === 0)) && styles.saveButtonDisabled
                     ]}
-                    disabled={!(kuvvet && form && firstDate && lastDate) || zamanlama.length === 0}
+                    disabled={!(kuvvet && form && firstDate && lastDate) || zamanlama.length === 0 || loading}
                     onPress={handleReminderSave}
                 >
-                    <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+                    {loading ? (
+                        <ActivityIndicator size="small" color="#ffffff" />  // Yükleme anında dönen animasyon
+                    ) : (
+                        <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>  // Yükleme yoksa buton yazısı
+                    )}
                 </TouchableOpacity>
             </View>
         </View>

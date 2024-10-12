@@ -16,11 +16,17 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.text, // Use color from constants
+    color: colors.text,
     letterSpacing: 2,
     textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
+  },
+  
+  logoImage: {
+    width: 100,  // Adjust the width based on your logo's aspect ratio
+    height: 40,  // Adjust the height as needed for the logo
+    resizeMode: 'contain', // Ensure the logo fits within the given size
   },
   rightSection: {
     flexDirection: 'row',
@@ -28,7 +34,7 @@ const styles = StyleSheet.create({
   },
   guestText: {
     color: colors.text, // Use color from constants
-    fontSize: 16,
+    fontSize: 12,
     marginRight: 10,
   },
   profileIcon: {
@@ -39,4 +45,5 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
+
 

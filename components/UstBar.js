@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity,Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome icons
 import styles from '../styles/UstBarStyles';
 import { colors } from '../styles/colors'; // Adjust the import path as necessary
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation from React Navigation
+// import Icon from 'react-native-vector-icons/Feather'; 
 
 const UstBar = () => {
   const user = useSelector((state) => state.user);
@@ -23,14 +24,16 @@ const UstBar = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logoText}>MenDosa</Text>
+      <Text style={styles.logoText}>Ölçek</Text> 
       <View style={styles.rightSection}>
-        <Text style={styles.guestText}>{displayName}</Text>
-        <TouchableOpacity onPress={handleIconPress}>
-          <Icon name="user" size={24} color={colors.icon} /> 
+      <TouchableOpacity onPress={handleIconPress} style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* <Text style={styles.guestText}>{displayName}</Text> */}
+          <View style={styles.iconWrapper}>
+            <Icon name="user" size={20} color={colors.icon} />
+          </View>
         </TouchableOpacity>
       </View>
-    </View>
+  </View>
   );
 };
 
