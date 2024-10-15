@@ -46,7 +46,7 @@ const NidSearchPage = ({ route }) => {
       try {
         // No Pagination verisini search için çekiyoruz
         const noPaginationResponse = await axios.get(
-          `${API_ROUTES.MEDICINE_FORM_NO_PAGINATIONS}${item.id}`
+          `${API_ROUTES.PRODUCT_CATEGORY_BY_PRODUCT_NO_PAGINATIONS}${item.id}`
         );
         setDataNoPagination(noPaginationResponse.data);
         
@@ -56,7 +56,9 @@ const NidSearchPage = ({ route }) => {
         console.error('Error fetching data:', error);
         Alert.alert('Error fetching data');
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1211);
       }
     };
 
@@ -67,7 +69,7 @@ const NidSearchPage = ({ route }) => {
     try {
       setLoadingMore(true);
       const paginationResponse = await axios.get(
-        `${API_ROUTES.MEDICINE_FORM_PAGINATIONS}${item.id}&page=${pageNumber}`
+        `${API_ROUTES.PRODUCT_CATEGORY_BY_PRODUCT}${item.id}&page=${pageNumber}`
       );
       
       const newData = paginationResponse.data.results;
@@ -108,15 +110,9 @@ const NidSearchPage = ({ route }) => {
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => {
-        // bura hastalıklar yerine hassasiyet ıd olarak decğiştirilecek
-        // hastaliklar dizisinin dolu olup olmadığını kontrol et
         
-        const id = item.hassasiyet_turu?.id;
-          if ([1, 2, 4, 7, 8].includes(id)) {
-            navigate.navigate('MedicineDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-          } else if ([3, 5, 6].includes(id)) {
-            navigate.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
-          }
+            navigate.navigate('VitDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+          
       }}
     >
       <View style={styles.medicineItem}>
@@ -141,9 +137,8 @@ const NidSearchPage = ({ route }) => {
   };
 
   
-
   return (
-    loading ? ( 
+    loading ? (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.uygulamaRengi} />
       </View>
@@ -173,8 +168,8 @@ const NidSearchPage = ({ route }) => {
         ListFooterComponent={loadingMore ? <Text>Loading more...</Text> : null} // Daha fazla yükleniyor mesajı
       />
     </View>
-  )
-);
+    )
+  );
 };
 
 export default NidSearchPage;

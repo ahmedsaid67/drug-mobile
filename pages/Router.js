@@ -19,11 +19,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
 import notifee, { EventType } from '@notifee/react-native';
 import NidSearchPage from "./Search/[nid]";
-import MedicineDetail from "./Medicine/[nid]";
+import MedicineDetail from "./Detail/[med].js";
 import SicknessDetail from  "./Sickness/[nid]";
 import PdfViewer from "./PdfViewer.js";
+<<<<<<< Updated upstream
 import ErrorPage from './ErrorPage.js';
 import AppSplashScreen from './AppSplashScreen.js';
+=======
+import NidProductPage from "./Products/[nid].js";
+import VitSearch from "./Search/[vit].js";
+import VitDetail from "./Detail/[vit].js";
+
+>>>>>>> Stashed changes
 
 const Stack = createNativeStackNavigator();
 
@@ -200,7 +207,14 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
         <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
         <Stack.Screen name="PdfViewer" component={PdfViewer} />
+<<<<<<< Updated upstream
         <Stack.Screen name="ErrorPage" component={ErrorPage} />
+=======
+        <Stack.Screen name="NidProductPage" component={NidProductPage} />
+        <Stack.Screen name="VitSearch" component={VitSearch} />
+        <Stack.Screen name="VitDetail" component={VitDetail} />
+
+>>>>>>> Stashed changes
       </Stack.Navigator>
     </Layout>
   );

@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: 'left',  // Sol hizalı metin
   },
+  loadingContainer: {
+    flex: 1, // Tüm alanı kapla
+    justifyContent: 'center', // Dikey ortalama
+    alignItems: 'center', // Yatay ortalama
+  },
 });
 
 export default styles;

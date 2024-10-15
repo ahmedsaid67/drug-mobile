@@ -16,6 +16,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
   const [showKiloInput, setShowKiloInput] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  
   const handleCalculate = async () => {
     try {
       setError(''); // Hata mesajını sıfırla
@@ -23,6 +24,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
       let params = {};
       let response;
 
+    
      
 
       // ID'ye göre API rotasını belirle ve parametreleri ayarla
@@ -103,7 +105,7 @@ const Input = ({ id, ilacId, hastalikId }) => {
       if(!second){
          // API isteği gönderiliyor
           response = await axios.get(apiUrl, { params });
-          console.log(response.data);
+          
 
           if (response?.data) {
             // Check uyarı kontrolü

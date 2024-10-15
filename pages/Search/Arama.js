@@ -17,7 +17,10 @@ const App = () => {
       try {
         const response = await axios.get(API_ROUTES.COMBINED);
         setMedicines(response.data);
+<<<<<<< Updated upstream
         console.log(response.data);
+=======
+>>>>>>> Stashed changes
       } catch (error) {
         // console.error('Error fetching data:', error);
       }
@@ -95,6 +98,11 @@ const App = () => {
           } else if ([3, 5, 6].includes(id)) {
             navigation.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
           }
+        }
+        else if(item.sayfa === "besin takviyesi"){
+          const id = item.product_category__supplement;
+          console.log(id);
+          navigation.navigate('VitDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
         }
       }}
       

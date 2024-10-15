@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     marginTop: 8,
   },
+  loadingContainer: {
+    flex: 1, // Tüm alanı kapla
+    justifyContent: 'center', // Dikey ortalama
+    alignItems: 'center', // Yatay ortalama
+  },
 });
 
 export default styles;

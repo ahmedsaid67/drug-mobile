@@ -1,46 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
 import styles from '../../styles/SicknessStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_ROUTES } from '../../utils/constant';
 import { colors } from '../../styles/colors';
 
+
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; // Get selected item
-  const [hastaliklar, setHastaliklar] = useState([]); // Eğer hastalıklar boşsa boş liste kullan
+  const [supplements, setSupplements] = useState([]); // Eğer supplement listesi boşsa boş liste kullan
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true); 
-
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (item && item.id) {
-          const response = await axios.get(`${API_ROUTES.MEDICINE_BY_ID}${item.id}`);
-          setHastaliklar(response.data.hastaliklar);
+          const response = await axios.get(`${API_ROUTES.SUPPLEMENT_BY_PRODUCT_CATEGORY}${item.id}`);
+          setSupplements(response.data);
+          console.log(response.data);
         }
       } catch (error) {
         console.error('API isteği sırasında hata oluştu:', error);
       }
       finally {
-         setLoading(false); 
-      }
+        
+          setLoading(false); 
+       
+        
+      
+    }
     };
   
     fetchData();
   }, [item]);
   
-  // Seçilen hastalıkla MedicineDetail'e yönlendirme işlevi
-  const handleHastalikSec = (hastalik) => {
-    // Seçilen hastalığı item'in içerisine ekleyerek güncelleme
-    const updatedItem = {
-      ...item, 
-      hastaliklar: hastalik  // Seçilen hastalık tüm bilgileriyle eklendi
-    };
-    
+  // Seçilen supplement ile MedicineDetail'e yönlendirme işlevi
+  const handleSupplementSelect = (supplement) => {
+    // Seçilen supplement'i item'in içerisine ekleyerek güncelleme
+   
     // MedicineDetail'e yönlendirme yaparken güncellenmiş item'i gönderiyoruz
-    navigation.navigate('MedicineDetail', { item: updatedItem });
+    navigation.navigate('VitSearch', { item: supplement });
   };
 
   return (
@@ -49,34 +50,34 @@ const NidSearchPage = ({ route }) => {
         <ActivityIndicator size="large" color={colors.uygulamaRengi} />
       </View>
     ) : (
-
+    <>
     <View style={styles.container}>
-      <Text style={styles.title}>Hastalıklar:</Text>
+      <Text style={styles.title}>Supplementler:</Text>
       
-      {/* Eğer hastalıklar listesi boşsa mesaj göster */}
-      {hastaliklar.length === 0 ? (
+      {/* Eğer supplement listesi boşsa mesaj göster */}
+      {supplements.length === 0 ? (
         <TouchableOpacity 
           style={styles.noDiseaseTextContainer} 
-          onPress={() => navigation.navigate('MedicineDetail', { item })}
+          onPress={() => navigation.navigate('VitSearch', { item })}
         >
-          <Text style={styles.noDiseaseText}>Bu ilaç için hastalık bilgisi bulunmamaktadır. İlaca gitmek için tıklayın.</Text>
+          <Text style={styles.noDiseaseText}>Bu ilaç için supplement bilgisi bulunmamaktadır. İlaca gitmek için tıklayın.</Text>
         </TouchableOpacity>
       ) : (
-        hastaliklar.map((hastalik, index) => (
+        supplements.map((supplement, index) => (
           <TouchableOpacity 
             key={index} 
             style={styles.hastalikItem}
-            onPress={() => handleHastalikSec(hastalik)} // Seçilen hastalıkla yönlendirme
+            onPress={() => handleSupplementSelect(supplement)} // Seçilen supplement ile yönlendirme
           >
             {/* Burada nesnenin adı render ediliyor */}
-            <Text style={styles.hastalikText}>{hastalik.name}</Text>
+            <Text style={styles.hastalikText}>{supplement.name}</Text>
           </TouchableOpacity>
         ))
       )}
     </View>
+    </>
     )
   );
 };
-
 
 export default NidSearchPage;

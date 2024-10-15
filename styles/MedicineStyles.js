@@ -145,6 +145,50 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
+    purchaseButton: {
+        backgroundColor: '#007BFF', // Buton rengi
+        padding: 15,
+        borderRadius: 5,
+        width: '100%',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    purchaseButtonText: {
+        color: 'white', // Metin rengi
+        fontSize: 18,
+        fontWeight: 'bold', // Metin kalınlığı
+    },
+    closeButton: {
+        backgroundColor: '#ff4d4d', // Kapatma butonu rengi
+        padding: 10,
+        borderRadius: 5,
+        margin: 20,
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: 'white', // Metin rengi
+        fontSize: 16,
+    },
+    warningBox: {
+        flexDirection: 'row', // İkon ve metni yan yana yerleştirmek için
+        alignItems: 'center',
+        padding: 10,
+        marginVertical: 10,
+      },
+      warningIcon: {
+        color: '#d9534f', // Kırmızı metin rengi
+        fontSize: 35, // İkon boyutu
+        marginRight: 5, // İkon ile metin arasında boşluk
+      },
+      warningText: {
+        color: '#d9534f', // Kırmızı metin rengi
+        fontWeight: 'bold',
+      },
+      loadingContainer: {
+        flex: 1, // Tüm alanı kapla
+        justifyContent: 'center', // Dikey ortalama
+        alignItems: 'center', // Yatay ortalama
+      },
 });
 
 export default styles;

@@ -12,7 +12,8 @@ const { width } = Dimensions.get('window');
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [medicines,setMedicines] = useState([]);
+  const [product, setProduct] = useState([]);
   
 
   useEffect(() => {
@@ -23,7 +24,14 @@ const HomePage = () => {
           ...item,
           image: item.img || 'https://via.placeholder.com/500'  // Eğer img null ise placeholder kullan
         }));
+        const responseProd = await axios.get(API_ROUTES.SUPPLEMENT);
+        const fetchedDataProd = responseProd.data.map(item => ({
+          ...item,
+          image: item.img || 'https://via.placeholder.com/500'  // Eğer img null ise placeholder kullan
+        }));
+        
         setMedicines(fetchedData);
+        setProduct(fetchedDataProd);
       } catch (error) {
         // console.error('Error fetching data:', error);
         // Alert.alert('Error fetching data');
@@ -33,7 +41,7 @@ const HomePage = () => {
     fetchForm();
   }, []);
 
-  const [medicines,setMedicines] = useState([]);
+  
 
   const [supplements] = useState([
     { id: 1, name: 'Katagori 1',data:"supplements", image: 'https://via.placeholder.com/500' },
@@ -73,6 +81,25 @@ const HomePage = () => {
     // `nid.js` sayfasına tıklanan kartın bilgilerini gönderiyoruz
     navigate.navigate('NidSearchPage', { item });
   };
+
+  const navigateToNidProd = (item) =>{
+    
+      const id = item.id;
+      if ([1, 4].includes(id)) {
+        navigate.navigate('NidProductPage', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+      } else if ([2, 3, 5, 6].includes(id)) {
+        navigate.navigate('VitSearch', { item }); // 3, 5, 6 için hastalık detayına yönlendir
+      }
+    
+  }
+
+  const renderCardProd = ({ item }) => (
+    <TouchableOpacity style={styles.card} onPress={() => navigateToNidProd(item)}>
+      <Image source={{ uri: item.image }} style={styles.image} />
+      <Text style={styles.cardText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+  
   
 
   const navigate = useNavigation();
@@ -101,7 +128,7 @@ const HomePage = () => {
       {/* İlaçlar */}
       <Text style={styles.sectionTitle}>İlaçlar</Text>
       <FlatList
-        data={medicines}
+        data={medicines.sort((a, b) => a.order - b.order)}
         renderItem={renderCard}
         keyExtractor={item => item.id.toString()}
         horizontal
@@ -119,8 +146,8 @@ const HomePage = () => {
       {/* Besin Takviyeleri */}
       <Text style={styles.sectionTitle}>Besin Takviyeleri</Text>
       <FlatList
-        data={supplements}
-        renderItem={renderCard}
+        data={product.sort((a, b) => a.order - b.order)}
+        renderItem={renderCardProd}
         keyExtractor={item => item.id.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -129,10 +156,10 @@ const HomePage = () => {
         pagingEnabled
       />
 
-     {/* Vitamin Alanı */}
-     <TouchableOpacity style={styles.adContainer} onPress={() => navigateToNidPage({ data: 'vitamins' })}>
-        <Text style={styles.adText}>Vitaminler</Text>
-      </TouchableOpacity>
+    {/* Reklam Alanı */}
+    <View style={styles.adContainer}>
+        <Text style={styles.adText}>Reklam Alanı</Text>
+    </View>
 
       {/* Sporcu Besinler */}
       <Text style={styles.sectionTitle}>Sporcu Besinler</Text>
@@ -146,42 +173,11 @@ const HomePage = () => {
         pagingEnabled
       />
 
-      {/* Sporcu Besinler */}
-      <Text style={styles.sectionTitle}>Sporcu Besinler</Text>
-      <FlatList
-        data={supplements}
-        renderItem={renderCard}
-        keyExtractor={item => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width * 0.75}
-        decelerationRate="fast"
-        pagingEnabled
-      />
-      {/* Sporcu Besinler */}
-      <Text style={styles.sectionTitle}>Sporcu Besinler</Text>
-      <FlatList
-        data={supplements}
-        renderItem={renderCard}
-        keyExtractor={item => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width * 0.75}
-        decelerationRate="fast"
-        pagingEnabled
-      />
-      {/* Sporcu Besinler */}
-      <Text style={styles.sectionTitle}>Sporcu Besinler</Text>
-      <FlatList
-        data={supplements}
-        renderItem={renderCard}
-        keyExtractor={item => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={width * 0.75}
-        decelerationRate="fast"
-        pagingEnabled
-      />
+       {/* Reklam Alanı */}
+    <View style={styles.adContainer}>
+        <Text style={styles.adText}>Reklam Alanı</Text>
+    </View>
+
 
       {/* Hatırlatıcı Butonu */}
       <TouchableOpacity style={styles.reminderButton}
