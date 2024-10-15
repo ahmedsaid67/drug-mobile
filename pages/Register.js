@@ -60,7 +60,7 @@ const Register = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <RegisterHeader />
+      {/* <RegisterHeader /> */}
       <View style={styles.container}>
         <Text style={styles.title}>Kayıt Ol</Text>
 

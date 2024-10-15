@@ -59,7 +59,6 @@ export const API_ROUTES = {
   PRODUCT_CATEGORY_BY_PRODUCT_NO_PAGINATIONS : API_KEY + '/products/list-products-by-category-no-paginations/', // paginationssuz aramada kullanılır.
 
 
-
   COMBINED : API_KEY + '/combined/',
 
  

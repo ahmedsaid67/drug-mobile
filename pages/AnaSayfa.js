@@ -25,8 +25,8 @@ const HomePage = () => {
         }));
         setMedicines(fetchedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        Alert.alert('Error fetching data');
+        // console.error('Error fetching data:', error);
+        // Alert.alert('Error fetching data');
       }
     };
 

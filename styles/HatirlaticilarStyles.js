@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   uyariText: {
       fontSize: 16,
-      color: '#666', // Lighter grey for warning text
+      color: colors.text, // Lighter grey for warning text
       textAlign: 'center',
       marginBottom: 20,
   },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
       marginTop: 15,
   },
   pauseButton: {
-      backgroundColor: '#007BFF', // Bootstrap blue for a modern look
+      backgroundColor: colors.uygulamaRengi, // Bootstrap blue for a modern look
       paddingVertical: 12,
       width:120,
       borderRadius: 16,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
       elevation: 5,
   },
   deleteButton: {
-      backgroundColor: '#FF6B6B', // Softer red for delete button
+      backgroundColor: colors.deleteIcon, // Softer red for delete button
       paddingVertical: 12,
       width:120,
       borderRadius: 16,
@@ -161,9 +161,9 @@ const styles = StyleSheet.create({
   
     floatingButton: {
       position: 'absolute',
-      bottom: 80,
+      bottom: 90,
       right: 20,
-      backgroundColor: '#1DA1F2',
+      backgroundColor: colors.uygulamaRengi,
       width: 60,
       height: 60,
       borderRadius: 30,

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     right: -10,
-    backgroundColor: 'red',
+    backgroundColor: colors.deleteIcon,
     padding: 5,
     borderRadius: 20,
     alignItems: 'center',

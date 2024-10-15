@@ -1,18 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity,Image } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome icons
+import { View, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 import styles from '../styles/UstBarStyles';
 import { colors } from '../styles/colors'; // Adjust the import path as necessary
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation from React Navigation
-// import Icon from 'react-native-vector-icons/Feather'; 
+import styles2 from '../styles/LoginHeaderStyles';
 
-const UstBar = () => {
+const UstBar = ({ showBars, currentRoute }) => {
   const user = useSelector((state) => state.user);
   const navigation = useNavigation(); // Initialize navigation
-  // console.log("userUstBar:",user)
-
-  const displayName = user.id ? `${user.first_name} ${user.last_name}` : 'Misafir';
 
   const handleIconPress = () => {
     if (user.id) {
@@ -22,22 +19,65 @@ const UstBar = () => {
     }
   };
 
+  // Hide the bar for AppSplashScreen and ErrorPage
+  if (currentRoute === 'AppSplashScreen' || currentRoute === 'ErrorPage') {
+    return null; // Return nothing when the route matches
+  }
+
+  // Determine what text to display based on currentRoute
+  const displayText = ['Login', 'Register', 'ResetPasswordCode', 'ResetPassword'].includes(currentRoute)
+  ? 'Ölçek'
+  : currentRoute;
+
+  const navigatorHandle =()=>{
+    if (currentRoute === 'Login') {
+      const previousRoute = navigation.getState()?.routes[navigation.getState().index - 1]?.name;
+      const twoStepsBackRoute = navigation.getState()?.routes[navigation.getState().index - 2]?.name;
+
+      // Eğer bir önceki sayfa Ana Sayfa veya Arama ise
+      if (previousRoute === 'Ana Sayfa' || previousRoute === 'Arama') {
+          navigation.goBack(); // Bir önceki sayfaya yönlendir
+      } 
+      // Eğer Bildirimler veya Hatırlatıcılar ise iki önceki sayfaya yönlendir
+      else if (previousRoute === 'Bildirimler' || previousRoute === 'Hatırlatıcılar' || previousRoute === 'Hatırlatıcı Oluştur') {
+          navigation.navigate(twoStepsBackRoute);
+      } else {
+          navigation.navigate('Ana Sayfa'); // Eğer giriş sayfasındaysan Ana Sayfa'ya git
+      }
+    } else {
+        navigation.goBack(); // Diğer durumlar için geri git
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.logoText}>Ölçek</Text> 
-      <View style={styles.rightSection}>
-      <TouchableOpacity onPress={handleIconPress} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {/* <Text style={styles.guestText}>{displayName}</Text> */}
-          <View style={styles.iconWrapper}>
-            <Icon name="user" size={20} color={colors.icon} />
+    <>
+      {showBars ? (
+        <View style={styles.container}>
+          <Text style={styles.logoText}>Ölçek</Text> 
+          <View style={styles.rightSection}>
+            <TouchableOpacity onPress={handleIconPress} style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={styles.iconWrapper}>
+                <Icon
+                  name={user.id ? "person" : "person-outline"}
+                  size={24}
+                  color={user.id ? colors.uygulamaRengi : colors.icon}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
-  </View>
+        </View>
+      ) : (
+        <View style={styles2.header}>
+          <TouchableOpacity onPress={navigatorHandle}>
+            <Icon name="arrow-back" size={24} color={colors.icon} />
+          </TouchableOpacity>
+          <Text style={styles2.logoText}>{displayText}</Text> 
+        </View>
+      )}
+    </>
   );
 };
 
 export default UstBar;
-
 
 

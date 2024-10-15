@@ -18,7 +18,7 @@ const HatirlaticiYonetModel = ({ modalVisible, setModalVisible, setSelectedRemin
                 }
             }
         } catch (error) {
-            console.error("Error deleting reminder:", error);
+            // console.error("Error deleting reminder:", error);
         } finally {
             setModalVisible(false);
             setSelectedReminder("");
@@ -40,7 +40,7 @@ const HatirlaticiYonetModel = ({ modalVisible, setModalVisible, setSelectedRemin
                 }
             }
         } catch (error) {
-            console.error("Error pausing reminder:", error);
+            // console.error("Error pausing reminder:", error);
         } finally {
             setModalVisible(false);
             setSelectedReminder("");

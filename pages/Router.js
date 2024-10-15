@@ -22,8 +22,8 @@ import NidSearchPage from "./Search/[nid]";
 import MedicineDetail from "./Medicine/[nid]";
 import SicknessDetail from  "./Sickness/[nid]";
 import PdfViewer from "./PdfViewer.js";
-
-
+import ErrorPage from './ErrorPage.js';
+import AppSplashScreen from './AppSplashScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -179,9 +179,12 @@ const Router = ({ currentRoute }) => {
     }
   };
 
+
+
   return (
     <Layout currentRoute={currentRoute}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="AppSplashScreen" component={AppSplashScreen} />
         <Stack.Screen name="Ana Sayfa" component={AnaSayfa} />
         <Stack.Screen name="Arama" component={Arama} />
         <Stack.Screen name="Bildirimler" component={Bildirimler} />
@@ -192,12 +195,12 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="ResetPasswordCode" component={ResetPasswordCode} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="ReminderSearch" component={ReminderSearch} />
-        <Stack.Screen name="ReminderCreate" component={ReminderCreate} />
+        <Stack.Screen name="Hatırlatıcı Oluştur" component={ReminderCreate} />
         <Stack.Screen name="NidSearchPage" component={NidSearchPage} />
         <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
         <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
         <Stack.Screen name="PdfViewer" component={PdfViewer} />
-
+        <Stack.Screen name="ErrorPage" component={ErrorPage} />
       </Stack.Navigator>
     </Layout>
   );

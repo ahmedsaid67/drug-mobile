@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/SearchPageStyles'; // Stillerin içe aktarılması
 import { API_ROUTES } from '../../utils/constant';
 import { useNavigation } from '@react-navigation/native'; // navigate fonksiyonu için
+import axios from 'axios';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,18 +15,17 @@ const App = () => {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const response = await fetch(API_ROUTES.COMBINED);
-        const data = await response.json();
-        setMedicines(data);
-        console.log(data);
+        const response = await axios.get(API_ROUTES.COMBINED);
+        setMedicines(response.data);
+        console.log(response.data);
       } catch (error) {
-        console.error('Veri çekme hatası:', error);
+        // console.error('Error fetching data:', error);
       }
     };
 
-    fetchMedicines(); // Veri çekme fonksiyonu çağrılıyor
+    fetchMedicines(); // Call the data fetching function
   }, []);
-
+  
   const popularSearches = [
     'İlaç 1',
     'İlaç 2',

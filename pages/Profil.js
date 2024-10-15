@@ -25,7 +25,7 @@ function Profil() {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  console.log("user:",user)
+  // console.log("user:",user)
 
   useEffect(() => {
     const getProfil = async () => {
@@ -36,7 +36,7 @@ function Profil() {
         setLastName(res.data.user?.last_name || '');
         setEmail(res.data.user?.email || '');
       } catch (error) {
-        console.error("Profil yüklenemedi:", error);
+        // console.error("Profil yüklenemedi:", error);
       } finally {
         setLoading(false); // Set loading to false when fetching is done
       }
@@ -84,7 +84,7 @@ function Profil() {
               Alert.alert("Başarıyla Güncellendi", "Profil fotoğrafınız başarıyla güncellendi.");
             })
             .catch((error) => {
-              console.error("Profil fotoğrafı güncellenemedi:", error);
+              // console.error("Profil fotoğrafı güncellenemedi:", error);
               Alert.alert("Güncelleme Hatası", "Profil fotoğrafınız güncellenirken bir hata oluştu.");
             });
         } else {
@@ -121,9 +121,9 @@ function Profil() {
       }
     } catch (error) {
       if (error.message.includes('User cancelled image selection')) {
-        console.log("Kullanıcı fotoğraf seçimini iptal etti.");
+        // console.log("Kullanıcı fotoğraf seçimini iptal etti.");
       } else {
-        console.error("Fotoğraf seçme hatası:", error);
+        // console.error("Fotoğraf seçme hatası:", error);
         Alert.alert("Fotoğraf Seçme Hatası", "Fotoğraf seçilirken bir hata oluştu.");
       }
     }
@@ -170,11 +170,11 @@ function Profil() {
         Alert.alert("Başarıyla Güncellendi", "Profil bilgileriniz başarıyla güncellendi.");
       })
       .catch(error => {
-        console.error("Profil güncellenemedi:", error);
+        // console.error("Profil güncellenemedi:", error);
         Alert.alert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
       });
     } catch (error) {
-      console.error("Güncelleme hatası:", error);
+      // console.error("Güncelleme hatası:", error);
       Alert.alert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
     } finally {
       Keyboard.dismiss(); // Klavyeyi kapat
@@ -184,7 +184,7 @@ function Profil() {
 
   return (
     <View style={styles.pageContainer}>
-      <ProfilHeader />
+      {/* <ProfilHeader /> */}
       <View style={styles.container}>
       {loading ? ( // Show loading indicator if loading is true
           <View style={styles.loadingConatiner}>

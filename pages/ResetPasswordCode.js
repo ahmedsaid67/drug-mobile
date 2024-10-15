@@ -71,7 +71,7 @@ const ResetPasswordCode = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <ResetPasswordCodeHeader />
+      {/* <ResetPasswordCodeHeader /> */}
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Şifre Sıfırlama</Text>
 

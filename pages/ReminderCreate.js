@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 
 
+
 const ReminderCreate = ({ route, navigation }) => {
     const { name } = route.params;
     const [form, setForm] = useState('');
@@ -42,6 +43,8 @@ const ReminderCreate = ({ route, navigation }) => {
     const [zamanlamaModalVisible, setZamanlamaModalVisible] = useState(false); 
 
     const userMail = useSelector((state) => state.user.email);
+    const loginStatus = useSelector((state) => state.login.success);
+
 
 
     const requestNotificationPermission = async () => {
@@ -314,11 +317,13 @@ const ReminderCreate = ({ route, navigation }) => {
     
     
 
-
+    if (!loginStatus){
+        navigation.navigate('Login')
+    }
 
     return (
-        <View style={styles.container}>
-            <ReminderCreateHead />
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+            {/* <ReminderCreateHead /> */}
             <View style={styles.secondContainer}>
                 <Text style={styles.title}>Detaylar</Text>
                 <View style={styles.inputWrapper}>
@@ -495,7 +500,7 @@ const ReminderCreate = ({ route, navigation }) => {
                     )}
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 

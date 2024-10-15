@@ -54,12 +54,12 @@ const App = () => {
 
   const handleItemPress = (name) => {
     // Navigate to ReminderCreate and pass the name
-    navigation.navigate('ReminderCreate', { name });
+    navigation.navigate('Hatırlatıcı Oluştur', { name });
   };
 
   return (
     <View style={styles.container}>
-      <ReminderSearchHeader />
+      {/* <ReminderSearchHeader /> */}
       <View style={styles.secondContainer}>
         <View style={styles.searchBoxContainer}>
           <TextInput

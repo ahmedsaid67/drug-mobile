@@ -88,9 +88,9 @@ const handlePasswordReset = async () => {
 
   return (
     <View style={styles.pageContainer}>
-      <ResetPasswordHeader />
+      {/* <ResetPasswordHeader /> */}
         <View style={styles.container}>
-        <Text style={styles.title}>Şifre Sıfırlama</Text>
+        <Text style={styles.title}>Yeni Şifre</Text>
             <TextInput
             style={styles.input}
             placeholder="6 haneli kodu giriniz"
@@ -135,7 +135,7 @@ const handlePasswordReset = async () => {
             {loading ? (
                 <ActivityIndicator size="small" color={colors.loadingColor} /> // Show loading indicator if loading
             ) : (
-                <Text style={styles.buttonText}>Şifreyi Sıfırla</Text> // Button text
+                <Text style={styles.buttonText}>Şifremi Kaydet</Text> // Button text
             )}
             </TouchableOpacity>
         </View>
