@@ -53,10 +53,10 @@ export const API_ROUTES = {
   GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT_DATA_AGE : API_KEY + '/hastalikhemyasahemkiloyabagliazalandoz/get-detail-data/', // eşik olan yaş bilgisini alıyoruz
 
   SUPPLEMENT : API_KEY + '/supplements/', // BESİN TAKVİYELERİ
-  SUPPLEMENT_BY_PRODUCT_CATEGORY : API_KEY + '/productcategory/list-categories-by-supplement/',  // BESİN TAKVİYESİNE GORE ÜRÜN KATEGORİLERİ  -- VİTAMİNLERE DİAR KATEGORİLERİ GETİRİ
-  PRODUCT_CATEGORY_BY_PRODUCT : API_KEY + '/products/list-products-by-category/', // ÜRÜN KATEGORİSİNE GÖRE ÜRÜNLER -- A VİTAMİNİN DAİR ÜRÜNLERİ GETİRİR
+  SUPPLEMENT_BY_PRODUCT_CATEGORY : API_KEY + '/productcategory/list-categories-by-supplement/?supplement_id=',  // BESİN TAKVİYESİNE GORE ÜRÜN KATEGORİLERİ  -- VİTAMİNLERE DİAR KATEGORİLERİ GETİRİ
+  PRODUCT_CATEGORY_BY_PRODUCT : API_KEY + '/products/list-products-by-category/?product_category_id=', // ÜRÜN KATEGORİSİNE GÖRE ÜRÜNLER -- A VİTAMİNİN DAİR ÜRÜNLERİ GETİRİR
 
-  PRODUCT_CATEGORY_BY_PRODUCT_NO_PAGINATIONS : API_KEY + '/products/list-products-by-category-no-paginations/', // paginationssuz aramada kullanılır.
+  PRODUCT_CATEGORY_BY_PRODUCT_NO_PAGINATIONS : API_KEY + '/products/list-products-by-category-no-paginations/?product_category_id=', // paginationssuz aramada kullanılır.
 
 
   COMBINED : API_KEY + '/combined/',

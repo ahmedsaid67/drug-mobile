@@ -17,10 +17,7 @@ const App = () => {
       try {
         const response = await axios.get(API_ROUTES.COMBINED);
         setMedicines(response.data);
-<<<<<<< Updated upstream
-        console.log(response.data);
-=======
->>>>>>> Stashed changes
+
       } catch (error) {
         // console.error('Error fetching data:', error);
       }
