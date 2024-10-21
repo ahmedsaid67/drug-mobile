@@ -71,6 +71,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Dikey ortalama
     alignItems: 'center', // Yatay ortalama
   },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'flex-end', // Modal ekranın altından gelsin
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Arkayı hafif karartmak için
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20, // Köşeleri yuvarlatmak için
+    borderTopRightRadius: 20,
+    padding: 20,
+    minHeight: 200, // Modalın yüksekliği (ayarlanabilir)
+    width: '100%', // Tüm genişliği kapsasın
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center', // Başlığı ortala
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+    alignItems: 'center', // Butonu ortala
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default styles;

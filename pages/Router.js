@@ -29,6 +29,10 @@ import AppSplashScreen from './AppSplashScreen.js';
 import NidProductPage from "./Products/[nid].js";
 import VitSearch from "./Search/[vit].js";
 import VitDetail from "./Detail/[vit].js";
+import UseInfo from "./Detail/[ku].js";
+import InputKg from "./Detail/[InputKg].js";
+import InputAge from "./Detail/[InputAge].js";
+import Check from "./Detail/[Check].js";
 
 
 const Stack = createNativeStackNavigator();
@@ -212,6 +216,10 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="NidProductPage" component={NidProductPage} />
         <Stack.Screen name="VitSearch" component={VitSearch} />
         <Stack.Screen name="VitDetail" component={VitDetail} />
+        <Stack.Screen name="UseInfo" component={UseInfo} />
+        <Stack.Screen name="InputKg" component={InputKg} />
+        <Stack.Screen name="InputAge" component={InputAge} />
+        <Stack.Screen name="Check" component={Check} />
 
 
       </Stack.Navigator>

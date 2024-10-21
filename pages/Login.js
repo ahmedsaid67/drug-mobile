@@ -143,6 +143,7 @@ const Login = () => {
           value={email}
           autoCapitalize="none"
           placeholderTextColor={colors.text}
+          keyboardType="email-address" 
         />
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 

@@ -1,12 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { colors } from './colors';
-
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.MainContainerBackground, // Daha temiz bir beyaz arka plan
+    backgroundColor: Colors.background, // Daha temiz bir beyaz arka plan
   },
   inputRow: {
     marginBottom: 15,
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   forwardButton: {
-    backgroundColor: colors.uygulamaRengi, // Daha canlı bir mavi ton
+    backgroundColor: '#2196f3', // Daha canlı bir mavi ton
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -62,13 +61,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   medText: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
+    fontSize: 20, // Daha büyük metin
     fontWeight: 'bold',
     color: '#333333',
   },
   warningText: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
-    color: '#DB4437', // Kırmızı uyarı metni
+    fontSize: 18, // Daha büyük metin
+    color: '#d32f2f', // Kırmızı uyarı metni
     marginTop: 10,
   },
   resultContainer: {
@@ -82,49 +81,24 @@ const styles = StyleSheet.create({
     color: '#388e3c', // Yeşil metin
   },
   instructionsButton: {
-    flex: 1,
-    backgroundColor: "#F2B01D",
-    padding: 15,
-    marginHorizontal: 5,
-    borderRadius: 5,  
+    backgroundColor: '#ff9800', // Turuncu buton
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 20,
+    position: 'absolute',
+    bottom: 80, // Butonlar arasında boşluk bırakmak için
+    left: 20,
+    right: 20,
   },
   instructionsButtonText: {
     color: '#ffffff',
-    fontSize: colors.fontSizeText, // Daha büyük metin
+    fontSize: 18, // Daha büyük metin
     textAlign: 'center',
-  },
-  remindersButton: {
-    flex: 1,
-    backgroundColor: colors.uygulamaRengi,
-    padding: 15,
-    marginHorizontal: 5,
-    borderRadius: 5,  
-  },
-  remindersButtonText: {
-    color: '#ffffff',
-    fontSize: colors.fontSizeText, // Daha büyük metin
-    textAlign: 'center',
-  },
-  checkInfo: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
-    color:colors.text, // Turuncu metin
-    marginBottom: 10,
   },
   checkText: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
-    color: "#DB4437", // Turuncu metin
-  },
-  pickerContainer: {
-    height: 200,
-    width: 100,
-    justifyContent: 'center',
-  },
-  selectedLayout: {
-    backgroundColor: '#e0e0e0',
-  },
-  elementText: {
-    fontSize: 15,
-    color: '#333',
+    fontSize: 18, // Daha büyük metin
+    color: '#f57c00', // Turuncu metin
   },
   // Diğer stiller...
 });
