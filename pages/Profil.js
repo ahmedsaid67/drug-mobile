@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, TextInput, ActivityIndicator  } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Alert, TextInput, ActivityIndicator,Linking  } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { submitLogout } from '../context/features/auth/loginSlice';
@@ -13,6 +13,8 @@ import { Keyboard } from 'react-native';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { colors } from '../styles/colors';
 import { setUser } from '../context/features/user/userSlice';
+import AlertModal from '../components/AlertModal';
+import PermissionBlockedModal from '../components/PermissionBlockedModal';
 
 function Profil() {
   const user = useSelector((state) => state.user);
@@ -21,11 +23,41 @@ function Profil() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const [alertVisibleBlockedPermission, setAlertVisibleBlockedPermission] = useState(false);
+  const [alertMessageBlockedPermission, setAlertMessageBlockedPermission] = useState('');
+  const [alertTitleBlockedPermission, setAlertTitleBlockedPermission] = useState('');
 
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   // console.log("user:",user)
+
+  const showAlert = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+
+    // 500 milisaniye gecikmeli olarak uyarıyı göster
+    setTimeout(() => {
+        setAlertVisible(true);
+    }, 400); // 500 milisaniye = 0.5 saniye
+  };
+
+  const showAlertBlockedPermission = (title, message) => {
+    setAlertTitleBlockedPermission(title);
+    setAlertMessageBlockedPermission(message);
+
+    // 500 milisaniye gecikmeli olarak uyarıyı göster
+    setTimeout(() => {
+      setAlertVisibleBlockedPermission(true);
+    }, 400); // 500 milisaniye = 0.5 saniye
+  };
+
+
+
 
   useEffect(() => {
     const getProfil = async () => {
@@ -53,9 +85,10 @@ function Profil() {
     try {
       // Galeri erişim iznini kontrol et
       const permissionResult = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
-      console.log("permissionResult:", permissionResult);
+      // console.log("permissionResult:", permissionResult);
+      const hasPermission = permissionResult === RESULTS.GRANTED
   
-      if (permissionResult === RESULTS.GRANTED) {
+      if (hasPermission) {
         // İzin verilmişse galeriyi aç
         const image = await ImagePicker.openPicker({
           cropping: true,
@@ -81,50 +114,27 @@ function Profil() {
                 ...prev,
                 photo: response.data.photo || prev.photo,
               }));
-              Alert.alert("Başarıyla Güncellendi", "Profil fotoğrafınız başarıyla güncellendi.");
+              showAlert("Başarıyla Güncellendi", "Profil fotoğrafınız başarıyla güncellendi.");
             })
             .catch((error) => {
               // console.error("Profil fotoğrafı güncellenemedi:", error);
-              Alert.alert("Güncelleme Hatası", "Profil fotoğrafınız güncellenirken bir hata oluştu.");
+              showAlert("Güncelleme Hatası", "Profil fotoğrafınız güncellenirken bir hata oluştu.");
             });
         } else {
-          Alert.alert("İşlem İptal Edildi", "Hiçbir fotoğraf seçilmedi.");
+          showAlert("İşlem İptal Edildi", "Hiçbir fotoğraf seçilmedi.");
         }
-      } else if (permissionResult === RESULTS.DENIED) {
-        // Kullanıcı izni reddettiyse bir uyarı göster ve tekrar izin iste
-        Alert.alert(
-          "İzin Gerekli",
-          "Galeriden fotoğraf seçebilmek için erişim izni vermeniz gerekiyor. İzin vermek ister misiniz?",
-          [
-            {
-              text: "İzin Ver",
-              onPress: async () => {
-                const newPermissionResult = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
-                if (newPermissionResult === RESULTS.GRANTED) {
-                  handlePhotoUpdate(); // İzin verilirse işlemi tekrar çalıştır
-                }
-              },
-            },
-            { text: "İptal", onPress: () => {} },
-          ]
-        );
-      } else if (permissionResult === RESULTS.BLOCKED) {
+
+      } else if (!hasPermission) {
         // Kullanıcı izni kalıcı olarak engellediyse ayarlara yönlendirin
-        Alert.alert(
-          "İzin Gerekli",
-          "Galeriden fotoğraf seçebilmek için ayarlardan erişim izni vermeniz gerekiyor.",
-          [
-            { text: "Ayarlar'a Git", onPress: () => Linking.openSettings() },
-            { text: "İptal", onPress: () => {} },
-          ]
-        );
+        showAlertBlockedPermission("İzin Gerekli","Galeriden fotoğraf seçebilmek için ayarlardan erişim izni vermeniz gerekiyor.",);
       }
     } catch (error) {
       if (error.message.includes('User cancelled image selection')) {
         // console.log("Kullanıcı fotoğraf seçimini iptal etti.");
+        showAlert("İşlem İptal Edildi", "Fotoğraf seçimi iptal edildi.");
       } else {
         // console.error("Fotoğraf seçme hatası:", error);
-        Alert.alert("Fotoğraf Seçme Hatası", "Fotoğraf seçilirken bir hata oluştu.");
+        showAlert("Fotoğraf Seçme Hatası", "Fotoğraf seçilirken bir hata oluştu.");
       }
     }
   };
@@ -133,7 +143,7 @@ function Profil() {
   const handleProfileUpdate = async () => {
     // Karakter sınırı kontrolü
     if (firstName.length > 30 || lastName.length > 30) {
-      Alert.alert("Güncelleme Hatası", "Ad ve soyad 30 karakterden fazla olamaz.");
+      showAlert("Güncelleme Hatası", "Ad ve soyad 30 karakterden fazla olamaz.");
       return; // API çağrısını yapmadan önce fonksiyondan çık
     }
   
@@ -142,7 +152,7 @@ function Profil() {
       firstName === profil.user?.first_name &&
       lastName === profil.user?.last_name
     ) {
-      Alert.alert("Güncelleme Yapılmadı", "Profil bilgilerinizi güncellemek için önce bir değişiklik yapmanız gerekiyor.");
+      showAlert("Güncelleme Yapılmadı", "Profil bilgilerinizi güncellemek için önce bir değişiklik yapmanız gerekiyor.");
       return; // API çağrısını yapmadan önce fonksiyondan çık
     }
   
@@ -167,15 +177,11 @@ function Profil() {
             last_name: lastName,
           })
         );
-        Alert.alert("Başarıyla Güncellendi", "Profil bilgileriniz başarıyla güncellendi.");
+        showAlert("Başarıyla Güncellendi", "Profil bilgileriniz başarıyla güncellendi.");
       })
-      .catch(error => {
-        // console.error("Profil güncellenemedi:", error);
-        Alert.alert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
-      });
     } catch (error) {
       // console.error("Güncelleme hatası:", error);
-      Alert.alert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
+      showAlert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
     } finally {
       Keyboard.dismiss(); // Klavyeyi kapat
     }
@@ -183,6 +189,7 @@ function Profil() {
   
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.pageContainer}>
       {/* <ProfilHeader /> */}
       <View style={styles.container}>
@@ -225,7 +232,7 @@ function Profil() {
         />
         <TextInput
           style={styles.input}
-          value={profil.user?.email || ''}
+          value={email}
           editable={false} // Kullanıcı değeri değiştiremiyor
           placeholder="E-posta Adresiniz"
         />
@@ -240,7 +247,20 @@ function Profil() {
         </>
         )}
       </View>
+      <AlertModal
+        isVisible={alertVisible}
+        message={alertMessage}
+        title={alertTitle}
+        onClose={() => setAlertVisible(false)}
+      />
+      <PermissionBlockedModal
+        isVisible={alertVisibleBlockedPermission}
+        message={alertMessageBlockedPermission}
+        title={alertTitleBlockedPermission}
+        onClose={() => setAlertVisibleBlockedPermission(false)}
+      />
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

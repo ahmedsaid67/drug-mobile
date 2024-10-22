@@ -85,7 +85,7 @@ const Hatirlaticilar = () => {
           // console.error("Error fetching reminders:", error);
           setError(true)
         } finally {
-          
+          setLoading(false);
         }        
       }
     };
@@ -206,7 +206,7 @@ const Hatirlaticilar = () => {
         data={reminders}
         renderItem={renderReminder}
         keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.2}

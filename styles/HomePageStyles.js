@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     elevation: 3,  // Android shadow
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: colors.fontSizeTextMaxi,
     fontWeight: '600',
     marginVertical: 12,
     color: '#333',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     padding: 14,  // Metin için daha az padding
-    fontSize: 14,
+    fontSize: colors.fontSizeTextMini,
     fontWeight: '600',
     textAlign: 'center',
     color: '#444',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   adText: {
-    fontSize: 18,
+    fontSize: colors.fontSizeText,
     color: '#555',
   },
   reminderButton: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   reminderText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: colors.fontSizeText,
     marginRight: 8,
   },
 });

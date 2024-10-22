@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    // paddingVertical: 20,
+    marginTop:20,
   },
   notificationCard: {
     backgroundColor: '#fff',
@@ -23,14 +24,18 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderWidth: 1,
   },
+  altContainer:{
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
   description: {
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     color: colors.text,
     marginBottom: 8,
     fontWeight: 'bold',
   },
   date: {
-    fontSize: 14,
+    fontSize: colors.fontSizeText,
     color: colors.thirdText,
   },
 });

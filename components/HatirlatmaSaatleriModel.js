@@ -5,13 +5,27 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import styles from '../styles/ReminderCreateStyles';
 import moment from 'moment';
 import 'moment/locale/tr';
-
+import AlertModal from '../components/AlertModal'
 
 const HatirlatmaSaatleriModel = ({ zamanlamaModalVisible, setZamanlamaModalVisible, setZamanlama, zamanlama, firstDate }) => {
 
     const [addDate, setAddDate] = useState(['08:00']); // Saatleri tutacak state
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false); // Saat picker görünürlüğü için
     const [selectedTimeIndex, setSelectedTimeIndex] = useState(null); // Hangi saatin düzenlendiğini tutmak için
+
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertTitle, setAlertTitle] = useState('');
+
+    const showAlert = (title, message) => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+    
+        // 500 milisaniye gecikmeli olarak uyarıyı göster
+        setTimeout(() => {
+            setAlertVisible(true);
+        }, 400); // 500 milisaniye = 0.5 saniye
+    };
 
     // Saat picker açma
     const showDatePicker = (index) => {
@@ -63,9 +77,9 @@ const HatirlatmaSaatleriModel = ({ zamanlamaModalVisible, setZamanlamaModalVisib
 
             if (invalidTimes.length > 0) {
                 // Geçersiz saatleri uyarı mesajında göster
-                Alert.alert(
+                showAlert(
                     'Uyarı',
-                    `Hatırlatıcının ilk tarihi bugünün tarihi seçildiği için, geçmiş bir saat seçemezsiniz. Lütfen girdiğiniz saatleri kontrol ediniz.`
+                    `Hatırlatıcının ilk tarihi bugünün tarihi olduğu için, geçmiş bir saat seçemezsiniz. Lütfen girdiğiniz saatleri kontrol ediniz.`
                 );
                 return; // Kaydetme işlemi durdurulur
             }
@@ -123,6 +137,12 @@ const HatirlatmaSaatleriModel = ({ zamanlamaModalVisible, setZamanlamaModalVisib
                         onCancel={hideDatePicker}
                         is24Hour={true} // 24 saat formatı kullanımı
                         locale="tr-TR" // Türkçe dil ayarı
+                    />
+                    <AlertModal
+                        isVisible={alertVisible}
+                        message={alertMessage}
+                        title={alertTitle}
+                        onClose={() => setAlertVisible(false)}
                     />
                 </View>
             </View>

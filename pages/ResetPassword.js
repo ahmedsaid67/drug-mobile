@@ -56,6 +56,18 @@ const handlePasswordReset = async () => {
     }));
     navigation.navigate('Login');
   } catch (error) {
+    // console.log("error:", error);
+    if (error.message === "Network Error") {
+      // Network Error durumu için hiçbir işlem yapılmıyor
+      return;
+    }
+    const status = error?.response?.status;
+  
+    // Eğer status 401, 408, 429 veya 500 ve üzeri ise, return ile işleme son veriyoruz
+    if (status === 401 || status === 408 || status === 429 || status >= 500) {
+      return; // Bu durumlarda yanıt verilmemesi için işlem burada sonlanıyor
+    }
+  
     // Genel hata mesajı
     let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
   
@@ -70,6 +82,8 @@ const handlePasswordReset = async () => {
       } else {
         errorMessage = 'Beklenmedik bir hata oluştu.';
       }
+    }else{
+      errorMessage = 'Beklenmedik bir hata oluştu.';
     }
   
     // Kullanıcıya mesajı göster
@@ -78,7 +92,7 @@ const handlePasswordReset = async () => {
       variant: 'error',
     }));
   
-    console.log("error:", error);
+    
   }
   finally {
     setLoading(false);

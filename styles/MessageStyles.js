@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     },
     messageText: {
       color: colors.secondText,
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
     },
   });
 

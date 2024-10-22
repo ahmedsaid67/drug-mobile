@@ -5,7 +5,7 @@ import notifee, { EventType } from '@notifee/react-native';
 import axios from 'axios';
 import { API_ROUTES } from './utils/constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Linking } from 'react-native';
 
 
 // notifee.onBackgroundEvent(async ({ type, detail }) => {
@@ -86,6 +86,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //     console.error('Error removing notification from storage:', error);
 //   }
 // };
+
+
+
+
+  async function onBackgroundEvent(event) {
+    // Olayı işlemek için gerekli kodu buraya ekleyin
+    console.log('Background event:', event);
+  }
+  
+  notifee.onBackgroundEvent(onBackgroundEvent);
 
 AppRegistry.registerComponent(appName, () => App);
 

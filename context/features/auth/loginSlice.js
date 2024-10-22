@@ -13,31 +13,9 @@ export const submitLogin = (email, password) => async (dispatch) => {
 
     const response = await axios.post(API_ROUTES.LOGIN, { email, password });
 
-    if (!response?.data?.token) {
-      dispatch(
-        showMessage({
-          message: "Geçersiz email veya şifre. Lütfen bilgilerinizi kontrol edin.",
-          variant: "error",
-        })
-      );
-      dispatch(loginError("Geçersiz email veya şifre."));
-      return;
-    }
-
     storeToken(response.data.token);
     axios.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
-
-    try {
-      const userResponse = await axios.get(API_ROUTES.GET_USER);
-      dispatch(setUser(userResponse.data));
-    } catch {
-      dispatch(
-        showMessage({
-          message: "Kullanıcı bilgileri getirilemedi.",
-          variant: "error",
-        })
-      );
-    }
+    dispatch(setUser(response.data.user))
 
     dispatch(loginSuccess());
     dispatch(
@@ -48,8 +26,14 @@ export const submitLogin = (email, password) => async (dispatch) => {
     );
 
   } catch (err) {
+    if (err.message === "Network Error") {
+      // Network Error durumu için hiçbir işlem yapılmıyor
+      return;
+    }
+  
     if (err.response) {
       const emailErrorMessage = "Enter a valid email address.";
+      // Geçersiz email hatası durumu
       if (err.response.data?.email?.[0] === emailErrorMessage) {
         dispatch(
           showMessage({
@@ -58,30 +42,26 @@ export const submitLogin = (email, password) => async (dispatch) => {
           })
         );
         dispatch(loginError("Geçerli bir email adresi giriniz."));
+      } else if (
+        err.response.status === 401 ||
+        err.response.status === 408 ||
+        err.response.status === 429 ||
+        err.response.status >= 500
+      ) {
+        // Bu durumlar için herhangi bir işlem yapmıyoruz
+        return;
       } else {
-        dispatch(
-          showMessage({
-            message: "Giriş işleminizde bir sorun oluştu. Lütfen bilgilerinizi kontrol edin ve tekrar deneyin.",
-            variant: "error",
-          })
-        );
-        dispatch(loginError("Giriş işleminizde bir sorun oluştu."));
-      }
-    } else {
-      dispatch(
-        showMessage({
+        dispatch(showMessage({
           message: "Giriş işleminizde bir sorun oluştu. Lütfen bilgilerinizi kontrol edin ve tekrar deneyin.",
           variant: "error",
-        })
-      );
-      dispatch(loginError("Giriş işleminizde bir sorun oluştu."));
+        }));
+        dispatch(loginError("Giriş işleminizde bir sorun oluştu. Lütfen bilgilerinizi kontrol edin ve tekrar deneyin."));
+      }
     }
   } finally {
     dispatch(loginLoadingDone());
   }
 };
-
-
 
 
 
@@ -105,10 +85,8 @@ export const submitCreate = (email, password, firstName, lastName) => async (dis
     axios.defaults.headers.common["Authorization"] = `Token ${createResponse.data.token}`;
 
     // Kullanıcı bilgilerini alma
+    dispatch(setUser(createResponse.data.user))
 
-    const userResponse = await axios.get(API_ROUTES.GET_USER);
-    dispatch(setUser(userResponse.data));
-   
 
     // Başarılı kayıt ve giriş mesajı
     dispatch(loginSuccess());
@@ -120,11 +98,22 @@ export const submitCreate = (email, password, firstName, lastName) => async (dis
     );
 
   } catch (err) {
-    console.log("Kullanıcı oluşturulurken bir hata oluştu: ", err);
-
+    if (err.message === "Network Error") {
+      // Network Error durumu için hiçbir işlem yapılmıyor
+      return;
+    } 
+    // Önce özel durum kodlarını kontrol ediyoruz
+    const status = err?.response?.status;
+    
+    // Eğer status 401, 408, 429 veya 500 ve üzeri ise, return ile işleme son veriyoruz
+    if (status === 401 || status === 408 || status === 429 || status >= 500) {
+      return; // Bu durumlarda yanıt verilmemesi için işlem burada sonlanıyor
+    }
+  
+  
     if (err?.response?.data?.email) {
       const emailErrors = err.response.data.email;
-
+  
       let errorMessage = "E-posta hatası: ";
       if (emailErrors.includes("Enter a valid email address.")) {
         errorMessage += "Geçerli bir e-posta adresi girin.";
@@ -133,7 +122,7 @@ export const submitCreate = (email, password, firstName, lastName) => async (dis
       } else {
         errorMessage += emailErrors.join(', ');
       }
-
+  
       dispatch(showMessage({
         message: errorMessage,
         variant: "error",
@@ -147,13 +136,6 @@ export const submitCreate = (email, password, firstName, lastName) => async (dis
         variant: "error",
       }));
       dispatch(loginError(passwordErrors.join(', ')));
-    } else if (err?.response?.data?.non_field_errors) {
-      const nonFieldErrors = err.response.data.non_field_errors;
-      dispatch(showMessage({
-        message: `Hata: ${nonFieldErrors.join(', ')}`,
-        variant: "error",
-      }));
-      dispatch(loginError(nonFieldErrors.join(', ')));
     } else {
       // Genel hata mesajı
       dispatch(showMessage({
@@ -162,7 +144,6 @@ export const submitCreate = (email, password, firstName, lastName) => async (dis
       }));
       dispatch(loginError("Kayıt işleminizde bir hata meydana geldi. Lütfen tüm bilgilerinizi doğru girdiğinizden emin olun ve tekrar deneyin."));      
     }
-
   } finally {
     dispatch(loginLoadingDone());
   }
@@ -174,7 +155,6 @@ export const submitGoogleLogin = (userInfo) => async (dispatch) => {
   try {
     // Başlangıçta yükleniyor durumunu başlat
     dispatch(mailLoginLoading());
-
 
     const idToken = userInfo.data.idToken;
 
@@ -190,60 +170,79 @@ export const submitGoogleLogin = (userInfo) => async (dispatch) => {
 
     // Backend'den alınan token'ı sakla
     const { token } = response.data;
-    if (token) {
-        // Token'ı sakla
-        storeToken(token);
-        
-        // Axios'un varsayılan header'ını güncelle
-        axios.defaults.headers.common["Authorization"] = `Token ${token}`;
 
-        // Kullanıcı bilgilerini al
-        try {
-            const userResponse = await axios.get(API_ROUTES.GET_USER);
-            dispatch(setUser(userResponse.data));
-        } catch (error) {
-            dispatch(
-                showMessage({
-                    message: "Kullanıcı bilgileri alınamadı. Lütfen tekrar deneyin.",
-                    variant: "error",
-                })
-            );
-            console.error("Kullanıcı bilgileri alınamadı:", error);
-            dispatch(loginError("Kullanıcı bilgileri alınamadı. Lütfen tekrar deneyin."));
-        }
+    // Token'ı sakla
+    storeToken(token);
+    
+    // Axios'un varsayılan header'ını güncelle
+    axios.defaults.headers.common["Authorization"] = `Token ${token}`;
 
-        // Başarı mesajını göster
-        dispatch(loginSuccess());
+    // Kullanıcı bilgilerini al
+    try {
+        const userResponse = await axios.get(API_ROUTES.GET_USER);
+        dispatch(setUser(userResponse.data));
+    } catch (error) {
         dispatch(
             showMessage({
-                message: "Giriş işlemi başarıyla tamamlandı!",
-                variant: "success",
-            })
-        );
-    } else {
-        // Hata mesajını göster
-        dispatch(
-            showMessage({
-                message: "Giriş işlemi sırasında bir sorun oluştu. Lütfen tekrar deneyin.",
+                message: "Kullanıcı bilgileri alınamadı. Lütfen tekrar deneyin.",
                 variant: "error",
             })
         );
-        dispatch(loginError("Giriş işlemi sırasında bir sorun oluştu. Lütfen tekrar deneyin."));
+        // console.error("Kullanıcı bilgileri alınamadı:", error);
+        dispatch(loginError("Kullanıcı bilgileri alınamadı. Lütfen tekrar deneyin."));
     }
-  } catch (error) {
-    // Google oturumu açma hatası
+
+    // Başarı mesajını göster
+    dispatch(loginSuccess());
     dispatch(
         showMessage({
-            message: "Google ile giriş yapılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
-            variant: "error",
+            message: "Giriş işlemi başarıyla tamamlandı!",
+            variant: "success",
         })
     );
-    console.error("Google giriş hatası:", error);
-    dispatch(loginError("Google ile giriş yapılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin."));
-  } finally {
-    // Yükleniyor durumunu sonlandır
-    dispatch(mailLoadingDone());
-  }
+
+  } catch (error) {
+    if (error.message === "Network Error") {
+      // Network Error durumu için hiçbir işlem yapılmıyor
+      return;
+    }
+    // Check if the error is a response from the backend
+    if (error.response) {
+        const status = error.response.status;
+
+        // 401, 408, 429 ve 500 ve üstü durum kodları için herhangi bir yanıt vermiyoruz
+        if (status === 401 || status === 408 || status === 429 || status >= 500) {
+            // console.error("Hata durumu:", status);
+            return; // Hiçbir işlem yapılmaz
+        }
+
+        // Extract the error message from the backend response
+        const backendErrorMessage = error.response.data.error || "Bir hata oluştu. Lütfen tekrar deneyin.";
+
+        // Dispatch specific error messages based on the backend response
+        dispatch(
+            showMessage({
+                message: backendErrorMessage,
+                variant: "error",
+            })
+        );
+
+        dispatch(loginError(backendErrorMessage));
+    } else {
+        // Handle errors that are not related to the backend response (e.g., network errors)
+        dispatch(
+            showMessage({
+                message: "Google ile giriş yapılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
+                variant: "error",
+            })
+        );
+        // console.error("Google giriş hatası:", error);
+        dispatch(loginError("Google ile giriş yapılamadı. Lütfen tekrar deneyin."));
+    }
+  }finally {
+        // Yükleniyor durumunu sonlandır
+        dispatch(mailLoadingDone());
+    }
 };
 
 
@@ -253,41 +252,49 @@ export const submitLogout = () => async (dispatch) => {
   try {
     const response = await axios({
       method: "post",
-      url: API_ROUTES.LOGOUT, 
+      url: API_ROUTES.LOGOUT,
     });
-    if (response?.data?.detail) {
-      console.log("Something went wrong during logout: ", response);
-      // dispatch(loginError(response));
-      return;
-    }
+
+    // Başarılı çıkış işlemi
     axios.defaults.headers.common["Authorization"] = null;
     deleteToken();
     dispatch(userLoggedOut());
     dispatch(logout());
     dispatch(
       showMessage({
-        message: "çıkış yapıldı",
+        message: "Başarıyla çıkış yapıldı.",
         variant: "success",
       })
     );
 
-   
-    
   } catch (err) {
-    console.log("Some error occured during signing in: ", err);
-    err?.response?.data?.non_field_errors?.map((error) => {
-      dispatch(
-        showMessage({
-          message: error,
-          variant: "error",
-        })
-      );
-      // dispatch(loginError(error));
-    });
+    if (err.message === "Network Error") {
+      // Network Error durumu için hiçbir işlem yapılmıyor
+      return;
+    }
+
+    const status = err?.response?.status;
+
+    // 401, 408, 429 ve 500 ve üstü durum kodları için herhangi bir yanıt vermiyoruz
+    if (status === 401 || status === 408 || status === 429 || status >= 500) {
+      return; // Hiçbir işlem yapılmaz
+    }
+
+    // Diğer hata durumları için bir hata mesajı gösteriyoruz
+    const error = 'Çıkış işlemi sağlanamadı. Daha sonra tekrar deneyin.';
+    dispatch(
+      showMessage({
+        message: error,
+        variant: "error",
+      })
+    );
+    dispatch(loginError(error));
+
   } finally {
-    // dispatch(loginLoadingDone());
+    dispatch(loginLoadingDone());
   }
 };
+
 
 
 

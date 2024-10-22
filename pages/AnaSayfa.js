@@ -14,6 +14,7 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [medicines,setMedicines] = useState([]);
   const [product, setProduct] = useState([]);
+
   
 
   useEffect(() => {
@@ -107,6 +108,13 @@ const HomePage = () => {
   const navigateToScreen = (screenName, params = {}) => {
     navigate.navigate(screenName, params);
   };
+
+
+
+
+
+
+
 
  
   

@@ -56,46 +56,47 @@ const Login = () => {
         // Dispatch the submitGoogleLogin action with userInfo
         dispatch(submitGoogleLogin(userInfo));
     } catch (error) {
-        console.error("Google Sign-In Error: ", error);
+        // console.error("Google Sign-In Error 01: ", error);
     }
 };
 
 
-  // Geçmiş bildirimleri kontrol eden fonksiyon
-  const checkNotificationsOnAppStart = async () => {
-    try {
-      const notificationsString = await AsyncStorage.getItem('notifications');
+  // // Geçmiş bildirimleri kontrol eden fonksiyon
+  // const checkNotificationsOnAppStart = async () => {
+  //   try {
+  //     const notificationsString = await AsyncStorage.getItem('notifications');
+
   
-      if (notificationsString) {
-        const notificationsList = JSON.parse(notificationsString);
-        const currentTime = new Date().getTime(); // Şu anki zaman
+  //     if (notificationsString) {
+  //       const notificationsList = JSON.parse(notificationsString);
+  //       const currentTime = new Date().getTime(); // Şu anki zaman
   
-        // Geçmişteki bildirimleri filtrele
-        const pastNotifications = notificationsList.filter(notification => {
-          const notificationTime = new Date(notification.tarih + ' ' + notification.saat).getTime(); // Tarih ve saat bilgisini birleştir
+  //       // Geçmişteki bildirimleri filtrele
+  //       const pastNotifications = notificationsList.filter(notification => {
+  //         const notificationTime = new Date(notification.tarih + ' ' + notification.saat).getTime(); // Tarih ve saat bilgisini birleştir
   
-          // Geçmişteki ve kullanıcıya ait bildirimler
-          return notificationTime < currentTime && notification.email === userMail;
-        });
+  //         // Geçmişteki ve kullanıcıya ait bildirimler
+  //         return notificationTime < currentTime && notification.email === userMail;
+  //       });
   
-        // console.log("pastNotifications:", pastNotifications);
+  //       // console.log("pastNotifications:", pastNotifications);
   
-        if (pastNotifications.length > 0) {
-          // API'ye gönder
-          await axios.post(API_ROUTES.NOTIFICATIONS_CREATE, { bildirim_list: pastNotifications });
+  //       if (pastNotifications.length > 0) {
+  //         // API'ye gönder
+  //         await axios.post(API_ROUTES.NOTIFICATIONS_CREATE, { bildirim_list: pastNotifications });
   
-          // Gönderilen bildirimleri yerel depolamadan sil
-          const updatedNotificationsList = notificationsList.filter(notification =>
-            !pastNotifications.some(pastNotification => pastNotification.id === notification.id)
-          );
-          await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotificationsList));
-          console.log("Past notifications sent and removed from storage.");
-        }
-      }
-    } catch (error) {
-      console.error('Error checking notifications on app start:', error);
-    }
-  };
+  //         // Gönderilen bildirimleri yerel depolamadan sil
+  //         const updatedNotificationsList = notificationsList.filter(notification =>
+  //           !pastNotifications.some(pastNotification => pastNotification.id === notification.id)
+  //         );
+  //         await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotificationsList));
+  //         // console.log("Past notifications sent and removed from storage.");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     // console.error('Error checking notifications on app start:', error);
+  //   }
+  // };
 
 
 
@@ -121,8 +122,8 @@ const Login = () => {
         navigation.navigate('Ana Sayfa');
       }
   
-      // Uygulama başlangıcında bildirimleri kontrol et
-      checkNotificationsOnAppStart();
+      // // Uygulama başlangıcında bildirimleri kontrol et
+      // checkNotificationsOnAppStart();
     }
   }, [loginStatus, navigation]);
   
@@ -143,6 +144,7 @@ const Login = () => {
           value={email}
           autoCapitalize="none"
           placeholderTextColor={colors.text}
+          keyboardType="email-address"
         />
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
@@ -190,7 +192,7 @@ const Login = () => {
             <Text style={styles.buttonText}>Google ile Devam Et</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordCode')}>
+        <TouchableOpacity style={styles.registerContainer} onPress={() => navigation.navigate('ResetPasswordCode')}>
           <Text style={styles.forgotPasswordText}>Şifremi unuttum</Text>
         </TouchableOpacity>
         <View style={styles.registerContainer}>

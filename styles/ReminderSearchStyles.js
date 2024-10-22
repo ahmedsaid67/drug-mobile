@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     color: colors.text,
     backgroundColor: '#fff',
   },
@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: colors.fontSizeText,
     fontWeight: '700',
     marginBottom: 12,
     color: colors.uygulamaRengi,
   },
   popularSearchItem: {
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     paddingVertical: 8,
     color: colors.text,
   },
@@ -70,18 +70,18 @@ const styles = StyleSheet.create({
 
   },
   medicineName: {
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     color: colors.text,
     marginBottom: 4, // Elemanlar arasındaki boşluk
   },
   medicineEtkenMadde: {
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     color: colors.thirdText,
     marginBottom: 4, // Elemanlar arasındaki boşluk
   },
   noResults: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
     marginTop: 20,
     color: colors.thirdText,
   },

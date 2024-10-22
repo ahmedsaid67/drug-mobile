@@ -80,6 +80,7 @@ const Layout = ({ children, currentRoute }) => {
         // Ağ hatası
         if (err.message === "Network Error") {
           navigation.navigate("ErrorPage", { errorMessage: "Ağ hatası. Lütfen bağlantınızı kontrol edin." });
+          // console.log("checkkk")
           return Promise.reject(err);
         }
 
@@ -94,17 +95,18 @@ const Layout = ({ children, currentRoute }) => {
         dispatch(loginSuccess());
         dispatch(setUser(res.data));
       } catch (err) {
-        console.log(err);
+        // console.log("tokenyok:",err);
       }
     }
 
     async function token() {
       const token = await AsyncStorage.getItem('token');
+      // console.log("tokenCheck:",token)
       if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        axios.defaults.headers.common["Authorization"] = `Token ${token}`;
         getUser();
       } else {
-        console.log("Token not found");
+        // console.log("Token not found");
       }
     }
     token();

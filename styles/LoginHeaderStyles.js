@@ -1,22 +1,24 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { colors } from './colors'; // Adjust the import path as necessary
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     header: {
 
             width: '100%',
-            height: 50,
             backgroundColor: colors.MainContainerBackground, // Use color from constants
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingHorizontal: 18,
             borderBottomColor: colors.border, // Use color from constants
             borderBottomWidth: 1, // Subtle top border
+            paddingHorizontal: 20,
+            paddingVertical:12,
 
       },
       logoText: {
-        fontSize: 20,
+        fontSize: height * 0.023,
         fontWeight: 'bold',
         color: colors.text,
         letterSpacing: 2,

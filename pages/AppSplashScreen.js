@@ -6,10 +6,14 @@ import logo from '../public/drug-logo-transparan.png';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
+
+
 const AppSplashScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
   const navigation = useNavigation();
+
+  
   
   useEffect(() => {
     const checkAgreement = async () => {
@@ -47,6 +51,9 @@ const AppSplashScreen = () => {
       handleAgreement(); // Automatically accept agreement
     }
   };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -141,7 +148,7 @@ const styles = StyleSheet.create({
         height: 250,
     },
     appName: {
-        fontSize: 40, // Başlığı büyütün
+        fontSize: 60, // Başlığı büyütün
         fontWeight: 'bold',
         color: colors.uygulamaRengi,
         marginBottom: 40, // Başlık ile sözleşme arasındaki boşluğu artırın
@@ -175,7 +182,7 @@ const styles = StyleSheet.create({
     modalHeader: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: colors.uygulamaRengi, // Başlık rengini koruyun veya istediğiniz renge ayarlayın
+        color: colors.text, // Başlık rengini koruyun veya istediğiniz renge ayarlayın
         marginBottom: 20,
     },
     modalText: {

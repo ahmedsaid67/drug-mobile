@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: colors.fontSizeTextMaxi,
     color: colors.uygulamaRengi,
     textAlign: 'center',
     marginBottom: 20,

@@ -39,12 +39,23 @@ const ResetPasswordCode = () => {
       }));
       navigation.navigate('ResetPassword');
     } catch (err) {
+      if (err.message === "Network Error") {
+        // Network Error durumu için hiçbir işlem yapılmıyor
+        return;
+      }
+      const status = err?.response?.status;
+    
+      // Eğer status 401, 408, 429 veya 500 ve üzeri ise, return ile işleme son veriyoruz
+      if (status === 401 || status === 408 || status === 429 || status >= 500) {
+        return; // Bu durumlarda yanıt verilmemesi için işlem burada sonlanıyor
+      }
+    
       let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-  
+    
       // Backend'den gelen spesifik hata mesajlarını kontrol etme
       if (err?.response?.data?.email) {
         const emailErrors = err.response.data.email;
-  
+    
         if (emailErrors.includes("Geçerli bir e-posta adresi girin.")) {
           errorMessage = "Geçerli bir e-posta adresi girin.";
         } else if (emailErrors.includes("Bu e-posta adresine sahip bir kullanıcı bulunamadı.")) {
@@ -54,14 +65,16 @@ const ResetPasswordCode = () => {
         } else {
           errorMessage = "E-posta ile ilgili bir hata oluştu.";
         }
+      }else{
+        errorMessage = "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.";
       }
-  
+    
       dispatch(showMessage({
         message: errorMessage,
         variant: 'error',
       }));
-  
-      console.log("error:", err);
+    
+      // console.log("error:", err);
     }
     finally {
         setLoading(false);
@@ -77,7 +90,7 @@ const ResetPasswordCode = () => {
 
             <TextInput
             style={styles.input}
-            placeholder="E-posta adresiniz"
+            placeholder="Email"
             onChangeText={(text) => {
               setEmail(text);
               if (text) setErrors((prev) => ({ ...prev, email: '' }));
@@ -85,6 +98,7 @@ const ResetPasswordCode = () => {
             value={email} // Display the current email value
             autoCapitalize="none" // Disable automatic capitalization
             placeholderTextColor={colors.placeholderText} // Set placeholder text color
+            keyboardType="email-address"
             />
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             <TouchableOpacity

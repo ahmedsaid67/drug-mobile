@@ -1,24 +1,30 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { colors } from './colors';
+
+const { height } = Dimensions.get('window');
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.MainContainerBackground,
     },
+    scrollContainer: {
+        flexGrow: 1,
+    },
     secondContainer: {
         paddingHorizontal: 20,
         paddingVertical: 20,
     },
     title: {
-        fontSize: 20,
+        fontSize: colors.fontSizeTextMaxi,
         fontWeight: 'bold',
         marginBottom: 20,
         color: colors.text,
         textAlign: 'left',
     },
     titleSecond: {
-        fontSize: 20,
+        fontSize: colors.fontSizeTextMaxi,
         fontWeight: 'bold',
         marginVertical: 20,
         color: colors.text,
@@ -36,7 +42,7 @@ const styles = StyleSheet.create({
     },
     input :{
         color: colors.thirdText,
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         maxWidth: '80%',
     },
     inputContainer: {
@@ -56,13 +62,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     label: {
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         color: colors.text,
-        fontWeight: '600',
+        fontWeight: 'bold',
     },
     inputForm: {
         color: colors.thirdText,
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         marginRight: 10,
     },
 
@@ -87,7 +93,7 @@ const styles = StyleSheet.create({
     
     inputZamanlama: {
         color: colors.thirdText,
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         marginHorizontal: 10, // Adjust margin for spacing
         flex: 0, // Prevent the text from taking all available space
         maxWidth: '80%', // Limit width to keep it near the icon
@@ -96,36 +102,39 @@ const styles = StyleSheet.create({
 
 
     Tree: {
-        fontSize: 24,
+        fontSize: colors.fontSizeTextMaxi,
         color: 'black',
         width: 20,
         height: 35,
     },
     buttonContainer: {
-        flex: 1,
-        justifyContent: 'flex-end', // Alt kısma hizalar
-        paddingHorizontal: 20,
-        paddingVertical: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding:20,
     },
     
     button: {
         backgroundColor: colors.uygulamaRengi,
-        padding: 15,
-        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
+        borderRadius: 8,
+        alignItems: 'center',
+        width: '100%',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
         elevation: 5,
         position: 'sicky',
-        bottom: 25,
+        marginVertical:10,
+        height:colors.buttonHeight,
     },
     buttonText: {
         color: colors.secondText,
-        fontSize: 20,
-        fontWeight: '700',
+        fontSize: colors.fontSizeText,
+        fontWeight: 'bold',
     },
     modalContainer: {
         flex: 1,
@@ -136,7 +145,8 @@ const styles = StyleSheet.create({
     popup: {
         backgroundColor: '#fff',
         padding: 20,
-        borderRadius: 20,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
         width: '100%',
         height: '100%', // Tam ekran popup
     },
@@ -153,7 +163,7 @@ const styles = StyleSheet.create({
         zIndex: 10
     },
     popupTitle: {
-        fontSize: 24,
+        fontSize: colors.fontSizeTextLarge,
         fontWeight: 'bold',
         textAlign: 'center',
         color:colors.text,
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
         borderRadius: 12, // Daha yuvarlak kenarlar
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         padding: 20, // İç boşluk ekleyerek daha rahat bir alan
         backgroundColor: 'white', // Beyaz arka plan
         shadowColor: '#000', // Gölge efekti
@@ -173,15 +183,15 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     popupInputText : {
-        fontSize:18,
+        fontSize:colors.fontSizeText,
         color:colors.text,
-        fontWeight: '600',
+        fontWeight: 'bold',
         marginBottom:20,
     },
     popupInput: {
         borderBottomWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
-        fontSize: 18,
+        fontSize: colors.fontSizeText,
         color: colors.text,
     },
 
@@ -190,7 +200,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
         borderRadius: 12, // Daha yuvarlak kenarlar
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         padding: 20, // İç boşluk ekleyerek daha rahat bir alan
         backgroundColor: 'white', // Beyaz arka plan
         shadowColor: '#000', // Gölge efekti
@@ -202,9 +212,9 @@ const styles = StyleSheet.create({
 
     unitsText : {
         marginBottom:20,
-        fontSize:18,
+        fontSize:colors.fontSizeText,
         color:colors.text,
-        fontWeight: '600',
+        fontWeight: 'bold',
     },
 
     unitsContainer: {
@@ -223,7 +233,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.uygulamaRengi,
     },
     unitButtonText: {
-        fontSize: 18,
+        fontSize: colors.fontSizeText,
         color: '#444',
     },
     unitButtonTextSelected: {
@@ -236,17 +246,19 @@ const styles = StyleSheet.create({
     },
     saveButton: {
         backgroundColor: colors.uygulamaRengi,  // Aktif durumdaki renk
-        padding: 15,
-        borderRadius: 10,
+        borderRadius: 8,
         width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 25,
+        marginTop: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
         position: 'relative',
-        bottom:25,
+        bottom:10,
+        height:colors.buttonHeight,
     },
 
     popupFormButtons: {
@@ -254,28 +266,31 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 30,
+        
     },
 
     saveFormButton: {
         backgroundColor: colors.uygulamaRengi,  // Aktif durumdaki renk
-        padding: 15,
-        borderRadius: 10,
-        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 25,
+        borderRadius: 8,
+        width: '100%',
+        marginTop: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 3,
         position: 'relative',
-        bottom:25,
+        bottom:10,
+        height:colors.buttonHeight,
     },
 
     saveButtonDisabled: {
         backgroundColor: colors.uygulamaRengiDisabled,  // Buton pasif durumdayken gösterilecek renk
     },
     saveButtonText: {
-        fontSize: 18,
+        fontSize: colors.fontSizeText,
         color: '#fff',
         fontWeight: 'bold',
     },
@@ -296,8 +311,8 @@ const styles = StyleSheet.create({
     },
     formItemText:{
         color:colors.text,
-        fontWeight:'600',
-        fontSize:18,
+        fontWeight:'bold',
+        fontSize:colors.fontSizeText,
     },
 
     DateMainContainer:{
@@ -328,7 +343,7 @@ const styles = StyleSheet.create({
       },
       
       DateText: {
-        fontSize: 18,
+        fontSize: colors.fontSizeText,
         fontWeight: 'bold',
         color: colors.text,
         marginRight: 8, // Metin ile ikon arasındaki boşluk
@@ -353,7 +368,7 @@ const styles = StyleSheet.create({
     DateButonText: {
         color: colors.text,
         marginLeft: 8,
-        fontSize: 18,
+        fontSize: colors.fontSizeText,
         fontWeight: 'bold',
     },
     

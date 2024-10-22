@@ -31,6 +31,12 @@ import VitSearch from "./Search/[vit].js";
 import VitDetail from "./Detail/[vit].js";
 
 
+import UseInfo from "./Detail/[ku].js";
+import InputKg from "./Detail/[InputKg].js";
+import InputAge from "./Detail/[InputAge].js";
+import Check from "./Detail/[Check].js";
+
+
 const Stack = createNativeStackNavigator();
 
 const Router = ({ currentRoute }) => {
@@ -47,16 +53,18 @@ const Router = ({ currentRoute }) => {
       if (notificationsString) {
         const notificationsList = JSON.parse(notificationsString);
         const currentTime = new Date().getTime(); // Şu anki zaman
+
   
         // Geçmişteki bildirimleri filtrele
         const pastNotifications = notificationsList.filter(notification => {
           const notificationTime = new Date(notification.tarih + ' ' + notification.saat).getTime(); // Tarih ve saat bilgisini birleştir
+
   
           // Geçmişteki ve kullanıcıya ait bildirimler
           return notificationTime < currentTime && notification.email === userMail;
         });
   
-        console.log("pastNotifications:", pastNotifications);
+        // console.log("pastNotifications:", pastNotifications);
   
         if (pastNotifications.length > 0) {
           // API'ye gönder
@@ -67,40 +75,47 @@ const Router = ({ currentRoute }) => {
             !pastNotifications.some(pastNotification => pastNotification.id === notification.id)
           );
           await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotificationsList));
-          console.log("Past notifications sent and removed from storage.");
+          // console.log("Past notifications sent and removed from storage.");
         }
       }
     } catch (error) {
-      console.error('Error checking notifications on app start:', error);
+      // console.error('Error checking notifications on app start:', error);
     }
   };
 
   useEffect(() => {
-    if(loginStatus){
+    if(userMail){
       checkNotificationsOnAppStart();
     } 
-  }, []);
+  }, [userMail]);
 
 
 
   useEffect(() => {
+    // console.log("usermail:",userMail)
     // Eğer userMail yoksa dinleyicileri ekleme ve return ile çık
-    if (!userMail) return;
 
+    
     // Dinleyiciler tanımlandığında unsubscribe fonksiyonlarını tutacağız
     let unsubscribeBackground = null;
     let unsubscribeForeground = null;
 
     // Arka plan bildirim dinleyici
+
     unsubscribeBackground = notifee.onBackgroundEvent(async ({ type, detail }) => {
+      if (type === EventType.ACTION_PRESS && pressAction.id === 'default') {
+        // Bildirime tıklandı, uygulamayı aç
+        console.log('Bildirime tıklandı: Arka planda');
+      }
       if (type === EventType.DELIVERED) {
         try {
           const { data } = detail.notification;
 
+          // Eğer userMail yoksa hiçbir işlem yapma
+          if (!userMail) return;
+
           // Gelen bildirimi userMail ile karşılaştır
           if (data.email === userMail) {
-            console.log('Bildirim arka planda alındı:', data);
-
             const explanations = data.explanations;
             const hatirlatici_id = data.hatirlatici_id;
             const saat = data.saat;
@@ -119,7 +134,7 @@ const Router = ({ currentRoute }) => {
           }
 
         } catch (error) {
-          console.error('Error handling background notification:', error);
+          // console.error('Error handling background notification:', error);
         }
       }
     });
@@ -129,11 +144,12 @@ const Router = ({ currentRoute }) => {
       if (type === EventType.DELIVERED) {
         try {
           const { data } = detail.notification;
+
+          // Eğer userMail yoksa hiçbir işlem yapma
+          if (!userMail) return;
+
           // Gelen bildirimi userMail ile karşılaştır
           if (data.email === userMail) {
-            console.log('Bildirim ön planda alındı:', data);
-            
-
             const explanations = data.explanations;
             const hatirlatici_id = data.hatirlatici_id;
             const saat = data.saat;
@@ -152,7 +168,7 @@ const Router = ({ currentRoute }) => {
           }
 
         } catch (error) {
-          console.error('Error handling foreground notification:', error);
+          // console.error('Error handling foreground notification:', error);
         }
       }
     });
@@ -179,11 +195,12 @@ const Router = ({ currentRoute }) => {
 
       // Güncellenmiş listeyi tekrar AsyncStorage'e kaydet
       await AsyncStorage.setItem('notifications', JSON.stringify(notificationsList));
-      console.log(`Notification with ID ${notificationId} deleted from storage.`);
+      // console.log(`Notification with ID ${notificationId} deleted from storage.`);
     } catch (error) {
-      console.error('Error removing notification from storage:', error);
+      // console.error('Error removing notification from storage:', error);
     }
   };
+
 
 
 
@@ -206,14 +223,14 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
         <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
         <Stack.Screen name="PdfViewer" component={PdfViewer} />
-
         <Stack.Screen name="ErrorPage" component={ErrorPage} />
-
         <Stack.Screen name="NidProductPage" component={NidProductPage} />
         <Stack.Screen name="VitSearch" component={VitSearch} />
         <Stack.Screen name="VitDetail" component={VitDetail} />
-
-
+        <Stack.Screen name="UseInfo" component={UseInfo} />
+        <Stack.Screen name="InputKg" component={InputKg} />
+        <Stack.Screen name="InputAge" component={InputAge} />
+        <Stack.Screen name="Check" component={Check} />
       </Stack.Navigator>
     </Layout>
   );

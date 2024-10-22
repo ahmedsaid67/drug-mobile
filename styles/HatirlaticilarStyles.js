@@ -26,12 +26,12 @@ const styles = StyleSheet.create({
       backgroundColor: colors.uygulamaRengi,
     },
     dateText: {
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
       fontWeight: 'bold',
       color: colors.text,
     },
     dayText: {
-      fontSize: 14,
+      fontSize: colors.fontSizeTextMini,
       color: colors.thirdText,
     },
     selectedDateText: {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     todayLabel: {
       marginTop: 10,
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
       fontWeight: 'bold',
       color: colors.uygulamaRengi,
     },
@@ -67,18 +67,18 @@ const styles = StyleSheet.create({
       flex: 1, // Allow this to take up remaining space
     },
     reminderText: {
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
       fontWeight: 'bold',
       color: colors.text,
     },
     reminderDetails: {
       marginTop: 5,
-      fontSize: 14,
+      fontSize: colors.fontSizeTextMini,
       color: colors.thirdText,
     },
     reminderDaysLeft: {
       marginTop: 5,
-      fontSize: 12,
+      fontSize: colors.fontSizeTextMini,
       color: colors.uygulamaRengi,
     },
     reminderIcon: {
@@ -94,9 +94,9 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
       width: '90%',
-      padding: 40,
+      padding: 20,
       backgroundColor: '#fff', // Changed to pure white for better contrast
-      borderRadius: 30,
+      borderRadius: 15,
       shadowColor: '#000',
       shadowOpacity: 0.4,
       shadowRadius: 15,
@@ -109,13 +109,13 @@ const styles = StyleSheet.create({
       right: 15,
   },
   modalTitle: {
-      fontSize: 24, // Increased font size for better visibility
+      fontSize: colors.fontSizeTextMaxi, // Increased font size for better visibility
       fontWeight: 'bold',
-      color: '#333', // Dark grey for better contrast
-      marginBottom: 20,
+      color: colors.text, // Dark grey for better contrast
+      marginBottom: 10,
   },
   uyariText: {
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
       color: colors.text, // Lighter grey for warning text
       textAlign: 'center',
       marginBottom: 20,
@@ -124,28 +124,22 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: '100%',
-      marginTop: 15,
   },
   pauseButton: {
-      backgroundColor: colors.uygulamaRengi, // Bootstrap blue for a modern look
-      paddingVertical: 12,
-      width:120,
-      borderRadius: 16,
-      marginRight: 10,
-      shadowColor: '#000',
-      shadowOpacity: 0.3,
-      shadowRadius: 5,
-      elevation: 5,
+    backgroundColor: colors.uygulamaRengi,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 2,
+    width: '45%',
   },
   deleteButton: {
-      backgroundColor: colors.deleteIcon, // Softer red for delete button
-      paddingVertical: 12,
-      width:120,
-      borderRadius: 16,
-      shadowColor: '#000',
-      shadowOpacity: 0.3,
-      shadowRadius: 5,
-      elevation: 5,
+    backgroundColor: colors.deleteIcon,
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 2,
+    width: '45%',
   },
   disabledButton: {
     backgroundColor: '#A9A9A9', // Gri renk ile butonu devre dışı olduğunu belli ediyoruz
@@ -154,14 +148,14 @@ const styles = StyleSheet.create({
   },
   actionText: {
       color: '#FFFFFF',
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
       fontWeight: '600',
       textAlign: 'center', // Center align text for better appearance
   },
   
     floatingButton: {
       position: 'absolute',
-      bottom: 90,
+      bottom: 20,
       right: 20,
       backgroundColor: colors.uygulamaRengi,
       width: 60,

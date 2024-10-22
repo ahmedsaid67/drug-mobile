@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import styles from '../styles/BildirimlerStyles';
 import { API_ROUTES } from '../utils/constant';
 import axios from 'axios';
@@ -7,6 +7,9 @@ import { colors } from '../styles/colors';
 import NoNotifications from '../components/NoNotifications';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Icon from 'react-native-vector-icons/Ionicons'; // Ionicons import edildi
+import AlertModal from '../components/AlertModal';
 
 function Bildirimler() {
   const [notifications, setNotifications] = useState([]);
@@ -17,21 +20,34 @@ function Bildirimler() {
   const navigation = useNavigation();
   const loginStatus = useSelector((state) => state.login.success);
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const showAlert = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+
+    // 500 milisaniye gecikmeli olarak uyarıyı göster
+    setTimeout(() => {
+        setAlertVisible(true);
+    }, 400); // 500 milisaniye = 0.5 saniye
+  };
+
   useEffect(() => {
-    if (loginStatus){
+    if (loginStatus) {
       fetchNotifications();
-    }else{
-      navigation.navigate('Login')
+    } else {
+      navigation.navigate('Login');
     }
   }, [page]); // Fetch notifications whenever the page changes
   
-
   const fetchNotifications = async () => {
     if (!hasMore) return; // Exit if there's no more data to fetch
 
     setLoading(true); // Start loading
     if(error){
-      setError(false)
+      setError(false);
     }
     try {
       const response = await axios.get(`${API_ROUTES.NOTIFICATIONS_USER_LIST}?page=${page}`);
@@ -42,8 +58,7 @@ function Bildirimler() {
       setHasMore(response.data.next !== null);
       
     } catch (err) {
-      // console.log(err);
-      setError(true)
+      setError(true);
     } finally {
       setLoading(false); // Stop loading
     }
@@ -55,19 +70,43 @@ function Bildirimler() {
       setPage(prevPage => prevPage + 1); // Load the next page
     }
   };
-  
+
+
+  // Panoya kopyalama fonksiyonu
+  const copyToClipboard = (explanations, tarih, saat) => {
+    const formattedTime = saat.split(':').slice(0, 2).join(':'); 
+    const formattedDate = tarih.split('-').reverse().join('.');
+    
+    // İstenilen formatta metin oluşturulması
+    const textToCopy = `Hatırlatma (${formattedDate} - ${formattedTime}):\n${explanations}`;
+    
+    Clipboard.setString(textToCopy);
+    
+    // Türkçe alert mesajı
+    showAlert('Başarılı', 'Bildirim başarıyla panoya kopyalandı!');
+
+  };
+
 
   const renderNotification = ({ item }) => {
     const formattedTime = item.saat.split(':').slice(0, 2).join(':'); 
     const formattedDate = item.tarih.split('-').reverse().join('.');
     return (
       <View key={item.id} style={styles.notificationCard}>
-        <Text style={styles.description}>{item.explanations}</Text>
-        <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
+        <View style={styles.notificationContent}>
+          <Text style={styles.description}>{item.explanations}</Text>
+          <View style={styles.altContainer}>
+            <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
+            <TouchableOpacity onPress={() => copyToClipboard(item.explanations, item.tarih, item.saat)}>
+              <Icon name="copy-outline" size={24} color={colors.uygulamaRengi} />
+            </TouchableOpacity>
+          </View>
+          
+        </View>
+        
       </View>
     );
   };
-  
 
   return (
     <View style={styles.pageContainer}>
@@ -76,14 +115,20 @@ function Bildirimler() {
           data={notifications}
           renderItem={renderNotification}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ paddingBottom: 80 }}
+          contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.2}
           ListEmptyComponent={!loading && !error ? <NoNotifications /> : null}
-          ListFooterComponent={loading ? <ActivityIndicator size="small" color={colors.uygulamaRengi}  /> : null} 
+          ListFooterComponent={loading ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null} 
         />
       </View>
+      <AlertModal
+        isVisible={alertVisible}
+        message={alertMessage}
+        title={alertTitle}
+        onClose={() => setAlertVisible(false)}
+      />
     </View>
   );
 }

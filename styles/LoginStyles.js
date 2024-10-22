@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     title: {
-      fontSize: 24,
+      fontSize: colors.fontSizeTextMaxi,
       fontWeight: 'bold',
       marginBottom: 20,
       color: colors.text,
@@ -24,44 +24,53 @@ const styles = StyleSheet.create({
     },
     input: {
       width: '100%',
-      padding: 15,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 15,
       marginBottom: 10,
-      borderRadius: 5,
+      borderRadius: 4,
       textAlign: 'left',  // Sol hizalı input
       borderWidth: 1,     // Kenar çizgisi kalınlığı
       borderColor: colors.border,
       color: colors.text,
+      fontSize: colors.fontSizeText,
+      height: colors.inputHeight ,
     },
     button: {
       backgroundColor: colors.uygulamaRengi,
       width: '100%',
-      padding: 15,
-      borderRadius: 5,
+      flexDirection: 'row',
+      justifyContent: 'center',
       alignItems: 'center',
+      borderRadius: 8,
       marginTop: 10,
-      minHeight:52,
+      height:colors.buttonHeight,
     },
     buttonText: {
       color: colors.secondText,
       fontWeight: 'bold',
-      fontSize: 16,
+      fontSize: colors.fontSizeText,
     },
     forgotPasswordText: {
       color: colors.uygulamaRengi,
       marginTop: 10,
       textAlign: 'left',  // Sol hizalı
+      fontSize: colors.fontSizeText,
     },
     registerContainer: {
       flexDirection: 'row',
-      marginTop: 20,
+      marginTop: 16,
       justifyContent: 'flex-start',  // Sol hizalı kayıt ol bölümü
     },
     registerText: {
       color: 'black',
       marginRight: 5,
+      fontSize: colors.fontSizeText,
     },
     registerLink: {
       color: colors.uygulamaRengi,
+      fontSize: colors.fontSizeText,
     },
     inputError: {
       borderColor: colors.uygulamaRengi,
@@ -69,7 +78,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
       color: colors.uygulamaRengi,
-      fontSize: 12,
+      fontSize: colors.fontSizeTextMini,
       marginBottom: 8,
     },
     loadingIndicator: {
@@ -92,11 +101,12 @@ const styles = StyleSheet.create({
     googleButton: {
       backgroundColor: '#4285F4',
       width: '100%',
-      padding: 15,
-      borderRadius: 5,
+      flexDirection: 'row',
+      justifyContent: 'center',
       alignItems: 'center',
+      borderRadius: 8,
       marginTop: 10,
-      minHeight: 52,
+      height:colors.buttonHeight,
     },
     
     

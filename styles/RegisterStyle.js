@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: colors.fontSizeTextMaxi,
     fontWeight: 'bold',
     marginBottom: 20,
     color: colors.text,
@@ -19,31 +19,37 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
     marginBottom: 10,
-    borderRadius: 5,
+    borderRadius: 4,
     textAlign: 'left',  // Sol hizalı input
     borderWidth: 1,     // Kenar çizgisi kalınlığı
     borderColor: colors.border,
-    color: colors.text,   // More prominent tone for input text (dark grey)
+    color: colors.text,
+    fontSize: colors.fontSizeText,
+    height: colors.inputHeight ,
   },
   button: {
     backgroundColor: colors.uygulamaRengi,
     width: '100%',
-    padding: 15,
-    borderRadius: 5,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    minHeight:52,
+    height:colors.buttonHeight,
   },
   buttonText: {
     color: colors.secondText,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: colors.fontSizeText,
   },
   errorText: {
     color: colors.uygulamaRengi,
-    fontSize: 12,
+    fontSize: colors.fontSizeTextMini,
     marginBottom: 8,
   },
   inputError: {

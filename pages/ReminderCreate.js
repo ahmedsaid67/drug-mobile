@@ -1,4 +1,5 @@
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
+// import { useRef } from 'react';
 import { View, Text, TouchableOpacity, Modal, TextInput, ScrollView,InteractionManager, ActivityIndicator, Alert, Linking, Platform, PermissionsAndroid, Keyboard  } from 'react-native';
 import ReminderCreateHead from '../components/ReminderCreateHead';
 import styles from '../styles/ReminderCreateStyles';
@@ -15,7 +16,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import 'react-native-get-random-values'; // crypto.getRandomValues için gerekli
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
-
+import AlertModal from '../components/AlertModal';
+import PermissionBlockedModal from '../components/PermissionBlockedModal';
+import { useDispatch } from 'react-redux';
+import { showMessage } from '../context/features/message/messageSlice'; // Import the showMessage action
+import { colors } from '../styles/colors';
 
 
 const ReminderCreate = ({ route, navigation }) => {
@@ -36,7 +41,7 @@ const ReminderCreate = ({ route, navigation }) => {
     const [loading,setLoading] = useState(false)
 
     const units = ['ml', 'IU', '%', 'mcg', 'mg','g','adet']; 
-    const inputRef = useRef(null); // TextInput için referans oluşturun
+    // const inputRef = useRef(null); // TextInput için referans oluşturun
 
     const [formModalVisible, setFormModalVisible] = useState(false); 
 
@@ -44,6 +49,36 @@ const ReminderCreate = ({ route, navigation }) => {
 
     const userMail = useSelector((state) => state.user.email);
     const loginStatus = useSelector((state) => state.login.success);
+
+    const dispatch = useDispatch();
+
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertTitle, setAlertTitle] = useState('');
+
+    const [alertVisibleBlockedPermission, setAlertVisibleBlockedPermission] = useState(false);
+    const [alertMessageBlockedPermission, setAlertMessageBlockedPermission] = useState('');
+    const [alertTitleBlockedPermission, setAlertTitleBlockedPermission] = useState('');
+
+    const showAlertBlockedPermission = (title, message) => {
+        setAlertTitleBlockedPermission(title);
+        setAlertMessageBlockedPermission(message);
+    
+        // 500 milisaniye gecikmeli olarak uyarıyı göster
+        setTimeout(() => {
+          setAlertVisibleBlockedPermission(true);
+        }, 400); // 500 milisaniye = 0.5 saniye
+    };
+
+    const showAlert = (title, message) => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+    
+        // 500 milisaniye gecikmeli olarak uyarıyı göster
+        setTimeout(() => {
+            setAlertVisible(true);
+        }, 400); // 500 milisaniye = 0.5 saniye
+    };
 
 
 
@@ -72,15 +107,20 @@ const ReminderCreate = ({ route, navigation }) => {
               await notifee.createChannel({
                 id: 'reminder',
                 name: 'Reminder Channel',
+                sound: 'arriving', 
                 importance: AndroidImportance.HIGH,
               });
-              console.log('Notification channel created');
+            //   console.log('Notification channel created');
             } else {
-              console.log('Notification channel already exists, no need to create');
+            //   console.log('Notification channel already exists, no need to create');
             }
-          } catch (error) {
-            console.error('Error checking or creating notification channel:', error);
-          }
+        } catch (error) {
+            // console.error('Error checking or creating notification channel:', error);
+            dispatch(showMessage({
+                message: 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
+                variant: 'error',
+            }));
+        }
     };
 
 
@@ -91,13 +131,9 @@ const ReminderCreate = ({ route, navigation }) => {
             // Bildirim izni kontrolü
             const hasPermission = await requestNotificationPermission();
             if (!hasPermission) {
-                Alert.alert(
-                    'İzin Verilmedi',
+                showAlertBlockedPermission(
+                    'İzin Gerekli"',
                     'Hatırlatıcı oluşturabilmek için bildirim izinlerine onay vermeniz gerekmektedir. İzinleri açmak için ayarlara gitmek ister misiniz?',
-                    [
-                        { text: 'Hayır', onPress: () => console.log('İzin verilmedi') },
-                        { text: 'Evet', onPress: () => Linking.openSettings() },
-                    ]
                 );
                 return; // İzin verilmediyse işlemi durdur
             }
@@ -113,7 +149,7 @@ const ReminderCreate = ({ route, navigation }) => {
             if (sameDay) {
                 const invalidTimes = zamanlama.filter(time => time <= currentTime);
                 if (invalidTimes.length > 0) {
-                    Alert.alert(
+                    showAlert(
                         'Uyarı',
                         `Hatırlatıcının ilk tarihi bugünün tarihi seçildiği için, geçmiş bir saat seçemezsiniz. Lütfen girdiğiniz saatleri kontrol ediniz.`
                     );
@@ -164,6 +200,10 @@ const ReminderCreate = ({ route, navigation }) => {
                         android: {
                             channelId: 'reminder',
                             smallIcon: 'ic_launcher',
+                            sound: 'arriving',
+                            pressAction: {
+                                id: 'default',
+                            },
                         },
                         data: {
                             hatirlatici_id: response.data.id,
@@ -196,11 +236,22 @@ const ReminderCreate = ({ route, navigation }) => {
             // Başarıyla kaydedildikten sonra hatırlatıcılar sayfasına git
             navigation.replace('Hatırlatıcılar');
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                console.error("Hata detayları:", error.response.data);
-            } else {
-                console.error("Beklenmedik hata:", error);
+            if (error.message === "Network Error") {
+                // Network Error durumu için hiçbir işlem yapılmıyor
+                return;
             }
+            const status = error?.response?.status;
+            
+            // Eğer status 401, 408, 429 veya 500 ve üzeri ise, return ile işleme son veriyoruz
+            if (status === 401 || status === 408 || status === 429 || status >= 500) {
+                return; // Bu durumlarda yanıt verilmemesi için işlem burada sonlanıyor
+            }
+
+            dispatch(showMessage({
+                message: 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
+                variant: 'error',
+            })); 
+            
         }finally {
             setLoading(false); // İşlem tamamlandığında loading'i kapat
         }
@@ -227,15 +278,15 @@ const ReminderCreate = ({ route, navigation }) => {
     const openModal = () => {
         setModalVisible(true);
         // Use InteractionManager to delay focus until after all interactions are done
-        InteractionManager.runAfterInteractions(() => {
-            setTimeout(() => {
-                if (inputRef.current) {
-                    const length = kuvvetValue.length;  // Mevcut değerin uzunluğunu al
-                    inputRef.current.focus();
-                    inputRef.current.setSelection(length);  // Imleci metnin sonuna yerleştir
-                }
-            }, 300);  // Adjust the delay if necessary
-        });
+        // InteractionManager.runAfterInteractions(() => {
+        //     setTimeout(() => {
+        //         if (inputRef.current) {
+        //             const length = kuvvetValue.length;  // Mevcut değerin uzunluğunu al
+        //             inputRef.current.focus();
+        //             inputRef.current.setSelection(length);  // Imleci metnin sonuna yerleştir
+        //         }
+        //     }, 300);  // Adjust the delay if necessary
+        // });
     };
     
 
@@ -245,13 +296,13 @@ const ReminderCreate = ({ route, navigation }) => {
 
     const openZamanlamaModal = () => {
         if (!firstDate) {
-            Alert.alert(
+            showAlert(
                 'Uyarı',
                 'Lütfen önce başlangıç tarihini belirleyiniz.'
             );
             return; // Eğer firstDate boşsa, fonksiyonu durdur
         }else if (!lastDate){
-            Alert.alert(
+            showAlert(
                 'Uyarı',
                 'Lütfen önce bitiş tarihini belirleyiniz.'
             );
@@ -268,7 +319,7 @@ const ReminderCreate = ({ route, navigation }) => {
 
     const showEndDatePicker = () => {
         if (!firstDate) {
-            Alert.alert(
+            showAlert(
                 'Uyarı',
                 'Lütfen önce başlangıç tarihini belirleyiniz.'
             );
@@ -283,7 +334,7 @@ const ReminderCreate = ({ route, navigation }) => {
     const handleConfirmStartDate = (date) => {
         const now = moment(); // Şu anki tarih ve saat
         if (moment(date).isBefore(now, 'minute')) {
-            Alert.alert("Hata", "Başlangıç tarihi geçmiş olamaz.");
+            showAlert("Hata", "Başlangıç tarihi geçmiş bir tarih olamaz.");
             hideDatePicker();
             return;
         }
@@ -298,14 +349,14 @@ const ReminderCreate = ({ route, navigation }) => {
     
         // Bitiş tarihi geçmiş olamaz
         if (moment(date).isBefore(now, 'minute')) {
-            Alert.alert("Hata", "Bitiş tarihi geçmiş olamaz.");
+            showAlert("Hata", "Bitiş tarihi geçmiş bir tarih olamaz.");
             hideEndDatePicker();
             return;
         }
     
         // Bitiş tarihi, başlangıç tarihinden önce olamaz
         if (moment(date).isBefore(formattedFirstDate, 'day')) {
-            Alert.alert("Hata", "Bitiş tarihi, başlangıç tarihinden önce bir tarih olamaz.");
+            showAlert("Hata", "Bitiş tarihi, başlangıç tarihinden önce olamaz.");
             hideEndDatePicker();
             return;
         }
@@ -322,168 +373,170 @@ const ReminderCreate = ({ route, navigation }) => {
     }
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <View style={styles.container} >
             {/* <ReminderCreateHead /> */}
-            <View style={styles.secondContainer}>
-                <Text style={styles.title}>Detaylar</Text>
-                <View style={styles.inputWrapper}>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.label}>İsim</Text>
-                        <Text style={styles.input} numberOfLines={1} ellipsizeMode="tail">{name}</Text>
-                    </View>
-
-                    <TouchableOpacity style={styles.inputContainer} onPress={openModal}>
-                        <Text style={styles.label}>Ölçek</Text>
-                        <View style={styles.formRightContainer}>
-                            {kuvvet ? (
-                                <Text style={styles.inputForm}>{kuvvet}</Text>
-                            ) : (
-                                <Text style={styles.Tree}>-</Text>
-                            )}
-                            <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                <View style={styles.secondContainer}>
+                    <Text style={styles.title}>Detaylar</Text>
+                    <View style={styles.inputWrapper}>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.label}>İsim</Text>
+                            <Text style={styles.input} numberOfLines={1} ellipsizeMode="tail">{name}</Text>
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.inputContainer} onPress={openFormModal}>
-                            <Text style={styles.label}>Form</Text>
+
+                        <TouchableOpacity style={styles.inputContainer} onPress={openModal}>
+                            <Text style={styles.label}>Ölçek</Text>
                             <View style={styles.formRightContainer}>
-                                {form ? (
-                                    <Text style={styles.inputForm}>{form}</Text>
+                                {kuvvet ? (
+                                    <Text style={styles.inputForm}>{kuvvet}</Text>
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
                                 <Ionicons name="chevron-forward-outline" size={16} color="#000" />
                             </View>
-                    </TouchableOpacity>
-                </View>
-
-                <Text style={styles.titleSecond}>Zaman</Text>
-                <View style={styles.inputWrapper}>
-                    <TouchableOpacity style={styles.inputContainer} onPress={showDatePicker}>
-                        <Text style={styles.label}>Başlangıç Tarihi</Text>
-                        <View style={styles.formRightContainer}>
-                            {firstDate ? (
-                                <Text style={styles.inputForm}>{firstDate}</Text>
-                            ) : (
-                                <Text style={styles.Tree}>-</Text>
-                            )}
-                            <Ionicons name="chevron-forward-outline" size={16} color="#000" />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.inputContainer} onPress={showEndDatePicker}>
-                        <Text style={styles.label}>Bitiş Tarihi</Text>
-                        <View style={styles.formRightContainer}>
-                            {lastDate ? (
-                                <Text style={styles.inputForm}>{lastDate}</Text>
-                            ) : (
-                                <Text style={styles.Tree}>-</Text>
-                            )}
-                            <Ionicons name="chevron-forward-outline" size={16} color="#000" />
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.inputContainerZaman} onPress={openZamanlamaModal}>
-                        <Text style={styles.label}>Hatırlatma Saatleri</Text>
-                        <View style={styles.zamanlamaRightContainer}>
-                            {zamanlama.length > 0 ? (
-                                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.inputZamanlama}>
-                                    {zamanlama.join(', ')}
-                                </Text>
-                            ) : (
-                                <Text style={styles.Tree}>-</Text>
-                            )}
-                            <Ionicons name="chevron-forward-outline" size={16} color="#000" style={styles.icon} />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-               
-
-                <Modal visible={modalVisible} transparent={true} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <View style={styles.popup}>
-                            <View>
-                            <View style={styles.closeIcon}>
-                                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                                    <Ionicons name="arrow-back-outline" size={30} color="#000000" />
-                                </TouchableOpacity>
-                            </View>
-
-                            <Text style={styles.popupTitle}>Ölçek Bilgisi</Text>
-
-                            <View style={styles.popupInputContainer} >
-                                <Text style={styles.popupInputText}>Ölçek</Text>
-                                <TextInput
-                                    ref={inputRef}  // TextInput'a referans ekleyin
-                                    style={styles.popupInput}
-                                    keyboardType="numeric"
-                                    value={kuvvetValue}
-                                    onChangeText={setKuvvetValue}
-                                />
-                            </View>
-
-                            <View style={styles.unitsMainContainer}>
-                                <Text style={styles.unitsText}>Birim</Text>
-                                <ScrollView
-                                    horizontal={true}
-                                    showsHorizontalScrollIndicator={false}
-                                    contentContainerStyle={styles.unitsContainer}
-                                >
-                                    {units.map((unit, index) => (
-                                        <TouchableOpacity
-                                            key={index}
-                                            style={[
-                                                styles.unitButton,
-                                                selectedUnit === unit && styles.unitButtonSelected
-                                            ]}
-                                            onPress={() => handleUnitPress(unit)}
-                                        >
-                                            <Text
-                                                style={[
-                                                    styles.unitButtonText,
-                                                    selectedUnit === unit && styles.unitButtonTextSelected
-                                                ]}
-                                            >
-                                                {unit}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </ScrollView>
-                            </View>
-                            </View>
-
-                            <View style={styles.popupButtons}>
-                                <TouchableOpacity
-                                    style={[styles.saveButton, !(kuvvetValue && selectedUnit) && styles.saveButtonDisabled]}
-                                    onPress={handleSave}
-                                    disabled={!(kuvvetValue && selectedUnit)}  // Butonun tıklanabilirliğini kontrol eder
-                                >
-                                    <Text style={styles.saveButtonText}>Kaydet</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                        </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.inputContainer} onPress={openFormModal}>
+                                <Text style={styles.label}>Form</Text>
+                                <View style={styles.formRightContainer}>
+                                    {form ? (
+                                        <Text style={styles.inputForm}>{form}</Text>
+                                    ) : (
+                                        <Text style={styles.Tree}>-</Text>
+                                    )}
+                                    <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                                </View>
+                        </TouchableOpacity>
                     </View>
-                </Modal>
 
-                <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirmStartDate}
-                    onCancel={hideDatePicker}
-                />
+                    <Text style={styles.titleSecond}>Zaman</Text>
+                    <View style={styles.inputWrapper}>
+                        <TouchableOpacity style={styles.inputContainer} onPress={showDatePicker}>
+                            <Text style={styles.label}>Başlangıç Tarihi</Text>
+                            <View style={styles.formRightContainer}>
+                                {firstDate ? (
+                                    <Text style={styles.inputForm}>{firstDate}</Text>
+                                ) : (
+                                    <Text style={styles.Tree}>-</Text>
+                                )}
+                                <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                            </View>
+                        </TouchableOpacity>
 
-                <DateTimePickerModal
-                    isVisible={isEndDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirmEndDate}
-                    onCancel={hideEndDatePicker}
-                />
+                        <TouchableOpacity style={styles.inputContainer} onPress={showEndDatePicker}>
+                            <Text style={styles.label}>Bitiş Tarihi</Text>
+                            <View style={styles.formRightContainer}>
+                                {lastDate ? (
+                                    <Text style={styles.inputForm}>{lastDate}</Text>
+                                ) : (
+                                    <Text style={styles.Tree}>-</Text>
+                                )}
+                                <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                            </View>
+                        </TouchableOpacity>
 
-                <FormModel  formModalVisible={formModalVisible} setFormModalVisible={setFormModalVisible} setForm={setForm}/>
-                <HatirlatmaSaatleriModel  zamanlamaModalVisible={zamanlamaModalVisible} setZamanlamaModalVisible={setZamanlamaModalVisible} 
-                setZamanlama={setZamanlama} zamanlama={zamanlama} firstDate={firstDate}/>
-            </View>
+                        <TouchableOpacity style={styles.inputContainerZaman} onPress={openZamanlamaModal}>
+                            <Text style={styles.label}>Hatırlatma Saatleri</Text>
+                            <View style={styles.zamanlamaRightContainer}>
+                                {zamanlama.length > 0 ? (
+                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.inputZamanlama}>
+                                        {zamanlama.join(', ')}
+                                    </Text>
+                                ) : (
+                                    <Text style={styles.Tree}>-</Text>
+                                )}
+                                <Ionicons name="chevron-forward-outline" size={16} color="#000" style={styles.icon} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    
+
+                
+
+                    <Modal visible={modalVisible} transparent={true} animationType="slide">
+                        <View style={styles.modalContainer}>
+                            <View style={styles.popup}>
+                                <View>
+                                    <View style={styles.closeIcon}>
+                                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                            <Ionicons name="arrow-back-outline" size={30} color="#000000" />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <Text style={styles.popupTitle}>Ölçek Bilgisi</Text>
+
+                                    <View style={styles.popupInputContainer} >
+                                        <Text style={styles.popupInputText}>Ölçek</Text>
+                                        <TextInput
+                                            // ref={inputRef}  // TextInput'a referans ekleyin
+                                            style={styles.popupInput}
+                                            keyboardType="numeric"
+                                            value={kuvvetValue}
+                                            onChangeText={setKuvvetValue}
+                                            
+                                        />
+                                    </View>
+
+                                    <View style={styles.unitsMainContainer}>
+                                        <Text style={styles.unitsText}>Birim</Text>
+                                        <ScrollView
+                                            horizontal={true}
+                                            showsHorizontalScrollIndicator={false}
+                                            contentContainerStyle={styles.unitsContainer}
+                                        >
+                                            {units.map((unit, index) => (
+                                                <TouchableOpacity
+                                                    key={index}
+                                                    style={[
+                                                        styles.unitButton,
+                                                        selectedUnit === unit && styles.unitButtonSelected
+                                                    ]}
+                                                    onPress={() => handleUnitPress(unit)}
+                                                >
+                                                    <Text
+                                                        style={[
+                                                            styles.unitButtonText,
+                                                            selectedUnit === unit && styles.unitButtonTextSelected
+                                                        ]}
+                                                    >
+                                                        {unit}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
+                                    </View>
+
+                                    <View style={styles.popupButtons}>
+                                        <TouchableOpacity
+                                            style={[styles.saveButton, !(kuvvetValue && selectedUnit) && styles.saveButtonDisabled]}
+                                            onPress={handleSave}
+                                            disabled={!(kuvvetValue && selectedUnit)}  // Butonun tıklanabilirliğini kontrol eder
+                                        >
+                                            <Text style={styles.saveButtonText}>Kaydet</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirmStartDate}
+                        onCancel={hideDatePicker}
+                    />
+
+                    <DateTimePickerModal
+                        isVisible={isEndDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirmEndDate}
+                        onCancel={hideEndDatePicker}
+                    />
+
+                    <FormModel  formModalVisible={formModalVisible} setFormModalVisible={setFormModalVisible} setForm={setForm}/>
+                    <HatirlatmaSaatleriModel  zamanlamaModalVisible={zamanlamaModalVisible} setZamanlamaModalVisible={setZamanlamaModalVisible} 
+                    setZamanlama={setZamanlama} zamanlama={zamanlama} firstDate={firstDate}/>
+                </View>
+            </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={[
@@ -500,7 +553,21 @@ const ReminderCreate = ({ route, navigation }) => {
                     )}
                 </TouchableOpacity>
             </View>
-        </ScrollView>
+
+            <PermissionBlockedModal
+                isVisible={alertVisibleBlockedPermission}
+                message={alertMessageBlockedPermission}
+                title={alertTitleBlockedPermission}
+                onClose={() => setAlertVisibleBlockedPermission(false)}
+            />
+
+            <AlertModal
+                isVisible={alertVisible}
+                message={alertMessage}
+                title={alertTitle}
+                onClose={() => setAlertVisible(false)}
+            />
+        </View>
     );
 };
 

@@ -22,7 +22,7 @@ const App = () => {
         const response = await axios.get(API_ROUTES.COMBINED);
         setCombinedData(response.data);
       } catch (error) {
-        console.error('Veri çekme hatası:', error);
+        // console.error('Veri çekme hatası:', error);
       }
       setLoading(false);
     };

@@ -1,9 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from './colors';
+import { he } from 'date-fns/locale';
+
+const { height } = Dimensions.get('window');
+
 
 const styles = StyleSheet.create({
   bottomBar: {
-    position: 'absolute', // Use absolute positioning for a floating effect
+    position: 'static', // Use absolute positioning for a floating effect
     bottom: 0,
     left: 0,
     right: 0,
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.text,
-    fontSize: 16, // Adjusted font size for better balance
+    fontSize: height * 0.013, // Adjusted font size for better balance
     marginTop: 4,
     fontWeight: 'bold', // Make text bold for emphasis
   },
