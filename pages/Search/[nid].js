@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/SearchPageStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -40,6 +40,31 @@ const NidSearchPage = ({ route }) => {
   const [page, setPage] = useState(1); // Sayfa numarası
   const [loadingMore, setLoadingMore] = useState(false);
   const [nextUrl, setNextUrl] = useState(null); // Bir sonraki sayfanın URL'si
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const createReminder = () => {
+    console.log('Hatırlatıcı oluşturulacak.');
+    setModalVisible(false); // Modalı kapat
+  };
+
+  const navigateToDoseCalculation = () => {
+    navigate.navigate('UseInfo', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+    setModalVisible(false); // Modalı kapat
+  };
+
+
+  // Modalı açan fonksiyon
+  const openModal = (item) => {
+    setSelectedItem(item); // Tıklanan item'i state'e kaydet
+    setModalVisible(true); // Modalı aç3
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null); // selectedItem sıfırlanıyor
+    setModalVisible(false); // Modal kapanıyor
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,17 +132,7 @@ const NidSearchPage = ({ route }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => {
-        // bura hastalıklar yerine hassasiyet ıd olarak decğiştirilecek
-        // hastaliklar dizisinin dolu olup olmadığını kontrol et
-        
-        const id = item.hassasiyet_turu?.id;
-          if ([1, 2, 4, 7, 8].includes(id)) {
-            navigate.navigate('MedicineDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-          } else if ([3, 5, 6].includes(id)) {
-            navigate.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
-          }
-      }}
+      onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
     >
       <View style={styles.medicineItem}>
         <View style={styles.medicineContent}>
@@ -161,6 +176,25 @@ const NidSearchPage = ({ route }) => {
           onSubmitEditing={() => setIsSearching(false)}
         />
       </View>
+      {/* Modal */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="none"
+        onRequestClose={closeModal} // Geri tuşuna basılınca modal kapansın
+      >
+        <TouchableOpacity style={styles.modalBackground} onPress={closeModal} activeOpacity={1}>
+          <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
+            <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
+            <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
+              <Text style={styles.buttonText}>Doz Hesaplama</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={createReminder}>
+              <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
 
       {/* Eğer arama aktifse filtrelenmiş veriyi göster, değilse pagination verisini göster */}
       <FlatList

@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { colors } from './colors';
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',  // Hafif bir arka plan rengi
+    backgroundColor: colors.MainContainerBackground,  // Hafif bir arka plan rengi
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: colors.fontSizeTextMaxi,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 20,
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     
   },
   hastalikText: {
-    fontSize: 18,
+    fontSize: colors.fontSizeTextLarge,
     color: "black",
     textAlign: 'left',  // Sol hizalı metin
   },

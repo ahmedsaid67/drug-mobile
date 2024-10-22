@@ -1,10 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { colors } from './colors';
-import { he } from 'date-fns/locale';
+import {Dimensions } from 'react-native';
 
 const { height } = Dimensions.get('window');
-
-
 const styles = StyleSheet.create({
   bottomBar: {
     position: 'static', // Use absolute positioning for a floating effect

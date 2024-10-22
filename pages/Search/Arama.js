@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, ScrollView, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
+import { View, Text, TextInput, FlatList, ScrollView, TouchableOpacity, StyleSheet, Keyboard, Modal } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/SearchPageStyles'; // Stillerin içe aktarılması
 import { API_ROUTES } from '../../utils/constant';
@@ -11,6 +11,34 @@ const App = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [medicines, setMedicines] = useState([]);
   const navigation = useNavigation(); // useNavigation kullanımı
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const createReminder = () => {
+    console.log('Hatırlatıcı oluşturulacak.');
+    setModalVisible(false); // Modalı kapat
+  };
+
+  const navigateToDoseCalculation = () => {
+    if (selectedItem.sayfa === 'ilac') {
+      navigation.navigate('UseInfo', { item: selectedItem }); // İlaca yönlendirme
+    } else if (selectedItem.sayfa === 'besin takviyesi') {
+      navigation.navigate('VitDetail', { item: selectedItem }); // Takviyeye yönlendirme
+    }
+    setModalVisible(false); // Modalı kapat
+  };
+
+
+  // Modalı açan fonksiyon
+  const openModal = (item) => {
+    setSelectedItem(item); // Tıklanan item'i state'e kaydet
+    setModalVisible(true); // Modalı aç3
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null); // selectedItem sıfırlanıyor
+    setModalVisible(false); // Modal kapanıyor
+  };
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -83,25 +111,7 @@ const App = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => {
-        // bura hastalıklar yerine hassasiyet ıd olarak decğiştirilecek
-        // hastaliklar dizisinin dolu olup olmadığını kontrol et
-        console.log(item);
-        console.log(item.hassasiyet_turu_id);
-        if(item.sayfa === "ilac"){
-          const id = item.hassasiyet_turu_id;
-          if ([1, 2, 4, 7, 8].includes(id)) {
-            navigation.navigate('MedicineDetail', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-          } else if ([3, 5, 6].includes(id)) {
-            navigation.navigate('SicknessDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
-          }
-        }
-        else if(item.sayfa === "besin takviyesi"){
-          const id = item.product_category__supplement;
-          console.log(id);
-          navigation.navigate('VitDetail', { item }); // 3, 5, 6 için hastalık detayına yönlendir
-        }
-      }}
+      onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
       
     >
       <View style={styles.medicineItem}>
@@ -127,6 +137,25 @@ const App = () => {
           onSubmitEditing={handleSearchComplete}
         />
       </View>
+       {/* Modal */}
+       <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="none"
+        onRequestClose={closeModal} // Geri tuşuna basılınca modal kapansın
+      >
+        <TouchableOpacity style={styles.modalBackground} onPress={closeModal} activeOpacity={1}>
+          <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
+            <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
+            <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
+              <Text style={styles.buttonText}>Doz Hesaplama</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={createReminder}>
+              <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
 
       {!searchTerm && !isSearching && (
         <ScrollView>

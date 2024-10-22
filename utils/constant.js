@@ -51,7 +51,7 @@ export const API_ROUTES = {
 
   GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT : API_KEY + '/hastalikhemyasahemkiloyabagliazalandoz/get-hastalik-azalan-doz-hem-kilo-hem-yas/', // hastalık , hem kıloya hem yasa gore azalan doz
   GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT_DATA_AGE : API_KEY + '/hastalikhemyasahemkiloyabagliazalandoz/get-detail-data/', // eşik olan yaş bilgisini alıyoruz
-  
+
   GET_SUPPLEMENT : API_KEY + '/products/',
   SUPPLEMENT : API_KEY + '/supplements/', // BESİN TAKVİYELERİ
   SUPPLEMENT_BY_PRODUCT_CATEGORY : API_KEY + '/productcategory/list-categories-by-supplement/?supplement_id=',  // BESİN TAKVİYESİNE GORE ÜRÜN KATEGORİLERİ  -- VİTAMİNLERE DİAR KATEGORİLERİ GETİRİ

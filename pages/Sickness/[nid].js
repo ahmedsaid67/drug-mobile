@@ -8,28 +8,11 @@ import { colors } from '../../styles/colors';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; // Get selected item
-  const [hastaliklar, setHastaliklar] = useState([]); // Eğer hastalıklar boşsa boş liste kullan
+  const hastaliklar = item.hastaliklar;
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
+  
 
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (item && item.id) {
-          const response = await axios.get(`${API_ROUTES.MEDICINE_BY_ID}${item.id}`);
-          setHastaliklar(response.data.hastaliklar);
-        }
-      } catch (error) {
-        console.error('API isteği sırasında hata oluştu:', error);
-      }
-      finally {
-         setLoading(false); 
-      }
-    };
-  
-    fetchData();
-  }, [item]);
   
   // Seçilen hastalıkla MedicineDetail'e yönlendirme işlevi
   const handleHastalikSec = (hastalik) => {
@@ -39,8 +22,15 @@ const NidSearchPage = ({ route }) => {
       hastaliklar: hastalik  // Seçilen hastalık tüm bilgileriyle eklendi
     };
     
-    // MedicineDetail'e yönlendirme yaparken güncellenmiş item'i gönderiyoruz
-    navigation.navigate('MedicineDetail', { item: updatedItem });
+   
+      const id = item.hassasiyet_turu.id;
+      if ([2,3,4].includes(id)) {
+        navigation.navigate('InputKg', { item: updatedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+      } else if ([1,5,6,7,8].includes(id)) {
+        navigation.navigate('InputAge', { item: updatedItem  }); // 3, 5, 6 için hastalık detayına yönlendir
+      }
+     
+    
   };
 
   return (
