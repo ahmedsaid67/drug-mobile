@@ -5,7 +5,6 @@ import styles from '../styles/UstBarStyles';
 import { colors } from '../styles/colors'; // Adjust the import path as necessary
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation from React Navigation
-import styles2 from '../styles/LoginHeaderStyles';
 
 const UstBar = ({ showBars, currentRoute }) => {
   const user = useSelector((state) => state.user);
@@ -15,7 +14,7 @@ const UstBar = ({ showBars, currentRoute }) => {
     if (user.id) {
       navigation.navigate('Profil'); // Navigate to Profile if user is logged in
     } else {
-      navigation.navigate('Login'); // Navigate to Login if user is not logged in
+      navigation.navigate('Giriş'); // Navigate to Login if user is not logged in
     }
   };
 
@@ -25,12 +24,12 @@ const UstBar = ({ showBars, currentRoute }) => {
   }
 
   // Determine what text to display based on currentRoute
-  const displayText = ['Login', 'Register', 'ResetPasswordCode', 'ResetPassword'].includes(currentRoute)
+  const displayText = ['Giriş', 'Register', 'ResetPasswordCode', 'ResetPassword'].includes(currentRoute)
   ? 'Ölçek'
   : currentRoute;
 
   const navigatorHandle =()=>{
-    if (currentRoute === 'Login') {
+    if (currentRoute === 'Giriş') {
       const previousRoute = navigation.getState()?.routes[navigation.getState().index - 1]?.name;
       const twoStepsBackRoute = navigation.getState()?.routes[navigation.getState().index - 2]?.name;
 
@@ -59,7 +58,7 @@ const UstBar = ({ showBars, currentRoute }) => {
               <View style={styles.iconWrapper}>
                 <Icon
                   name={user.id ? "person" : "person-outline"}
-                  size={24}
+                  size={colors.iconHeight}
                   color={user.id ? colors.uygulamaRengi : colors.icon}
                 />
               </View>
@@ -67,11 +66,11 @@ const UstBar = ({ showBars, currentRoute }) => {
           </View>
         </View>
       ) : (
-        <View style={styles2.header}>
+        <View style={styles.container}>
           <TouchableOpacity onPress={navigatorHandle}>
-            <Icon name="arrow-back" size={24} color={colors.icon} />
+            <Icon name="arrow-back" size={colors.iconHeight} color={colors.icon} />
           </TouchableOpacity>
-          <Text style={styles2.logoText}>{displayText}</Text> 
+          <Text style={styles.logoText}>{displayText}</Text> 
         </View>
       )}
     </>

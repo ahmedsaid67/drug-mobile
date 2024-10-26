@@ -7,15 +7,14 @@ const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-
     backgroundColor: colors.MainContainerBackground, // Use color from constants
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: colors.mainPadingHorizantal,
     borderBottomColor: colors.border, // Use color from constants
     borderBottomWidth: 1, // Subtle top border
-    paddingVertical:12,
+    height:height * 0.075,
   },
   logoText: {
     fontSize: height * 0.023,

@@ -37,13 +37,12 @@ const FormModel = ({ formModalVisible, setFormModalVisible, setForm }) => {
         <Modal visible={formModalVisible} transparent={true} animationType="slide">
             <View style={styles.modalContainer}>
                 <View style={styles.popup}>
-                    <View style={styles.closeFormIcon}>
-                        <TouchableOpacity onPress={() => setFormModalVisible(false)}>
-                            <Ionicons name="arrow-back-outline" size={30} color="#000000" />
+                    <View style={styles.popupTitleContainer}>
+                        <TouchableOpacity style={styles.closeIcon}  onPress={() => setFormModalVisible(false)}>
+                            <Ionicons name="arrow-back-outline" size={colors.iconHeight} color="#000000" />
                         </TouchableOpacity>
+                        <Text style={styles.popupTitle}>Form</Text>
                     </View>
-
-                    <Text style={styles.popupTitle}>Form</Text>
 
                     {isLoading ? (
                         <ActivityIndicator color={colors.uygulamaRengi} size="large" />
@@ -61,7 +60,7 @@ const FormModel = ({ formModalVisible, setFormModalVisible, setForm }) => {
                                     {item.img && (
                                         <Image
                                             source={{ uri: item.img }}
-                                            style={{ width: 32, height: 32, marginRight: 10 }} // Set appropriate size
+                                            style={{ width: 32, height: 32, marginRight: 20 }} // Set appropriate size
                                         />
                                     )}
                                     <Text

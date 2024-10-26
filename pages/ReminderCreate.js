@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 // import { useRef } from 'react';
-import { View, Text, TouchableOpacity, Modal, TextInput, ScrollView,InteractionManager, ActivityIndicator, Alert, Linking, Platform, PermissionsAndroid, Keyboard  } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, TextInput, ScrollView,Dimensions, ActivityIndicator, Alert, Linking, Platform, PermissionsAndroid, Keyboard  } from 'react-native';
 import ReminderCreateHead from '../components/ReminderCreateHead';
 import styles from '../styles/ReminderCreateStyles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -40,7 +40,7 @@ const ReminderCreate = ({ route, navigation }) => {
 
     const [loading,setLoading] = useState(false)
 
-    const units = ['ml', 'IU', '%', 'mcg', 'mg','g','adet']; 
+    const units = ['ml','mcg', 'mg','g', 'IU', '%','adet']; 
     // const inputRef = useRef(null); // TextInput için referans oluşturun
 
     const [formModalVisible, setFormModalVisible] = useState(false); 
@@ -59,6 +59,8 @@ const ReminderCreate = ({ route, navigation }) => {
     const [alertVisibleBlockedPermission, setAlertVisibleBlockedPermission] = useState(false);
     const [alertMessageBlockedPermission, setAlertMessageBlockedPermission] = useState('');
     const [alertTitleBlockedPermission, setAlertTitleBlockedPermission] = useState('');
+
+    const { height } = Dimensions.get('window');
 
     const showAlertBlockedPermission = (title, message) => {
         setAlertTitleBlockedPermission(title);
@@ -190,7 +192,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         minute: parseInt(time.split(':')[1]),
                     });
     
-                    const notificationMessage = `${name} ${kuvvet} (${form})`;
+                    const notificationMessage = `${name} - ${kuvvet} (${form})`;
     
                     const notificationId = uuidv4();  // Benzersiz bir ID oluştur
     
@@ -298,13 +300,13 @@ const ReminderCreate = ({ route, navigation }) => {
         if (!firstDate) {
             showAlert(
                 'Uyarı',
-                'Lütfen önce başlangıç tarihini belirleyiniz.'
+                'Lütfen önce bir başlangıç tarihi seçiniz.'
             );
             return; // Eğer firstDate boşsa, fonksiyonu durdur
         }else if (!lastDate){
             showAlert(
                 'Uyarı',
-                'Lütfen önce bitiş tarihini belirleyiniz.'
+                'Lütfen önce bir bitiş tarihi seçiniz.'
             );
             return;
         }
@@ -321,7 +323,7 @@ const ReminderCreate = ({ route, navigation }) => {
         if (!firstDate) {
             showAlert(
                 'Uyarı',
-                'Lütfen önce başlangıç tarihini belirleyiniz.'
+                'Lütfen önce bir başlangıç tarihi seçiniz.'
             );
             return; // Eğer firstDate boşsa, fonksiyonu durdur
         }
@@ -369,13 +371,13 @@ const ReminderCreate = ({ route, navigation }) => {
     
 
     if (!loginStatus){
-        navigation.navigate('Login')
+        navigation.navigate('Giriş')
     }
 
     return (
         <View style={styles.container} >
             {/* <ReminderCreateHead /> */}
-            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
                 <View style={styles.secondContainer}>
                     <Text style={styles.title}>Detaylar</Text>
                     <View style={styles.inputWrapper}>
@@ -392,7 +394,7 @@ const ReminderCreate = ({ route, navigation }) => {
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
-                                <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                                <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.inputContainer} onPress={openFormModal}>
@@ -403,7 +405,7 @@ const ReminderCreate = ({ route, navigation }) => {
                                     ) : (
                                         <Text style={styles.Tree}>-</Text>
                                     )}
-                                    <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                                    <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
                                 </View>
                         </TouchableOpacity>
                     </View>
@@ -418,7 +420,7 @@ const ReminderCreate = ({ route, navigation }) => {
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
-                                <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                                <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
                             </View>
                         </TouchableOpacity>
 
@@ -430,7 +432,7 @@ const ReminderCreate = ({ route, navigation }) => {
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
-                                <Ionicons name="chevron-forward-outline" size={16} color="#000" />
+                                <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
                             </View>
                         </TouchableOpacity>
 
@@ -444,76 +446,72 @@ const ReminderCreate = ({ route, navigation }) => {
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
-                                <Ionicons name="chevron-forward-outline" size={16} color="#000" style={styles.icon} />
+                                <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} style={styles.icon} />
                             </View>
                         </TouchableOpacity>
                     </View>
                     
 
-                
-
                     <Modal visible={modalVisible} transparent={true} animationType="slide">
                         <View style={styles.modalContainer}>
                             <View style={styles.popup}>
-                                <View>
-                                    <View style={styles.closeIcon}>
-                                        <TouchableOpacity onPress={() => setModalVisible(false)}>
-                                            <Ionicons name="arrow-back-outline" size={30} color="#000000" />
+                                <View style={styles.popupTitleContainer}>
+                                        <TouchableOpacity style={styles.closeIcon} onPress={() => setModalVisible(false)}>
+                                            <Ionicons name="arrow-back-outline" size={colors.iconHeight} color={colors.text} />
                                         </TouchableOpacity>
-                                    </View>
                                     <Text style={styles.popupTitle}>Ölçek Bilgisi</Text>
+                                </View>
 
-                                    <View style={styles.popupInputContainer} >
-                                        <Text style={styles.popupInputText}>Ölçek</Text>
-                                        <TextInput
-                                            // ref={inputRef}  // TextInput'a referans ekleyin
-                                            style={styles.popupInput}
-                                            keyboardType="numeric"
-                                            value={kuvvetValue}
-                                            onChangeText={setKuvvetValue}
-                                            
-                                        />
-                                    </View>
+                                <View style={styles.popupInputContainer} >
+                                    <Text style={styles.popupInputText}>Ölçek</Text>
+                                    <TextInput
+                                        // ref={inputRef}  // TextInput'a referans ekleyin
+                                        style={styles.popupInput}
+                                        keyboardType="numeric"
+                                        value={kuvvetValue}
+                                        onChangeText={setKuvvetValue}
+                                    />
+                                </View>
 
-                                    <View style={styles.unitsMainContainer}>
-                                        <Text style={styles.unitsText}>Birim</Text>
-                                        <ScrollView
-                                            horizontal={true}
-                                            showsHorizontalScrollIndicator={false}
-                                            contentContainerStyle={styles.unitsContainer}
-                                        >
-                                            {units.map((unit, index) => (
-                                                <TouchableOpacity
-                                                    key={index}
+                                <View style={styles.unitsMainContainer}>
+                                    <Text style={styles.unitsText}>Birim</Text>
+                                    <ScrollView
+                                        horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        contentContainerStyle={styles.unitsContainer}
+                                        keyboardShouldPersistTaps="always"
+                                    >
+                                        {units.map((unit, index) => (
+                                            <TouchableOpacity
+                                                key={index}
+                                                style={[
+                                                    styles.unitButton,
+                                                    selectedUnit === unit && styles.unitButtonSelected
+                                                ]}
+                                                onPress={() => handleUnitPress(unit)}
+                                            >
+                                                <Text
                                                     style={[
-                                                        styles.unitButton,
-                                                        selectedUnit === unit && styles.unitButtonSelected
+                                                        styles.unitButtonText,
+                                                        selectedUnit === unit && styles.unitButtonTextSelected
                                                     ]}
-                                                    onPress={() => handleUnitPress(unit)}
                                                 >
-                                                    <Text
-                                                        style={[
-                                                            styles.unitButtonText,
-                                                            selectedUnit === unit && styles.unitButtonTextSelected
-                                                        ]}
-                                                    >
-                                                        {unit}
-                                                    </Text>
-                                                </TouchableOpacity>
-                                            ))}
-                                        </ScrollView>
-                                    </View>
-                                    </View>
-
-                                    <View style={styles.popupButtons}>
-                                        <TouchableOpacity
-                                            style={[styles.saveButton, !(kuvvetValue && selectedUnit) && styles.saveButtonDisabled]}
-                                            onPress={handleSave}
-                                            disabled={!(kuvvetValue && selectedUnit)}  // Butonun tıklanabilirliğini kontrol eder
-                                        >
-                                            <Text style={styles.saveButtonText}>Kaydet</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                                    {unit}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                          
+                                <View style={styles.popupButtons}>
+                                    <TouchableOpacity
+                                        style={[styles.saveButton, !(kuvvetValue && selectedUnit) && styles.saveButtonDisabled]}
+                                        onPress={handleSave}
+                                        disabled={!(kuvvetValue && selectedUnit)}  // Butonun tıklanabilirliğini kontrol eder
+                                    >
+                                        <Text style={styles.saveButtonText}>Kaydet</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </Modal>
@@ -547,7 +545,7 @@ const ReminderCreate = ({ route, navigation }) => {
                     onPress={handleReminderSave}
                 >
                     {loading ? (
-                        <ActivityIndicator size="small" color="#ffffff" />  // Yükleme anında dönen animasyon
+                        <ActivityIndicator size={colors.iconHeight} color="#ffffff" />  // Yükleme anında dönen animasyon
                     ) : (
                         <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>  // Yükleme yoksa buton yazısı
                     )}

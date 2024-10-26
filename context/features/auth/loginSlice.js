@@ -250,6 +250,7 @@ export const submitGoogleLogin = (userInfo) => async (dispatch) => {
 
 export const submitLogout = () => async (dispatch) => {
   try {
+    dispatch(loginLoading());
     const response = await axios({
       method: "post",
       url: API_ROUTES.LOGOUT,

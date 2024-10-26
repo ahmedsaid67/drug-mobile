@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity,Dimensions } from 'react-native';
 import styles from '../styles/BildirimlerStyles';
 import { API_ROUTES } from '../utils/constant';
 import axios from 'axios';
@@ -24,6 +24,8 @@ function Bildirimler() {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
 
+  const { height } = Dimensions.get('window');
+
   const showAlert = (title, message) => {
     setAlertTitle(title);
     setAlertMessage(message);
@@ -38,7 +40,7 @@ function Bildirimler() {
     if (loginStatus) {
       fetchNotifications();
     } else {
-      navigation.navigate('Login');
+      navigation.navigate('Giriş');
     }
   }, [page]); // Fetch notifications whenever the page changes
   
@@ -94,17 +96,21 @@ function Bildirimler() {
     return (
       <View key={item.id} style={styles.notificationCard}>
         <View style={styles.notificationContent}>
-          <Text style={styles.description}>{item.explanations}</Text>
-          <View style={styles.altContainer}>
+            <Text style={styles.description}>{item.explanations}</Text>
             <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
-            <TouchableOpacity onPress={() => copyToClipboard(item.explanations, item.tarih, item.saat)}>
-              <Icon name="copy-outline" size={24} color={colors.uygulamaRengi} />
-            </TouchableOpacity>
-          </View>
-          
         </View>
-        
+        <TouchableOpacity style={styles.iconContainer}  onPress={() => copyToClipboard(item.explanations, item.tarih, item.saat)}>
+            <Icon name="copy-outline" size={colors.iconHeight} color={colors.uygulamaRengi} />
+        </TouchableOpacity>
       </View>
+    );
+  };
+  const renderLoader = () => {
+    return (
+      loading ?
+        <View style={styles.loaderStyle}>
+          <ActivityIndicator size={colors.iconHeight} color={colors.uygulamaRengi} />
+        </View> : null
     );
   };
 
@@ -115,12 +121,12 @@ function Bildirimler() {
           data={notifications}
           renderItem={renderNotification}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={{ paddingBottom: 40 }}
+          contentContainerStyle={{ paddingBottom: height * 0.025 }}
           showsVerticalScrollIndicator={false}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.2}
           ListEmptyComponent={!loading && !error ? <NoNotifications /> : null}
-          ListFooterComponent={loading ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null} 
+          ListFooterComponent={renderLoader} 
         />
       </View>
       <AlertModal

@@ -111,14 +111,6 @@ const HomePage = () => {
 
 
 
-
-
-
-
-
- 
-  
-
   return (
     <ScrollView>
     <View style={styles.container}>

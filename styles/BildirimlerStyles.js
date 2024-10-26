@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { colors } from './colors'; // Adjust the import path as necessary
+import {Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -7,36 +10,40 @@ const styles = StyleSheet.create({
     backgroundColor: colors.MainContainerBackground,
   },
   container: {
-    paddingHorizontal: 20,
-    // paddingVertical: 20,
-    marginTop:20,
+    paddingHorizontal: colors.mainPadingHorizantal,
+    paddingTop: colors.mainPadingVertical,
+    flex:1,
   },
   notificationCard: {
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 2,
+    padding: height * 0.02,
+    borderRadius: height * 0.013,
+    marginBottom: colors.mainPadingHorizantal,
     borderColor: colors.border,
     borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  altContainer:{
-    flexDirection:"row",
-    justifyContent:"space-between"
+  notificationContent:{
+    flexDirection: 'columun',
+    flex: 1, 
   },
   description: {
     fontSize: colors.fontSizeText,
     color: colors.text,
-    marginBottom: 8,
+    marginBottom: height * 0.005,
     fontWeight: 'bold',
   },
   date: {
-    fontSize: colors.fontSizeText,
+    fontSize: colors.fontSizeTextMini,
     color: colors.thirdText,
+  },
+  iconContainer :{
+    justifyContent:"flex-end",
+  },
+  loaderStyle: {
+    alignItems: "center",
+    justifyContent:"center",
   },
 });
 

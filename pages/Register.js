@@ -106,7 +106,7 @@ const Register = () => {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            style={[styles.input, errors.password && styles.inputError]}
+            style={[styles.passwordInput, errors.password && styles.inputError]}
             placeholder="Şifre"
             onChangeText={(text) => {
               setPassword(text);
@@ -122,8 +122,8 @@ const Register = () => {
           >
             <Icon
               name={showPassword ? 'eye' : 'eye-slash'}
-              size={24}
-              color={colors.text}
+              size={colors.iconHeight}
+              color={colors.uygulamaRengi}
             />
           </TouchableOpacity>
         </View>

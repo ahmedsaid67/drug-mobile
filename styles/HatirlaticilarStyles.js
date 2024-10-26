@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { colors } from './colors'; // Adjust the import path as necessary
+import {Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -10,15 +13,13 @@ const styles = StyleSheet.create({
       width: '100%',
       backgroundColor: '#fff',
       alignItems: 'center',
-      paddingVertical: 15,
-      marginBottom:40,
+      paddingVertical: colors.mainPadingVertical,
     },
     dateContainer: {
-      width: 60,
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderRadius: 10,
-      marginHorizontal: 10,
+      width: height * 0.075,
+      height: height * 0.1,
+      borderRadius: height * 0.013,
+      marginHorizontal: height * 0.0075,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -38,23 +39,25 @@ const styles = StyleSheet.create({
       color: colors.secondText,
     },
     todayLabel: {
-      marginTop: 10,
+      marginTop: height * 0.025,
       fontSize: colors.fontSizeText,
       fontWeight: 'bold',
       color: colors.uygulamaRengi,
+    },
+    reminderMainContainer:{
+      paddingHorizontal: colors.mainPadingHorizantal,
+      paddingTop: colors.mainPadingVertical,
+      flex:1
     },
     reminderContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       backgroundColor: '#fff',
-      padding: 15,
-      marginHorizontal: 20,
-      marginBottom: 20,
-      borderRadius: 10,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
+      padding: height * 0.02,
+      marginBottom: colors.mainPadingHorizantal,
+      borderRadius: height * 0.013,
+      borderColor: colors.border,
+      borderWidth: 1,
       position: 'relative', // Add this to position children absolutely within it
     },
     reminderContent: {
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
       flex: 1, // Allow this to take up remaining space
     },
     reminderTextContainer: {
-      marginLeft: 15,
+      marginLeft: height * 0.02,
       flex: 1, // Allow this to take up remaining space
     },
     reminderText: {
@@ -72,19 +75,12 @@ const styles = StyleSheet.create({
       color: colors.text,
     },
     reminderDetails: {
-      marginTop: 5,
+      marginTop: height * 0.005,
       fontSize: colors.fontSizeTextMini,
       color: colors.thirdText,
     },
-    reminderDaysLeft: {
-      marginTop: 5,
-      fontSize: colors.fontSizeTextMini,
-      color: colors.uygulamaRengi,
-    },
-    reminderIcon: {
-      position: 'absolute', // Position absolutely within the container
-      bottom: 0,
-      right: 10, // Adjust as needed
+    iconContainer :{
+      justifyContent:"center"
     },
     modalBackground: {
       flex: 1,
@@ -93,32 +89,34 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(0, 0, 0, 0.7)', // Increased opacity for a darker overlay
   },
   modalContainer: {
-      width: '90%',
-      padding: 20,
+      width: '85%',
+      paddingHorizontal: colors.mainPadingHorizantal,
+      paddingBottom:colors.mainPadingHorizantal,
+      paddingTop:colors.mainPadingHorizantal * 2,
       backgroundColor: '#fff', // Changed to pure white for better contrast
-      borderRadius: 15,
-      shadowColor: '#000',
-      shadowOpacity: 0.4,
-      shadowRadius: 15,
-      elevation: 12,
+      borderRadius: height * 0.024,
       alignItems: 'center',
   },
   closeButton: {
       position: 'absolute',
-      top: 15,
-      right: 15,
+      top: colors.mainPadingHorizantal / 2,
+      right: colors.mainPadingHorizantal / 2,
+      zIndex:1,
+  },
+  textContainer: {
+    marginBottom:colors.mainPadingVertical * 2,
   },
   modalTitle: {
       fontSize: colors.fontSizeTextMaxi, // Increased font size for better visibility
       fontWeight: 'bold',
       color: colors.text, // Dark grey for better contrast
-      marginBottom: 10,
+      marginBottom:colors.mainPadingHorizantal / 2,
   },
   uyariText: {
       fontSize: colors.fontSizeText,
       color: colors.text, // Lighter grey for warning text
       textAlign: 'center',
-      marginBottom: 20,
+      marginBottom:colors.mainPadingHorizantal * 2,
   },
   modalActions: {
       flexDirection: 'row',
@@ -126,19 +124,17 @@ const styles = StyleSheet.create({
       width: '100%',
   },
   pauseButton: {
-    backgroundColor: colors.uygulamaRengi,
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    elevation: 2,
+    backgroundColor: colors.uygulamaIkinciRengi,
+    paddingVertical: height * 0.015,
+    paddingHorizontal: colors.paddingHorizontal,
+    borderRadius: height * 0.012,
     width: '45%',
   },
   deleteButton: {
-    backgroundColor: colors.deleteIcon,
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    elevation: 2,
+    backgroundColor: colors.uygulamaRengi,
+    paddingVertical: height * 0.015,
+    paddingHorizontal: colors.paddingHorizontal,
+    borderRadius: height * 0.012,
     width: '45%',
   },
   disabledButton: {
@@ -149,20 +145,24 @@ const styles = StyleSheet.create({
   actionText: {
       color: '#FFFFFF',
       fontSize: colors.fontSizeText,
-      fontWeight: '600',
+      fontWeight: 'bold',
       textAlign: 'center', // Center align text for better appearance
   },
   
     floatingButton: {
       position: 'absolute',
-      bottom: 20,
-      right: 20,
+      bottom: colors.mainPadingHorizantal,
+      right: colors.mainPadingHorizantal,
       backgroundColor: colors.uygulamaRengi,
-      width: 60,
-      height: 60,
-      borderRadius: 30,
+      width: height * 0.07,
+      height: height * 0.07,
+      borderRadius: height * 0.035,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    loaderStyle: {
+      alignItems: "center",
+      justifyContent:"center",
     },
   });
   

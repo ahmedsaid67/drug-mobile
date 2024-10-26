@@ -33,7 +33,7 @@ const AltBar = ({ currentRoute }) => {
                   screen === 'Arama' ? (currentRoute === 'Arama' ? "search" : "search-outline") :  // Filled search icon if active
                   screen === 'Bildirimler' ? (currentRoute === 'Bildirimler' ? "notifications" : "notifications-outline") :  // Filled notifications icon if active
                   (currentRoute === 'Hatırlatıcılar' ? "alarm" : "alarm-outline")}  // Filled alarm icon if active
-            size={24} 
+            size={colors.iconHeight} 
             color={getIconColor(screen)} 
           />
           <Text style={[styles.label, { color: getTextColor(screen) }]}>

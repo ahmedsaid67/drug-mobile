@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { colors } from './colors'; // Adjust the import path as necessary
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -7,13 +9,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.MainContainerBackground,
   },
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: colors.mainPadingHorizantal,
+    paddingVertical: colors.mainPadingVertical,
   },
   title: {
     fontSize: colors.fontSizeTextMaxi,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: colors.mainPadingHorizantal,
     color: colors.text,
     textAlign: 'left',  // Sol hizalı başlık
   },
@@ -22,9 +24,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    marginBottom: 10,
-    borderRadius: 4,
+    paddingHorizontal: colors.mainPadingHorizantal,
+    marginBottom: height * 0.0125,
+    borderRadius: height * 0.006,
     textAlign: 'left',  // Sol hizalı input
     borderWidth: 1,     // Kenar çizgisi kalınlığı
     borderColor: colors.border,
@@ -35,11 +37,11 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.uygulamaRengi,
     width: '100%',
-    borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    borderRadius: height * 0.012,
+    marginTop: height * 0.0125,
     height:colors.buttonHeight,
   },
   buttonText: {
@@ -50,24 +52,31 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.uygulamaRengi,
     fontSize: colors.fontSizeTextMini,
-    marginBottom: 8,
+    marginBottom: height * 0.0125,
   },
   inputError: {
     borderColor: colors.uygulamaRengi,
     borderWidth: 1,
   },
-  loadingIndicator: {
-    marginVertical: 20,
-    alignItems: 'center',
-  },
   passwordContainer: {
-    position: 'relative',
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: height * 0.006,
+    marginBottom: height * 0.0125,
+    paddingHorizontal: colors.mainPadingHorizantal,
+  },
+  passwordInput: {
+    flex: 1,  // Giriş alanı esnek olacak, boşluğu dolduracak
+    color: colors.text,
+    fontSize: colors.fontSizeText,
+    height: colors.inputHeight,
+    padding:0
   },
   eyeIcon: {
-    position: 'absolute',
-    right: 10,
-    top: 15,
-    zIndex: 1,
+    marginLeft: height * 0.0125,  // Göz ikonunu input'tan biraz ayırıyoruz
   },
 });
 

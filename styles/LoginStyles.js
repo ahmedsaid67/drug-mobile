@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { colors } from './colors'; // Adjust the import path as necessary
+
+const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     pageContainer: {
@@ -7,18 +9,13 @@ const styles = StyleSheet.create({
       backgroundColor: colors.MainContainerBackground,
     },
     container: {
-      paddingHorizontal: 20,
-      paddingVertical: 20,
-    },
-    image: {
-      width: 100,
-      height: 100,
-      marginBottom: 20,
+      paddingHorizontal: colors.mainPadingHorizantal,
+      paddingVertical: colors.mainPadingVertical,
     },
     title: {
       fontSize: colors.fontSizeTextMaxi,
       fontWeight: 'bold',
-      marginBottom: 20,
+      marginBottom: colors.mainPadingHorizantal,
       color: colors.text,
       textAlign: 'left',  // Sol hizalı başlık
     },
@@ -27,9 +24,9 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 15,
-      marginBottom: 10,
-      borderRadius: 4,
+      paddingHorizontal: colors.mainPadingHorizantal,
+      marginBottom: height * 0.0125,
+      borderRadius: height * 0.006,
       textAlign: 'left',  // Sol hizalı input
       borderWidth: 1,     // Kenar çizgisi kalınlığı
       borderColor: colors.border,
@@ -43,8 +40,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 8,
-      marginTop: 10,
+      borderRadius: height * 0.012,
+      marginTop: height * 0.0125,
       height:colors.buttonHeight,
     },
     buttonText: {
@@ -54,18 +51,22 @@ const styles = StyleSheet.create({
     },
     forgotPasswordText: {
       color: colors.uygulamaRengi,
-      marginTop: 10,
       textAlign: 'left',  // Sol hizalı
       fontSize: colors.fontSizeText,
     },
     registerContainer: {
       flexDirection: 'row',
-      marginTop: 16,
+      marginTop: height * 0.025,
+      justifyContent: 'flex-start',  // Sol hizalı kayıt ol bölümü
+    },
+    registerContainerVersion2: {
+      flexDirection: 'row',
+      marginTop: height * 0.0125,
       justifyContent: 'flex-start',  // Sol hizalı kayıt ol bölümü
     },
     registerText: {
       color: 'black',
-      marginRight: 5,
+      marginRight: height * 0.01,
       fontSize: colors.fontSizeText,
     },
     registerLink: {
@@ -79,33 +80,37 @@ const styles = StyleSheet.create({
     errorText: {
       color: colors.uygulamaRengi,
       fontSize: colors.fontSizeTextMini,
-      marginBottom: 8,
-    },
-    loadingIndicator: {
-      padding: 15,
-      alignItems: 'center',
+      marginBottom: height * 0.0125,
     },
     passwordContainer: {
-      position: 'relative',
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: height * 0.006,
+      marginBottom: height * 0.0125,
+      paddingHorizontal: colors.mainPadingHorizantal,
+    },
+    passwordInput: {
+      flex: 1,  // Giriş alanı esnek olacak, boşluğu dolduracak
+      color: colors.text,
+      fontSize: colors.fontSizeText,
+      height: colors.inputHeight,
+      padding:0
     },
     eyeIcon: {
-      position: 'absolute',
-      right: 10,
-      top: 15,
-      zIndex: 1,
+      marginLeft: height * 0.0125,  // Göz ikonunu input'tan biraz ayırıyoruz
     },
-    eyeIconImage: {
-      width: 24,
-      height: 24,
-    },
+    
     googleButton: {
-      backgroundColor: '#4285F4',
+      backgroundColor: '#F4B400',
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 8,
-      marginTop: 10,
+      borderRadius: height * 0.012,
+      marginTop: height * 0.0125,
       height:colors.buttonHeight,
     },
     

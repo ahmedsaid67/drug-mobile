@@ -1,14 +1,22 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback,Linking,Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback,Dimensions } from 'react-native';
 import { colors } from '../styles/colors'; // Renkleri uygun şekilde ayarlayın
 
 const { height, width } = Dimensions.get('window');
 
-const PermissionBlockedModal = ({ isVisible, title, message, onClose }) => {
+const AlertSaat = ({ isVisible, title, message, onClose,pupupClose,setAddDate,zamanlama }) => {
     const handleGo = () =>{
         onClose()
-        Linking.openSettings()
+        setTimeout(() => {
+            if(zamanlama.length > 0){
+                setAddDate(zamanlama)
+            }else{
+                setAddDate(["08:00"])
+            }
+            pupupClose();
+        }, 200)
     }
+
   return (
     <Modal
       visible={isVisible}
@@ -29,7 +37,7 @@ const PermissionBlockedModal = ({ isVisible, title, message, onClose }) => {
                     <Text style={styles.buttonTextIptal}>İptal</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleGo}>
-                    <Text style={styles.buttonText}>Ayarlar</Text>
+                    <Text style={styles.buttonText}>Geri Dön</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -107,5 +115,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PermissionBlockedModal;
+export default AlertSaat;
 

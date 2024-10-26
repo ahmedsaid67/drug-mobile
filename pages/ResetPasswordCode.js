@@ -34,10 +34,10 @@ const ResetPasswordCode = () => {
       });
   
       dispatch(showMessage({
-        message: 'Şifre sıfırlama talebiniz gönderildi. E-posta adresinizi kontrol edin.',
+        message: 'Şifre sıfırlama talebiniz alındı. Lütfen e-posta gelen kutunuzu kontrol edin.',
         variant: 'success',
       }));
-      navigation.navigate('ResetPassword');
+      navigation.navigate('Onaylama');
     } catch (err) {
       if (err.message === "Network Error") {
         // Network Error durumu için hiçbir işlem yapılmıyor

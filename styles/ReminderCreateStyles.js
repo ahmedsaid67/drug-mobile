@@ -13,33 +13,31 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     secondContainer: {
-        paddingHorizontal: 20,
-        paddingVertical: 20,
+        paddingHorizontal: colors.mainPadingHorizantal,
+        paddingVertical: colors.mainPadingVertical,
     },
     title: {
         fontSize: colors.fontSizeTextMaxi,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: colors.mainPadingHorizantal,
         color: colors.text,
-        textAlign: 'left',
+        textAlign: 'left',  // Sol hizalı başlık
     },
     titleSecond: {
         fontSize: colors.fontSizeTextMaxi,
         fontWeight: 'bold',
-        marginVertical: 20,
+        marginVertical: colors.mainPadingHorizantal,
         color: colors.text,
-        textAlign: 'left',
+        textAlign: 'left',  // Sol hizalı başlık
     },
     inputWrapper: {
         backgroundColor: '#fff',
-        borderRadius: 15,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
-    },
+        borderRadius: height * 0.02,
+        padding: colors.mainPadingHorizantal,
+        borderWidth: 1, // Hafif bir kenar çizgisi
+        borderColor: colors.border, // Açık gri bir kenar rengi
+      },
+      
     input :{
         color: colors.thirdText,
         fontSize: colors.fontSizeText,
@@ -51,9 +49,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
-        paddingVertical: 10,
-        height: 50,
-        
+        height: height * 0.0610,
     },
     
     formRightContainer: {
@@ -69,9 +65,8 @@ const styles = StyleSheet.create({
     inputForm: {
         color: colors.thirdText,
         fontSize: colors.fontSizeText,
-        marginRight: 10,
+        marginRight: height * 0.0125,
     },
-
 
     inputContainerZaman: {
         flexDirection: 'row',
@@ -79,8 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: colors.border,
-        paddingVertical: 10,
-        height: 50,
+        height: height * 0.0610,
     },
     
     zamanlamaRightContainer: {
@@ -88,30 +82,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 1, // This allows the container to fill available space
         justifyContent: 'flex-end', // Align items to the right
-        
     },
-    
     inputZamanlama: {
         color: colors.thirdText,
         fontSize: colors.fontSizeText,
-        marginHorizontal: 10, // Adjust margin for spacing
+        marginHorizontal: height * 0.0125, // Adjust margin for spacing
         flex: 0, // Prevent the text from taking all available space
         maxWidth: '80%', // Limit width to keep it near the icon
+        textAlign:"right"
     },
     
-
-
     Tree: {
         fontSize: colors.fontSizeTextMaxi,
         color: 'black',
-        width: 20,
-        height: 35,
+        marginHorizontal: height * 0.0125,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        padding:20,
+        padding:colors.mainPadingHorizantal,
     },
     
     button: {
@@ -119,16 +109,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
+        borderRadius: height * 0.012,
         alignItems: 'center',
         width: '100%',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        elevation: 5,
         position: 'sicky',
-        marginVertical:10,
+        marginVertical: height * 0.012,
         height:colors.buttonHeight,
     },
     buttonText: {
@@ -144,77 +129,65 @@ const styles = StyleSheet.create({
     },
     popup: {
         backgroundColor: '#fff',
-        padding: 20,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        paddingHorizontal: colors.mainPadingHorizantal,
+        borderTopRightRadius: height * 0.025,
+        borderTopLeftRadius: height * 0.025,
         width: '100%',
         height: '100%', // Tam ekran popup
     },
-    closeIcon: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        zIndex: 10
+    closeIcon:{
+        position:"absolute",
+        zIndex: 1,
     },
-    closeFormIcon: {
-        position: 'absolute',
-        top: 20,
-        left: 20,
-        zIndex: 10
+    popupTitleContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between", // Adjusts space between items
+        alignItems: "center", // Centers items vertically
+        width: "100%", // Ensures the container takes the full width
+        paddingVertical:colors.mainPadingVertical
     },
     popupTitle: {
-        fontSize: colors.fontSizeTextLarge,
+        fontSize: colors.fontSizeText,
         fontWeight: 'bold',
-        textAlign: 'center',
-        color:colors.text,
-        marginBottom: 20,
+        color: colors.text,
+        flex: 1, // Allows the text to take available space
+        textAlign: "center", // Centers the text within its space
     },
     popupInputContainer:{
-        marginVertical: 10,
         borderWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
-        borderRadius: 12, // Daha yuvarlak kenarlar
+        borderRadius: height * 0.02, // Daha yuvarlak kenarlar
         fontSize: colors.fontSizeText,
-        padding: 20, // İç boşluk ekleyerek daha rahat bir alan
-        backgroundColor: 'white', // Beyaz arka plan
-        shadowColor: '#000', // Gölge efekti
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        padding: colors.mainPadingHorizantal, // İç boşluk ekleyerek daha rahat bir alan
+        backgroundColor: '#fff', // Beyaz arka plan
     },
     popupInputText : {
         fontSize:colors.fontSizeText,
         color:colors.text,
-        fontWeight: 'bold',
-        marginBottom:20,
+        marginBottom: colors.mainPadingHorizantal,
     },
     popupInput: {
         borderBottomWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
         fontSize: colors.fontSizeText,
         color: colors.text,
+        padding:0
     },
 
     unitsMainContainer: {
-        marginVertical: 10,
+        marginTop: colors.mainPadingHorizantal,
         borderWidth: 1,
         borderColor: colors.border, // Tüm kenarlarda aynı renk
-        borderRadius: 12, // Daha yuvarlak kenarlar
+        borderRadius: height * 0.02, // Daha yuvarlak kenarlar
         fontSize: colors.fontSizeText,
-        padding: 20, // İç boşluk ekleyerek daha rahat bir alan
-        backgroundColor: 'white', // Beyaz arka plan
-        shadowColor: '#000', // Gölge efekti
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        
+        padding: colors.mainPadingHorizantal, // İç boşluk ekleyerek daha rahat bir alan
+        backgroundColor: '#ffff', // Beyaz arka plan
     },
 
     unitsText : {
-        marginBottom:20,
+        marginBottom:colors.mainPadingHorizantal,
         fontSize:colors.fontSizeText,
         color:colors.text,
-        fontWeight: 'bold',
     },
 
     unitsContainer: {
@@ -223,10 +196,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     unitButton: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 10,
-        marginRight: 10,
+        paddingVertical: height * 0.012,
+        paddingHorizontal: height * 0.02,
+        borderRadius: height * 0.012,
+        marginRight: height * 0.012,
         backgroundColor: '#eee',
     },
     unitButtonSelected: {
@@ -238,35 +211,33 @@ const styles = StyleSheet.create({
     },
     unitButtonTextSelected: {
         color: '#fff',
+        
     },
     popupButtons: {
         flex: 1,
         justifyContent: 'flex-end', // Alt kısma hizalar
+        paddingVertical:colors.mainPadingHorizantal,
 
     },
     saveButton: {
         backgroundColor: colors.uygulamaRengi,  // Aktif durumdaki renk
-        borderRadius: 8,
+        borderRadius: height * 0.012,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
+        marginTop: height * 0.012,
         position: 'relative',
-        bottom:10,
         height:colors.buttonHeight,
+        marginVertical: height * 0.012,
+
     },
 
     popupFormButtons: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 30,
-        
+        paddingVertical:colors.mainPadingHorizantal,
     },
 
     saveFormButton: {
@@ -274,16 +245,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
+        borderRadius: height * 0.012,
         width: '100%',
-        marginTop: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        position: 'relative',
-        bottom:10,
+        position: 'sicky',
         height:colors.buttonHeight,
+        marginVertical: height * 0.012,
     },
 
     saveButtonDisabled: {
@@ -299,8 +265,15 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     formItem: {
-        paddingVertical: 16,
-        marginVertical: 5,
+        paddingVertical: colors.mainPadingHorizantal,
+        borderBottomWidth:1,
+        borderBottomColor:colors.border,
+        flexDirection:'row',
+        alignItems:'center',
+    },
+    firstFormItem:{
+        paddingVertical:0,
+        paddingBottom: colors.mainPadingHorizantal,
         borderBottomWidth:1,
         borderBottomColor:colors.border,
         flexDirection:'row',
@@ -308,10 +281,10 @@ const styles = StyleSheet.create({
     },
     lastFormItem: {
         borderBottomWidth: 0, // Alt çizgiyi kaldır
+        marginBottom: height * 0.016,
     },
     formItemText:{
         color:colors.text,
-        fontWeight:'bold',
         fontSize:colors.fontSizeText,
     },
 
@@ -321,53 +294,47 @@ const styles = StyleSheet.create({
 
 
     DateContainer: {
-        borderRadius: 12,
-        padding: 12,
+        borderRadius: height * 0.012,
+        padding: height * 0.018,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderWidth: 1,
         borderColor: colors.border,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        marginBottom: 16, // Biraz daha sıkı hale getirildi
+        marginBottom: height * 0.018, // Biraz daha sıkı hale getirildi
       },
       
       DateTextContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
         flex: 1, // Bu sayede ikonlar ve text arasındaki boşluk kontrol edilebilir
+      },
+      EditIcon:{
+        marginRight: height * 0.01
       },
       
       DateText: {
         fontSize: colors.fontSizeText,
-        fontWeight: 'bold',
         color: colors.text,
-        marginRight: 8, // Metin ile ikon arasındaki boşluk
       },
       
       DeleteIconContainer: {
         marginLeft: 16, // İkonların biraz ayrık durmasını sağlar
       },
 
-      
     DateButonContainer: {
         backgroundColor: '#D9D9E0', // Koyu açık gri ton
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent:'center',
-        borderRadius: 12,
-        padding: 12,
-        marginTop: 20,
+        borderRadius: height * 0.012,
+        height:colors.buttonHeight,
+        marginTop: colors.mainPadingHorizantal,
     },
-    
     
     DateButonText: {
         color: colors.text,
-        marginLeft: 8,
+        marginLeft: height * 0.010,
         fontSize: colors.fontSizeText,
         fontWeight: 'bold',
     },

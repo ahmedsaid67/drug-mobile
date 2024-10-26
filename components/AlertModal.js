@@ -1,21 +1,25 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
-import { colors } from '../styles/colors'; // Renkleri uygun şekilde ayarlayın
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { colors } from '../styles/colors';
+
+const { height, width } = Dimensions.get('window');
 
 const AlertModal = ({ isVisible, title, message, onClose }) => {
   return (
     <Modal
       visible={isVisible}
       transparent={true}
-      animationType="fade" // Animasyon tipini değiştirdik
+      animationType="slide" // Slide-in animation for a more engaging experience
       onRequestClose={onClose}
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.message}>{message}</Text>
+              <View style={styles.textContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.message}>{message}</Text>
+              </View>
               <TouchableOpacity style={styles.button} onPress={onClose}>
                 <Text style={styles.buttonText}>Tamam</Text>
               </TouchableOpacity>
@@ -30,48 +34,44 @@ const AlertModal = ({ isVisible, title, message, onClose }) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center', // Modalı alt kısma yerleştirdik
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Daha koyu bir arka plan
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Softer background opacity for a modern feel
   },
   modalContent: {
     backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 15,
-    width: '90%',
-    shadowColor: colors.border,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    padding: colors.mainPadingHorizantal,
+    borderRadius: height * 0.024, // More pronounced rounded corners
+    width: width * 0.85,
     alignItems: 'center',
   },
+  textContainer: {
+    marginBottom:colors.mainPadingVertical * 2,
+  },
   title: {
-    fontSize: colors.fontSizeTextMaxi, // Başlık için daha büyük bir yazı boyutu
+    fontSize: colors.fontSizeTextMaxi,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: colors.mainPadingHorizantal / 2,
     textAlign: 'center',
     color: colors.text,
   },
   message: {
     fontSize: colors.fontSizeText,
-    marginBottom: 20,
+    lineHeight: height * 0.024,
     textAlign: 'center',
     color: colors.text,
   },
   button: {
     backgroundColor: colors.uygulamaRengi,
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    elevation: 2,
+    paddingVertical: height * 0.015,
+    paddingHorizontal: width * 0.2,
+    borderRadius: height * 0.012,
   },
   buttonText: {
     color: colors.secondText,
     fontSize: colors.fontSizeText,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
 
 export default AlertModal;
-

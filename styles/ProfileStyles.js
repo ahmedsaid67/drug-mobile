@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20, // Reduced padding for a more compact look
-    paddingVertical: 16,   // Reduced padding for a more compact look
+    paddingHorizontal: colors.mainPadingHorizantal,
+    paddingVertical: colors.mainPadingVertical,
   },
   loadingConatiner:{
     flex:1,
@@ -19,23 +19,23 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     alignItems: 'center',
-    marginBottom: 16,      // Reduced margin
+    marginBottom: colors.mainPadingVertical,      // Reduced margin
   },
   profileImageWrapper: {
     position: 'relative',
   },
   profileImage: {
-    width: 100,            // Smaller profile image
-    height: 100,           // Smaller profile image
-    borderRadius: 50,      // Adjusted for smaller image
+    width: height * 0.15,            // Smaller profile image
+    height: height * 0.15,           // Smaller profile image
+    borderRadius: height * 0.075,      // Adjusted for smaller image
     borderWidth: 1,        // Thinner border
     borderColor: colors.uygulamaRengi,
     backgroundColor: '#fff',
   },
   profileImagePlaceholder: {
-    width: 100,            // Smaller placeholder
-    height: 100,           // Smaller placeholder
-    borderRadius: 50,      // Adjusted for smaller placeholder
+    width: height * 0.15,            // Smaller placeholder
+    height: height * 0.15,           // Smaller placeholder
+    borderRadius: height * 0.075,      // Adjusted for smaller placeholder
     backgroundColor: '#e0e0e0',
     justifyContent: 'center',
     alignItems: 'center',
@@ -44,26 +44,25 @@ const styles = StyleSheet.create({
   },
   editIcon: {
     position: 'absolute',
-    bottom: 5,
-    right: 5,
+    bottom: height * 0.007,
+    right: height * 0.007,
     backgroundColor: colors.uygulamaRengi,
-    borderRadius: 12,      // Slightly smaller icon button
-    padding: 4,           // Smaller padding
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,   // Softer shadow
-    shadowRadius: 1.5,
+    borderRadius: height * 0.025,      // Slightly smaller icon button
+    height: height * 0.05,           // Smaller padding
+    width: height * 0.05,
+    alignItems:'center',
+    justifyContent:'center'           
   },
   input: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,   // Reduced padding for a slimmer input field
-    marginTop: 10,     // Reduced margin
+    paddingHorizontal: colors.mainPadingHorizantal,   // Reduced padding for a slimmer input field
+    marginTop: height * 0.0125,     // Reduced margin
     borderWidth: 1,     // Kenar çizgisi kalınlığı
     borderColor: colors.border,
-    borderRadius: 4,
+    borderRadius: height * 0.006,
     fontSize: colors.fontSizeText,          // Smaller font size
     color: colors.text,
     height: colors.inputHeight ,
@@ -71,11 +70,11 @@ const styles = StyleSheet.create({
   updateButton: {
     backgroundColor: colors.uygulamaRengi,
     height:colors.buttonHeight,
-    borderRadius: 8,       // Slightly smaller corner radius
+    borderRadius: height * 0.012,       // Slightly smaller corner radius
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,         // Reduced margin
+    marginTop: height * 0.025,         // Reduced margin
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,   // Softer shadow
@@ -88,12 +87,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',    // Slightly lighter font weight
   },
   logoutButton: {
-    backgroundColor: colors.deleteIcon,
-    borderRadius: 8,       // Slightly smaller corner radius
+    backgroundColor: colors.uygulamaIkinciRengi,
+    borderRadius: height * 0.012,       // Slightly smaller corner radius
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,       // Reduced margin
+    marginTop: height * 0.0125,       // Reduced margin
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,   // Softer shadow
@@ -104,16 +103,6 @@ const styles = StyleSheet.create({
     color: colors.secondText,
     fontSize: colors.fontSizeText,          // Smaller font size
     fontWeight: 'bold',
-  },
-  removeIcon: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: colors.deleteIcon,
-    padding: 5,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

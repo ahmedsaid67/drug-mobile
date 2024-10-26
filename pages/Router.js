@@ -212,11 +212,11 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="Arama" component={Arama} />
         <Stack.Screen name="Bildirimler" component={Bildirimler} />
         <Stack.Screen name="Hatırlatıcılar" component={Hatirlaticilar} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Giriş" component={Login} />
+        <Stack.Screen name="Kayıt" component={Register} />
         <Stack.Screen name="Profil" component={Profil} />
-        <Stack.Screen name="ResetPasswordCode" component={ResetPasswordCode} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="Sıfırlama" component={ResetPasswordCode} />
+        <Stack.Screen name="Onaylama" component={ResetPassword} />
         <Stack.Screen name="ReminderSearch" component={ReminderSearch} />
         <Stack.Screen name="Hatırlatıcı Oluştur" component={ReminderCreate} />
         <Stack.Screen name="NidSearchPage" component={NidSearchPage} />

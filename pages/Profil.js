@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Alert, TextInput, ActivityIndicator,Linking  } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, TextInput, ActivityIndicator,Dimensions  } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { submitLogout } from '../context/features/auth/loginSlice';
 import axios from 'axios';
 import { API_ROUTES } from '../utils/constant';
 import { useNavigation } from '@react-navigation/native';
-import ProfilHeader from '../components/ProfilHeader';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from '../styles/ProfileStyles';
 import { Keyboard } from 'react-native';
@@ -16,6 +15,7 @@ import { setUser } from '../context/features/user/userSlice';
 import AlertModal from '../components/AlertModal';
 import PermissionBlockedModal from '../components/PermissionBlockedModal';
 
+
 function Profil() {
   const user = useSelector((state) => state.user);
   const [profil, setProfil] = useState({});
@@ -23,6 +23,7 @@ function Profil() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertTitle, setAlertTitle] = useState('');
@@ -30,6 +31,10 @@ function Profil() {
   const [alertVisibleBlockedPermission, setAlertVisibleBlockedPermission] = useState(false);
   const [alertMessageBlockedPermission, setAlertMessageBlockedPermission] = useState('');
   const [alertTitleBlockedPermission, setAlertTitleBlockedPermission] = useState('');
+
+  const loadingLogout = useSelector((state) => state.login.loading);
+
+  const { height } = Dimensions.get('window');
 
 
   const dispatch = useDispatch();
@@ -144,18 +149,17 @@ function Profil() {
     // Karakter sınırı kontrolü
     if (firstName.length > 30 || lastName.length > 30) {
       showAlert("Güncelleme Hatası", "Ad ve soyad 30 karakterden fazla olamaz.");
-      return; // API çağrısını yapmadan önce fonksiyondan çık
+      return;
     }
-  
-    // Mevcut veriler ile yeni verileri karşılaştır
-    if (
-      firstName === profil.user?.first_name &&
-      lastName === profil.user?.last_name
-    ) {
+
+    // Verilerin değişmediği durumda güncelleme yapma
+    if (firstName === profil.user?.first_name && lastName === profil.user?.last_name) {
       showAlert("Güncelleme Yapılmadı", "Profil bilgilerinizi güncellemek için önce bir değişiklik yapmanız gerekiyor.");
-      return; // API çağrısını yapmadan önce fonksiyondan çık
+      return;
     }
-  
+
+    setLoadingUpdate(true); // Start loading
+
     try {
       await axios.put(API_ROUTES.PUT_PROFIL.replace("data", user.id), {
         user_first_name: firstName,
@@ -180,10 +184,10 @@ function Profil() {
         showAlert("Başarıyla Güncellendi", "Profil bilgileriniz başarıyla güncellendi.");
       })
     } catch (error) {
-      // console.error("Güncelleme hatası:", error);
       showAlert("Güncelleme Hatası", "Profil bilgileriniz güncellenirken bir hata oluştu.");
     } finally {
-      Keyboard.dismiss(); // Klavyeyi kapat
+      setLoadingUpdate(false); // Stop loading
+      Keyboard.dismiss();
     }
   };
   
@@ -191,13 +195,11 @@ function Profil() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.pageContainer}>
-      {/* <ProfilHeader /> */}
       <View style={styles.container}>
       {loading ? ( // Show loading indicator if loading is true
           <View style={styles.loadingConatiner}>
-            <ActivityIndicator size="medium" color={colors.uygulamaRengi} />
-          </View>
-          
+            <ActivityIndicator size={colors.loadingSize} color={colors.uygulamaRengi} />
+          </View> 
         ) : (
           <>
         <View style={styles.profileContainer}>
@@ -205,14 +207,14 @@ function Profil() {
             <View style={styles.profileImageWrapper}>
               <Image source={{ uri: profil.photo }} style={styles.profileImage} />
               <TouchableOpacity style={styles.editIcon} onPress={handlePhotoUpdate}>
-                <Icon name="camera" size={20} color="#fff" />
+                <Icon name="camera" size={colors.iconHeight} color="#fff" />
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.profileImagePlaceholder}>
-              <Icon name="user-circle" size={80} color="#ccc" />
+              <Icon name="user-circle" size={height * 0.11} color="#ccc" />
               <TouchableOpacity style={styles.editIcon} onPress={handlePhotoUpdate}>
-                <Icon name="camera" size={20} color="#fff" />
+                <Icon name="camera" size={colors.iconHeight} color="#fff" />
               </TouchableOpacity>
             </View>
           )}
@@ -237,12 +239,21 @@ function Profil() {
           placeholder="E-posta Adresiniz"
         />
 
-        <TouchableOpacity style={styles.updateButton} onPress={handleProfileUpdate}>
-          <Text style={styles.updateButtonText}>Profil Güncelle</Text>
+        <TouchableOpacity style={styles.updateButton} onPress={handleProfileUpdate} disabled={loadingUpdate}>
+          {loadingUpdate ? (
+            <ActivityIndicator size={colors.iconHeight} color="#fff" />
+          ) : (
+            <Text style={styles.updateButtonText}>Profil Güncelle</Text>
+          )}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
+          
+          {loadingLogout ? (
+            <ActivityIndicator size={colors.iconHeight} color="#fff" />
+          ) : (
+            <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
+          )}
         </TouchableOpacity>
         </>
         )}

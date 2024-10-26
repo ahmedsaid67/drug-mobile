@@ -6,13 +6,9 @@ const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   bottomBar: {
     position: 'static', // Use absolute positioning for a floating effect
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 75,
     backgroundColor: colors.MainContainerBackground,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-beetwen',
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -21,12 +17,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // Shadow offset
     shadowOpacity: 0.2, // Shadow opacity
     shadowRadius: 3.84, // Shadow blur radius
-    paddingVertical: 10,
+    paddingHorizontal: colors.mainPadingHorizantal,
+    height:height * 0.09,
   },
   button: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 10, // More padding for touchable area
   },
   label: {
     color: colors.text,

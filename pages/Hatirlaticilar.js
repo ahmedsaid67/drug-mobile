@@ -12,7 +12,7 @@ import styles from '../styles/HatirlaticilarStyles';
 import HatirlaticiYonetModel from '../components/HatirlaticiYonetModel';
 import { useSelector } from 'react-redux';
 import { tr } from 'date-fns/locale';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Hatirlaticilar = () => {
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
@@ -28,12 +28,14 @@ const Hatirlaticilar = () => {
   const loginStatus = useSelector((state) => state.login.success);
 
 
+  const { height } = Dimensions.get('window');
+
   moment.locale('tr');
 
   const screenWidth = Dimensions.get('window').width;
 
   const handlePress = () => {
-    navigation.replace('ReminderSearch');
+    navigation.replace('Arama');
   };
 
   
@@ -49,8 +51,8 @@ const Hatirlaticilar = () => {
 
   useEffect(() => {
     const todayIndex = dates.findIndex(date => date === selectedDate);
-    const itemWidth = 60;
-    const marginHorizontal = 20;
+    const itemWidth = height * 0.075;
+    const marginHorizontal = height * 0.015;
     const totalItemWidth = itemWidth + marginHorizontal;
     const offset = (todayIndex * totalItemWidth) - (screenWidth / 2) + (totalItemWidth / 2);
 
@@ -92,7 +94,7 @@ const Hatirlaticilar = () => {
     if (loginStatus){
       fetchData();
     }else{
-      navigation.navigate('Login')
+      navigation.navigate('Giriş')
     }
 
     
@@ -131,9 +133,9 @@ const Hatirlaticilar = () => {
     const formattedEndDate = endDate.format('D MMMM');
   
     return (
-      <View style={styles.reminderContainer}>
+      <TouchableOpacity style={styles.reminderContainer} onPress={() => { setSelectedReminder(item); setModalVisible(true); }}>
         <View style={styles.reminderContent}>
-          <Icon name="medkit" size={24} color={colors.uygulamaRengi}/>
+          <Icon name="medkit" size={colors.iconHeight} color={colors.uygulamaRengi}/>
           <View style={styles.reminderTextContainer}>
             <Text style={styles.reminderText}>{item.name}</Text>
             <Text style={styles.reminderDetails}>
@@ -151,10 +153,10 @@ const Hatirlaticilar = () => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => { setSelectedReminder(item); setModalVisible(true); }}>
-          <Icon name="trash" size={24} color={colors.deleteIcon} style={styles.reminderIcon} />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.iconContainer} >
+          <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
+        </View>
+      </TouchableOpacity>
     );
 };
 
@@ -162,6 +164,15 @@ const Hatirlaticilar = () => {
     if (hasMore && !loading && reminders.length>0) {
       setPage(prevPage => prevPage + 1);
     }
+  };
+
+  const renderLoader = () => {
+    return (
+      loading ?
+        <View style={styles.loaderStyle}>
+          <ActivityIndicator size={colors.iconHeight} color={colors.uygulamaRengi} />
+        </View> : null
+    );
   };
 
   return (
@@ -201,21 +212,22 @@ const Hatirlaticilar = () => {
         </ScrollView>
         <Text style={[styles.todayLabel, { color: isToday ? colors.uygulamaRengi : colors.text }]}>{todayLabel}</Text>
       </View>
-
-      <FlatList
-        data={reminders}
-        renderItem={renderReminder}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.2}
-        ListEmptyComponent={!loading && !error ? <NoReminders /> : null}
-        ListFooterComponent={loading ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null}
-      />
+      <View style={styles.reminderMainContainer}>
+        <FlatList
+          data={reminders}
+          renderItem={renderReminder}
+          keyExtractor={item => item.id.toString()}
+          contentContainerStyle={{ paddingBottom: height * 0.025 }}
+          showsVerticalScrollIndicator={false}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.2}
+          ListEmptyComponent={!loading && !error ? <NoReminders /> : null}
+          ListFooterComponent={renderLoader}
+        />
+      </View>
 
       <TouchableOpacity style={styles.floatingButton} onPress={handlePress}>
-        <Icon name="plus" size={24} color="#fff" />
+        <Icon name="plus" size={colors.iconHeight} color="#fff" />
       </TouchableOpacity>
 
       {selectedReminder?.id && (

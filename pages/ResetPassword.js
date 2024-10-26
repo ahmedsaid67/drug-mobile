@@ -54,7 +54,7 @@ const handlePasswordReset = async () => {
       message: 'Şifre başarılı bir şekilde yenilenmiştir.',
       variant: 'success',
     }));
-    navigation.navigate('Login');
+    navigation.navigate('Giriş');
   } catch (error) {
     // console.log("error:", error);
     if (error.message === "Network Error") {
@@ -118,27 +118,27 @@ const handlePasswordReset = async () => {
             />
             {errors.code && <Text style={styles.errorText}>{errors.code}</Text>}
             <View style={styles.passwordContainer}>
-                <TextInput
-                    style={[styles.input, errors.email && styles.inputError]}
-                    placeholder="Şifre"
-                    onChangeText={(text) => {
-                    setPassword(text);
-                    if (text) setErrors((prev) => ({ ...prev, password: '' }));
-                    }}
-                    value={password}
-                    secureTextEntry={!showPassword}
-                    placeholderTextColor={colors.text}
+              <TextInput
+                style={[styles.passwordInput, errors.password && styles.inputError]}
+                placeholder="Şifre"
+                onChangeText={(text) => {
+                  setPassword(text);
+                  if (text) setErrors((prev) => ({ ...prev, password: '' }));
+                }}
+                value={password}
+                secureTextEntry={!showPassword}
+                placeholderTextColor={colors.text}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Icon
+                  name={showPassword ? 'eye' : 'eye-slash'}
+                  size={colors.iconHeight}
+                  color={colors.uygulamaRengi}
                 />
-                <TouchableOpacity
-                    style={styles.eyeIcon}
-                    onPress={() => setShowPassword(!showPassword)}
-                >
-                    <Icon
-                    name={showPassword ? 'eye' : 'eye-slash'}
-                    size={24}
-                    color={colors.text}
-                    />
-                </TouchableOpacity>
+              </TouchableOpacity>
             </View>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             <TouchableOpacity

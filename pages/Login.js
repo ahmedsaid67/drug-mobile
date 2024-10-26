@@ -150,7 +150,7 @@ const Login = () => {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            style={[styles.input, errors.password && styles.inputError]}
+            style={[styles.passwordInput, errors.password && styles.inputError]}
             placeholder="Şifre"
             onChangeText={(text) => {
               setPassword(text);
@@ -166,8 +166,8 @@ const Login = () => {
           >
             <Icon
               name={showPassword ? 'eye' : 'eye-slash'}
-              size={24}
-              color={colors.text}
+              size={colors.iconHeight}
+              color={colors.uygulamaRengi}
             />
           </TouchableOpacity>
         </View>
@@ -192,12 +192,12 @@ const Login = () => {
             <Text style={styles.buttonText}>Google ile Devam Et</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={styles.registerContainer} onPress={() => navigation.navigate('ResetPasswordCode')}>
+        <TouchableOpacity style={styles.registerContainer} onPress={() => navigation.navigate('Sıfırlama')}>
           <Text style={styles.forgotPasswordText}>Şifremi unuttum</Text>
         </TouchableOpacity>
-        <View style={styles.registerContainer}>
+        <View style={styles.registerContainerVersion2}>
           <Text style={styles.registerText}>Hesabınız yok mu?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Kayıt')}>
             <Text style={styles.registerLink}>Kayıt ol</Text>
           </TouchableOpacity>
         </View>
