@@ -12,6 +12,7 @@ import ResetPasswordCode from './ResetPasswordCode';
 import ResetPassword from './ResetPassword';
 import ReminderSearch from './ReminderSearch.js'
 import ReminderCreate from './ReminderCreate.js'
+import ReminderCreate2 from './ReminderCreate2.js'
 import { useEffect } from 'react';
 import axios from 'axios';
 import { API_ROUTES } from '../utils/constant';
@@ -219,18 +220,19 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="Onaylama" component={ResetPassword} />
         <Stack.Screen name="ReminderSearch" component={ReminderSearch} />
         <Stack.Screen name="Hatırlatıcı Oluştur" component={ReminderCreate} />
-        <Stack.Screen name="NidSearchPage" component={NidSearchPage} />
-        <Stack.Screen name="MedicineDetail" component={MedicineDetail} />
-        <Stack.Screen name="SicknessDetail" component={SicknessDetail} />
-        <Stack.Screen name="PdfViewer" component={PdfViewer} />
+        <Stack.Screen name="Hatırlatıcı Oluşturma" component={ReminderCreate2} />
+        <Stack.Screen name="İlaçlar" component={NidSearchPage} />
+        <Stack.Screen name="İlaç Bilgisi" component={MedicineDetail} />
+        <Stack.Screen name="Hastalıklar" component={SicknessDetail} />
+        <Stack.Screen name="Kullanım Talimatı" component={PdfViewer} />
         <Stack.Screen name="ErrorPage" component={ErrorPage} />
-        <Stack.Screen name="NidProductPage" component={NidProductPage} />
-        <Stack.Screen name="VitSearch" component={VitSearch} />
-        <Stack.Screen name="VitDetail" component={VitDetail} />
-        <Stack.Screen name="UseInfo" component={UseInfo} />
-        <Stack.Screen name="InputKg" component={InputKg} />
-        <Stack.Screen name="InputAge" component={InputAge} />
-        <Stack.Screen name="Check" component={Check} />
+        <Stack.Screen name="Takviye Seçimi" component={NidProductPage} />
+        <Stack.Screen name="Besin Takviyeleri" component={VitSearch} />
+        <Stack.Screen name="Vitamin Bilgisi" component={VitDetail} />
+        <Stack.Screen name="Kullanım Uyarısı" component={UseInfo} />
+        <Stack.Screen name="Kilo Bilgisi" component={InputKg} />
+        <Stack.Screen name="Yaş Bilgisi" component={InputAge} />
+        <Stack.Screen name="Uyarı" component={Check} />
       </Stack.Navigator>
     </Layout>
   );

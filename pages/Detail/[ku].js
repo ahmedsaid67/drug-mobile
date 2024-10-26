@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { API_ROUTES } from '../../utils/constant';
 import { colors } from '../../styles/colors'; // Assuming colors are still being imported from a constants file
 import styles from '../../styles/MedicineStyles';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const UseInfo = ({ route }) => {
   const { item } = route.params; 
@@ -60,9 +61,9 @@ const UseInfo = ({ route }) => {
       console.log("selamlar");
       const id = data.hassasiyet_turu.id;
       if ([2,3,4,8].includes(id)) {
-        navigation.navigate('InputKg', { item: data  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+        navigation.navigate('Kilo Bilgisi', { item: data  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
       } else if ([1,5,6].includes(id)) {
-        navigation.navigate('InputAge', { item: data  }); // 3, 5, 6 için hastalık detayına yönlendir
+        navigation.navigate('Yaş Bilgisi', { item: data  }); // 3, 5, 6 için hastalık detayına yönlendir
       }
       else {
         handleCalculate();
@@ -70,7 +71,7 @@ const UseInfo = ({ route }) => {
      
     }
     else{
-      navigation.navigate('SicknessDetail', { item: data}); // 1, 2, 4, 7, 8 için ilaca yönlendir
+      navigation.navigate('Hastalıklar', { item: data}); // 1, 2, 4, 7, 8 için ilaca yönlendir
     }
 
       
@@ -85,10 +86,12 @@ const UseInfo = ({ route }) => {
       </View>
     ) : (
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.contentContanier}>
+        <View style={styles.infoContainer}>
+        <Ionicons name="information-circle"  style={styles.icons}/>
           <Text style={styles.medText}>{data.name}  </Text>
-          <Text style={styles.warningText}>
-          İlac Uyarısı: {data.kullanim_uyarisi && data.kullanim_uyarisi.trim() !== "" ?  data.kullanim_uyarisi : 'Bu ilacın herhangi bir kullanım uyarısı yoktur'} 
+        
+          
+          <Text style={styles.warningText}>Uygulama, yalnızca bilgilendirme amaçlıdır ve tıbbi tavsiye niteliği taşımaz. Kullanıcı, sağlık durumu ile ilgili her zaman doktoruna veya bir sağlık uzmanına danışmalıdır.
           </Text>
         </View>
        

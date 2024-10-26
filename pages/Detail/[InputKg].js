@@ -83,14 +83,14 @@ const Input = ({ route }) => {
                 ...response.data // response.data'daki verileri item'a ekliyoruz
               };
             
-              navigation.navigate("Check", {item: updatedItem});
+              navigation.navigate("Uyarı", {item: updatedItem});
             } else {
               // Check uyarı yoksa sonuçları ayarla buradada med.js e gideceğiz
               const updatedItem = {
                 ...item,        // Mevcut item'deki tüm verileri koruyoruz
                 ...response.data // response.data'daki verileri item'a ekliyoruz
               }
-              navigation.navigate('MedicineDetail',  { item: updatedItem  });
+              navigation.navigate('İlaç Bilgisi',  { item: updatedItem  });
             }
           } else {
             setError('API çağrısı başarısız oldu');
@@ -121,21 +121,27 @@ const Input = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.inputRow}>
-        <Text style={styles.inputLabel}>Kg Girin:</Text>
+        <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen kişinin kilogram bilgisini giriniz.</Text>
+        <TouchableOpacity style={styles.inputTouchable}>
         <TextInput
           style={styles.input}
-          placeholder="Kg"
+          placeholder="Kilogram giriniz"
           keyboardType="numeric"
+           mode="outlined"
           value={inputValue}
           onChangeText={setInputValue}
         />
+        </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.buttonText}>Geri</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleCalculate} style={styles.forwardButton}>
+        <TouchableOpacity onPress={() => inputValue ? handleCalculate() : null} style={[
+                        styles.forwardButton,
+                        (!(inputValue)) && styles.forwardButtonDisabled
+                    ]}>
           <Text style={styles.buttonText}>Hesapla</Text>
         </TouchableOpacity>
       </View>

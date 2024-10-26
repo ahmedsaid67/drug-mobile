@@ -7,6 +7,7 @@ import { API_ROUTES } from '../../utils/constant';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import { colors } from '../../styles/colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
@@ -19,7 +20,7 @@ const NidSearchPage = ({ route }) => {
   
   const handleAccept = () => {
    
-    navigation.navigate('MedicineDetail',  { item: item  })
+    navigation.navigate('İlaç Bilgisi',  { item: item  })
 
    
   };
@@ -35,8 +36,13 @@ const NidSearchPage = ({ route }) => {
       <ScrollView contentContainerStyle={styles.container}>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.checkInfo}>ÖNEMLİ UYARI</Text>
-          <Text style={styles.checkText}>{item.check_uyari} </Text>
+          <Ionicons name="warning"  style={styles.icons}/>
+          
+          
+          {item.check_uyari ? (
+              <Text style={styles.warningText}>{item.check_uyari}{item.check_uyari.slice(-1) !== '.' ? '.' : ''}</Text>
+            ) : null}
+          
           
          
         </View>

@@ -46,22 +46,36 @@ const NidSearchPage = ({ route }) => {
       </View>
 
       <View style={styles.resultContainer}>
-        <Text style={styles.explanationText}>{data.explanation}</Text>
+        <Text style={styles.resultText}>{data.explanation}</Text>
       </View>
 
+
+      <View style={styles.buttonContainer}>
       <TouchableOpacity 
-        style={styles.purchaseButton} 
-        onPress={() => {
-          if (data.satin_al_link) {
-            // Eğer satin_al_link mevcutsa, kullanıcıyı o linke yönlendir
-            Linking.openURL(data.satin_al_link).catch(err => console.error('Link açılamadı:', err));
-          } else {
-            console.log('Satın alma bağlantısı mevcut değil.');
-          }
-        }}
-      >
-        <Text style={styles.purchaseButtonText}>Şimdi Satın Al</Text>
-      </TouchableOpacity>
+          style={styles.instructionsButton} 
+          onPress={() => {
+            navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+          }}
+        >
+          <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.remindersButton} 
+          onPress={() => {
+            if (data.satin_al_link) {
+              // Eğer satin_al_link mevcutsa, kullanıcıyı o linke yönlendir
+              Linking.openURL(data.satin_al_link).catch(err => console.error('Link açılamadı:', err));
+            } else {
+              console.log('Satın alma bağlantısı mevcut değil.');
+            }
+          }}
+        >
+          <Text style={styles.instructionsButtonText}>Şimdi Satın Al</Text>
+        </TouchableOpacity>
+      </View>
+
+
       </>
       ) : (
         <Text>Veriler yükleniyor...</Text> 

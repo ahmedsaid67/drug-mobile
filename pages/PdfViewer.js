@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Dimensions, ActivityIndicator } from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'react-native-blob-util';
+import { colors } from '../styles/colors';
+import styles from '../styles/MedicineStyles';
 
 const PdfViewer = ({ route }) => {
   const { documentUrl } = route.params; // URL ile PDF gösteriliyor
@@ -27,11 +29,14 @@ const PdfViewer = ({ route }) => {
     downloadPdf(); 
   }, [documentUrl]);
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
+ 
 
   return (
+    loading ? (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.uygulamaRengi} />
+      </View>
+    ) : (
     <View style={{ flex: 1 }}>
       <Pdf
         source={{ uri: pdfPath, cache: true }}
@@ -51,6 +56,7 @@ const PdfViewer = ({ route }) => {
         enableDownload={false} // İndirme işlemini devre dışı bırak
       />
     </View>
+    )
   );
 };
 

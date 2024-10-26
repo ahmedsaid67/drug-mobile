@@ -8,20 +8,16 @@ const styles = StyleSheet.create({
   },
   searchBoxContainer: {
     padding: 16,
+    color: colors.text,
   },
   searchBox: {
-    height: 45,
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
+    height: colors.searchHeight,
+    borderWidth: 1.50,
+    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 15,
-    backgroundColor: '#f9f9f9',
     marginVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,  // Android shadow
+    color: colors.text,
   },
   popularSearchesContainer: {
     padding: 16,
@@ -42,8 +38,6 @@ const styles = StyleSheet.create({
   medicineItem: {
     width: '100%',
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee', // Daha açık bir çizgi rengi
   },
   medicineContent: {
     flexDirection: 'row',
@@ -52,12 +46,12 @@ const styles = StyleSheet.create({
   },
   medicineName: {
     fontSize: 18, // Font boyutunu artırarak daha okunabilir hale getirme
-    color: "black",
+    color: colors.text,
     flex: 1,
   },
   activeIngredient: {
     fontSize: 14,
-    color: '#666',
+    color: colors.thirdText,
     marginTop: 4,
   },
   divider: {
@@ -68,6 +62,7 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1, // Tüm alanı kapla
+    backgroundColor: colors.MainContainerBackground,
     justifyContent: 'center', // Dikey ortalama
     alignItems: 'center', // Yatay ortalama
   },
@@ -81,17 +76,27 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20, // Köşeleri yuvarlatmak için
     borderTopRightRadius: 20,
     padding: 20,
+    paddingVertical: 35,
     minHeight: 200, // Modalın yüksekliği (ayarlanabilir)
     width: '100%', // Tüm genişliği kapsasın
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: colors.text,
     marginBottom: 10,
     textAlign: 'center', // Başlığı ortala
   },
   button: {
-    backgroundColor: '#007BFF',
+    backgroundColor: colors.uygulamaRengi,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+    alignItems: 'center', // Butonu ortala
+  },
+  buttonSecond: {
+    backgroundColor: colors.uygulamaIkinciRengi,
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 10,

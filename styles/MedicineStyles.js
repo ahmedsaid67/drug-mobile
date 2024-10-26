@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions } from 'react-native';
 import { colors } from './colors';
+
+const { height } = Dimensions.get('window');
 
 
 const styles = StyleSheet.create({
@@ -12,17 +14,31 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   inputLabel: {
-    fontSize: 18, // Daha büyük metin
-    color: '#333333', // Daha koyu bir metin rengi
-    marginBottom: 5,
+    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
+    color: colors.text, // Daha koyu bir metin rengi
+    fontWeight: "500",
+    marginBottom: 20,
+  },
+  inputTouchable: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: colors.mainPadingHorizantal,
+    marginBottom: height * 0.0125,
+    borderRadius: height * 0.006,
+    textAlign: 'left',  // Sol hizalı input
+    borderWidth: 1,     // Kenar çizgisi kalınlığı
+    borderColor: colors.border,
+    color: colors.text,
+    fontSize: colors.fontSizeText,
+    height: colors.inputHeight ,
+
   },
   input: {
-    height: 50, // Daha büyük giriş alanı
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
-    borderRadius: 8, // Daha yuvarlak köşeler
-    paddingHorizontal: 10,
-    fontSize: 18, // Daha büyük metin
+    flex: 1,  // TextInput'un esnekliği, tüm alanı kaplar
+    color: colors.text,
+    fontSize: colors.fontSizeText,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -35,51 +51,62 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: '#9e9e9e', // Daha yumuşak bir gri ton
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    height: colors.buttonHeight,
+    width: '25%', // Buton genişliği yüzde olarak ayarlanıyor
     borderRadius: 8,
+    justifyContent: "center",
   },
   forwardButton: {
     backgroundColor: colors.uygulamaRengi, // Daha canlı bir mavi ton
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    height: colors.buttonHeight,
+    width: '25%', // Buton genişliği yüzde olarak ayarlanıyor
     borderRadius: 8,
+    justifyContent: "center",
+  },
+  forwardButtonDisabled: {
+    backgroundColor: colors.uygulamaRengiDisabled, // Daha canlı bir mavi ton
+    height: colors.buttonHeight,
+    width: '25%', // Buton genişliği yüzde olarak ayarlanıyor
+    borderRadius: 8,
+    justifyContent: "center",
   },
   buttonText: {
     color: '#ffffff', // Beyaz metin
-    fontSize: 18, // Daha büyük metin
+    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
     textAlign: 'center',
+   
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: colors.MainContainerBackground,
     alignItems: 'center',
   },
   infoContainer: {
     padding: 15,
-    backgroundColor: '#f5f5f5', // Hafif gri arka plan
     borderRadius: 8,
     marginBottom: 15,
   },
   medText: {
     fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
     fontWeight: 'bold',
-    color: '#333333',
+    color: colors.text,
   },
   warningText: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
-    color: '#DB4437', // Kırmızı uyarı metni
+    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    color: colors.text, // Kırmızı uyarı metni
     marginTop: 10,
   },
   resultContainer: {
     padding: 15,
     backgroundColor: '#e8f5e9', // Hafif yeşil arka plan
+    color: colors.text,
     borderRadius: 8,
     marginBottom: 15,
   },
   resultText: {
-    fontSize: 18, // Daha büyük metin
-    color: '#388e3c', // Yeşil metin
+    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    color: colors.text, // Kırmızı uyarı metni
   },
   instructionsButton: {
     flex: 1,
@@ -100,6 +127,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,  
   },
+  remindersButtonDisable: {
+    flex: 1,
+    backgroundColor: colors.uygulamaRengiDisabled,
+    padding: 15,
+    marginHorizontal: 5,
+    borderRadius: 5,  
+  },
   remindersButtonText: {
     color: '#ffffff',
     fontSize: colors.fontSizeText, // Daha büyük metin
@@ -108,11 +142,31 @@ const styles = StyleSheet.create({
   checkInfo: {
     fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
     color:colors.text, // Turuncu metin
-    marginBottom: 10,
+    fontWeight: "900",
+    marginTop: 25,
+    textAlign: "center",
   },
   checkText: {
-    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
-    color: "#DB4437", // Turuncu metin
+    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    marginTop: 15,
+    padding: 5,
+    textAlign: "center",
+    color: colors.text, // Turuncu metin
+  },
+  checkTextSecond: {
+    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    marginTop: 15,
+    padding: 5,
+    color: colors.text, // Turuncu metin
+  },
+  icons:{
+    fontSize: 340,
+    color: colors.uygulamaRengi,
+    textAlign: "center",
+  },
+  iconSmall:{
+    fontSize: 35,
+    color: colors.uygulamaRengi,
   },
   pickerContainer: {
     height: 200,

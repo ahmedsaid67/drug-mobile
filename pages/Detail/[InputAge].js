@@ -7,6 +7,7 @@ import { Alert } from 'react-native'; // Added import for Alert
 import { useNavigation } from '@react-navigation/native';
 import { API_ROUTES } from '../../utils/constant';
 import DateTimePickerModal from 'react-native-modal-datetime-picker'; 
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 
@@ -50,11 +51,11 @@ const Input = ({ route }) => {
     const today = new Date();
     const birthYear = birthDate.getFullYear();
     const birthMonth = birthDate.getMonth();
-    const birthDay = birthDate.getDate();
+    const birthDay = birthDate.getDay();
 
     let ageYear = today.getFullYear() - birthYear;
     let ageMonth = today.getMonth() - birthMonth;
-    let ageDay = today.getDate() - birthDay;
+    let ageDay = today.getDay() - birthDay;
 
     if (ageMonth < 0 || (ageMonth === 0 && ageDay < 0)) {
       ageYear--;
@@ -70,7 +71,6 @@ const Input = ({ route }) => {
     setCalculatedYear(ageYear);
     setCalculatedAge(totalMonths);
     setInfoAge(`Yaşınız: ${ageYear} Yıl, ${ageMonth} Ay`);
-    console.log(calculatedAge);
     
   };
 
@@ -80,10 +80,6 @@ const Input = ({ route }) => {
       let apiUrl = '';
       let params = {};
       let response;
-
-    
-     
-
       // ID'ye göre API rotasını belirle ve parametreleri ayarla
       switch (id) {
 
@@ -93,22 +89,7 @@ const Input = ({ route }) => {
           apiUrl = API_ROUTES.GET_DOSAGE_BY_AGE;
           params = { ilac_id: ilacId , yas: calculatedAge,  yas_birimi: "ay"};
           break;
-        // Kilo-Doz	FALSE	2
-        case 2:
-          apiUrl = API_ROUTES.GET_DOSAGE_BY_WEIGHT;
-          params = {kilo: calculatedAge, ilac_id: ilacId}
-          break;
-         // Hastalıklı-Azalan-kilo	FALSE	3
-        case 3:
-          apiUrl = API_ROUTES.GET_DECREASED_DOSAGE_BY_DISEASE_AND_WEIGHT;
-          params = {kilo: calculatedAge, ilac_id: ilacId, hastalik_id: hastalikId}
-          break;
-         // Azalan-kilo	FALSE	4
-        case 4:
-          apiUrl = API_ROUTES.GET_DOSAGE_DECREASING_WEIGHT;
-          params = {kilo: calculatedAge, ilac_id: ilacId}
-          break;
-        // Hastalıklı-yasa-baglı-azalan-kilo-doz	FALSE	5 burası özel durum içine alınmalı iki aşamalı bir durum var burada.
+        
         case 5:
           try {
             const ageWeightData = await axios.get(API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT_DATA_AGE, {
@@ -130,13 +111,13 @@ const Input = ({ route }) => {
                 ...item,
                 input_yas: calculatedYear // Yaşı ekliyoruz
               };
-              navigation.navigate('InputKg', { item: updatedItem });
+              navigation.navigate('Kilo Bilgisi', { item: updatedItem });
               return; // Burada işlem bitiyor, bir sonraki aşamaya geçilmiyor.
             }
             
             // Yaş kontrolü geçildi, ama kilo bilgisi gerekiyor olabilir
             apiUrl = API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT;
-            params = { age: inputValue, ilac_id: ilacId, hastalik_id: hastalikId, }
+            params = { age: calculatedYear, ilac_id: ilacId, hastalik_id: hastalikId, }
            
             
 
@@ -145,28 +126,12 @@ const Input = ({ route }) => {
           }
         break;
 
-
         // Hastalık-Yaş	FALSE	6    
         case 6:
           apiUrl = API_ROUTES.GET_DOSAGE_BY_AGE_AND_DISEASE;
           params = {ilac_id: ilacId, hastalik_id: hastalikId, yas: calculatedAge,  yas_birimi: "ay" }
           break;
         
-        // Explations-Doz	FALSE	7 eğer explation lu ise direk çıktı almalıyım çıktı bilgi diye geliyor
-        case 7:
-          apiUrl = API_ROUTES.GET_DOSAGE_BY_EXPLANATION;
-          params = { ilac_id: ilacId };
-          response = await axios.get(apiUrl, { params });
-          if (response?.data) {
-            setResult(`Sonuç: ${response.data.bilgi}`);
-            console.log(response.data);
-          }
-          return; // useEffect tetiklediği için butonla işlem olmayacak
-         // hastalıklı artan kilo	FALSE	8
-        case 8:
-          apiUrl = API_ROUTES.GET_INCREASING_DOSAGE_BY_DISEASE_AND_WEIGHT;
-          params = {kilo: calculatedAge, ilac_id: ilacId, hastalik_id: hastalikId}
-          break;
         default:
           setError('Geçersiz ID');
           return;
@@ -186,25 +151,19 @@ const Input = ({ route }) => {
                 ...response.data // response.data'daki verileri item'a ekliyoruz
               };
             
-              navigation.navigate("Check", {item: updatedItem});
+              navigation.navigate("Uyarı", {item: updatedItem});
             } else {
               // Check uyarı yoksa sonuçları ayarla buradada med.js e gideceğiz
               const updatedItem = {
                 ...item,        // Mevcut item'deki tüm verileri koruyoruz
                 ...response.data // response.data'daki verileri item'a ekliyoruz
               }
-              navigation.navigate('MedicineDetail',  { item: updatedItem  });
+              navigation.navigate('İlaç Bilgisi',  { item: updatedItem  });
             }
           } else {
             setError('API çağrısı başarısız oldu');
           }
       }
-      
-
-      
-
-     
-
     } catch (error) {
       console.error(error.response.data);
       console.log(error);
@@ -212,25 +171,23 @@ const Input = ({ route }) => {
     }
   };
 
-  
-
-
-  
-
   return (
     <View style={styles.container}>
       
       <View style={styles.inputRow}>
-        <Text style={styles.inputLabel}>Yaş Girin:</Text>
-        <TouchableOpacity onPress={showDatePicker} style={styles.inputTouchable}>
+        <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen kişinin yaş bilgisini giriniz.</Text>
+        <TouchableOpacity onPress={showDatePicker}  style={styles.inputTouchable} >
           <TextInput
             style={styles.input}
-            placeholder="Yaş"
+            placeholder="DD - MM - YYYY"
             keyboardType="numeric"
             value={ageInfo}
             editable={false} // Kullanıcı manuel olarak değiştiremesin
             pointerEvents="none" // TextInput'un dokunma olaylarını devre dışı bırak
           />
+
+          <Ionicons name="calendar" style={styles.iconSmall} /> 
+          
         </TouchableOpacity>
       </View>
         
@@ -240,7 +197,10 @@ const Input = ({ route }) => {
           <Text style={styles.buttonText}>Geri</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleCalculate} style={styles.forwardButton}>
+        <TouchableOpacity onPress={() => birthDate ? handleCalculate() : null}  style={[
+                        styles.forwardButton,
+                        (!(birthDate)) && styles.forwardButtonDisabled
+                    ]}>
           <Text style={styles.buttonText}>Hesapla</Text>
         </TouchableOpacity>
       </View>

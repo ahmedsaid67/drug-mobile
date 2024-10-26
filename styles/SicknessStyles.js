@@ -38,11 +38,9 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 8,
    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,  // Kartlara hafif bir gölge
+    
+    borderWidth: 1.50,
+    borderColor: colors.border,
     
   },
   hastalikText: {
@@ -54,6 +52,12 @@ const styles = StyleSheet.create({
     flex: 1, // Tüm alanı kapla
     justifyContent: 'center', // Dikey ortalama
     alignItems: 'center', // Yatay ortalama
+  },
+  inputLabel: {
+    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
+    color: colors.text, // Daha koyu bir metin rengi
+    fontWeight: "500",
+    marginBottom: 20,
   },
 });
 

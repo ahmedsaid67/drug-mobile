@@ -1,4 +1,9 @@
 {
   "name": "ReminderApp",
-  "displayName": "ReminderApp"
+  "displayName": "ReminderApp",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9748836659878475~9584881058",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
+  
 }

@@ -5,6 +5,7 @@ import styles from '../../styles/SearchPageStyles'; // Stillerin içe aktarılma
 import { API_ROUTES } from '../../utils/constant';
 import { useNavigation } from '@react-navigation/native'; // navigate fonksiyonu için
 import axios from 'axios';
+import { colors } from '../../styles/colors';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,15 +16,15 @@ const App = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const createReminder = () => {
-    console.log('Hatırlatıcı oluşturulacak.');
+    navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
     setModalVisible(false); // Modalı kapat
   };
 
   const navigateToDoseCalculation = () => {
     if (selectedItem.sayfa === 'ilac') {
-      navigation.navigate('UseInfo', { item: selectedItem }); // İlaca yönlendirme
+      navigation.navigate('Kullanım Uyarısı', { item: selectedItem }); // İlaca yönlendirme
     } else if (selectedItem.sayfa === 'besin takviyesi') {
-      navigation.navigate('VitDetail', { item: selectedItem }); // Takviyeye yönlendirme
+      navigation.navigate('Vitamin Bilgisi', { item: selectedItem }); // Takviyeye yönlendirme
     }
     setModalVisible(false); // Modalı kapat
   };
@@ -45,6 +46,7 @@ const App = () => {
       try {
         const response = await axios.get(API_ROUTES.COMBINED);
         setMedicines(response.data);
+        console.log("data",response.data);
 
       } catch (error) {
         // console.error('Error fetching data:', error);
@@ -117,9 +119,12 @@ const App = () => {
       <View style={styles.medicineItem}>
         <View style={styles.medicineContent}>
           <Text style={styles.medicineName}>{item.name}</Text>
-          <Ionicons name="chevron-forward-outline" size={30} color="#000" />
+          <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
-        <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
+        {item.etken_madde ? (
+            <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
+          ) : null}
+        
         <View style={styles.divider} />
       </View>
     </TouchableOpacity>
@@ -150,7 +155,7 @@ const App = () => {
             <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
               <Text style={styles.buttonText}>Doz Hesaplama</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={createReminder}>
+            <TouchableOpacity style={styles.buttonSecond} onPress={createReminder}>
               <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
             </TouchableOpacity>
           </TouchableOpacity>
@@ -160,15 +165,7 @@ const App = () => {
       {!searchTerm && !isSearching && (
         <ScrollView>
           <View style={styles.popularSearchesContainer}>
-            <Text style={styles.sectionTitle}>Popüler Aramalar</Text>
-            {popularSearches.map((term, index) => (
-              <TouchableOpacity key={index} onPress={() => {
-                setSearchTerm(term);
-                setIsSearching(true);
-              }}>
-                <Text style={styles.popularSearchItem}>{term}</Text>
-              </TouchableOpacity>
-            ))}
+            
           </View>
         </ScrollView>
       )}
@@ -176,6 +173,7 @@ const App = () => {
       {searchTerm && isSearching && (
         <FlatList
           style={styles.searchResultsContainer}
+          keyboardShouldPersistTaps="always"
           data={filteredMedicines} // data prop'u FlatList'e eklenmeli
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}

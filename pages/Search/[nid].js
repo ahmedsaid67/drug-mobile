@@ -45,12 +45,12 @@ const NidSearchPage = ({ route }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const createReminder = () => {
-    console.log('Hatırlatıcı oluşturulacak.');
+    navigate.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
     setModalVisible(false); // Modalı kapat
   };
 
   const navigateToDoseCalculation = () => {
-    navigate.navigate('UseInfo', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+    navigate.navigate('Kullanım Uyarısı', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
     setModalVisible(false); // Modalı kapat
   };
 
@@ -98,6 +98,7 @@ const NidSearchPage = ({ route }) => {
       const newData = paginationResponse.data.results;
       setDataPagination(prevData => [...prevData, ...newData]); // Yeni verileri öncekiyle birleştir
       setNextUrl(paginationResponse.data.next); // next varsa kaydet
+      
     } catch (error) {
       console.error('Error fetching pagination data:', error);
       Alert.alert('Error fetching pagination data');
@@ -139,7 +140,7 @@ const NidSearchPage = ({ route }) => {
           <Text style={styles.medicineName}>{item.name}</Text>
           <Ionicons name="chevron-forward-outline" size={30} color="#000" />
         </View>
-        <Text style={styles.activeIngredient}>{item.activeIngredient}</Text>
+        <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
         <View style={styles.divider} />
       </View>
     </TouchableOpacity>
@@ -189,7 +190,7 @@ const NidSearchPage = ({ route }) => {
             <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
               <Text style={styles.buttonText}>Doz Hesaplama</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={createReminder}>
+            <TouchableOpacity style={styles.buttonSecond} onPress={createReminder}>
               <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
             </TouchableOpacity>
           </TouchableOpacity>
@@ -198,13 +199,14 @@ const NidSearchPage = ({ route }) => {
 
       {/* Eğer arama aktifse filtrelenmiş veriyi göster, değilse pagination verisini göster */}
       <FlatList
+        keyboardShouldPersistTaps="always"
         style={styles.searchResultsContainer}
         data={isSearching ? filteredData : dataPagination} // Arama aktifse filtrelenmiş veriyi göster
         keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
         onEndReached={handleLoadMore} // Yeni sayfa yüklemek için
         onEndReachedThreshold={0.5} // Yükleme eşiği
-        ListFooterComponent={loadingMore ? <Text>Loading more...</Text> : null} // Daha fazla yükleniyor mesajı
+        ListFooterComponent={loadingMore ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null} // Daha fazla yükleniyor mesajı
       />
     </View>
   )

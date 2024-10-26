@@ -52,13 +52,14 @@ const NidSearchPage = ({ route }) => {
     ) : (
     <>
     <View style={styles.container}>
-      <Text style={styles.title}>Supplementler:</Text>
+
+    <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen besin takviyesi seçiniz.</Text>
       
       {/* Eğer supplement listesi boşsa mesaj göster */}
       {supplements.length === 0 ? (
         <TouchableOpacity 
           style={styles.noDiseaseTextContainer} 
-          onPress={() => navigation.navigate('VitSearch', { item })}
+          onPress={() => navigation.navigate('Besin Takviyeleri', { item })}
         >
           <Text style={styles.noDiseaseText}>Bu ilaç için supplement bilgisi bulunmamaktadır. İlaca gitmek için tıklayın.</Text>
         </TouchableOpacity>
