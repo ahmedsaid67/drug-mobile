@@ -15,20 +15,26 @@ const HatirlaticiYonetModel = ({ modalVisible, setModalVisible, setSelectedRemin
     const [loadingPouse,setLoaingPouse] = useState(false)
 
     const today = new Date();
+
     const isCompleted = () => {
         const endDate = new Date(selectedReminder.bitis_tarihi);
-        
+        endDate.setHours(today.getHours(), today.getMinutes(), today.getSeconds(), today.getMilliseconds());
+
         // Eğer bitiş tarihi geçmişse
         if (endDate < today) return true;
 
-        // Eğer bugünkü tarih bitiş tarihiyle aynıysa ve tüm saatler geçmişse
+        // Eğer bugünkü tarih bitiş tarihiyle aynıysa saatlere bakacağız
         if (endDate.toDateString() === today.toDateString()) {
-            return selectedReminder.hatirlatici_saat.every(({ saat }) => {
+            // Hatırlatıcı saatlerinden en geç olanı bulalım
+            const latestTime = selectedReminder.hatirlatici_saat.reduce((latest, { saat }) => {
                 const [hour, minute, second] = saat.split(":");
                 const reminderTime = new Date();
                 reminderTime.setHours(hour, minute, second);
-                return reminderTime < today;
-            });
+                return reminderTime > latest ? reminderTime : latest;
+            }, new Date(0)); // En düşük tarih ile başlıyoruz
+
+            // Eğer en geç hatırlatıcı saati de bugünkü saatten önceyse, tamamlandı olarak işaretle
+            return latestTime < today;
         }
 
         return false;
