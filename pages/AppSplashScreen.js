@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, ScrollView,Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../styles/colors';
 import logo from '../public/drug-logo-transparan.png';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+const { height } = Dimensions.get('window');
+
 
 const AppSplashScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,7 +16,7 @@ const AppSplashScreen = () => {
 
   useEffect(() => {
     const checkAgreement = async () => {
-      const agreement = await AsyncStorage.getItem('userAgreement03');
+      const agreement = await AsyncStorage.getItem('userAgreement08');
       if (agreement === 'true') {
         setIsAgreed(true);
         // Sözleşme kabul edildiyse yönlendirme yap
@@ -36,7 +38,7 @@ const AppSplashScreen = () => {
 
   const handleAgreement = async () => {
     try {
-      await AsyncStorage.setItem('userAgreement03', 'true');
+      await AsyncStorage.setItem('userAgreement08', 'true');
       setIsAgreed(true);
       setModalVisible(false);
       
@@ -51,7 +53,7 @@ const AppSplashScreen = () => {
 
   const handleCancelAgreement = async () => {
     try {
-      await AsyncStorage.setItem('userAgreement03', 'false'); // Sözleşme iptal edildi
+      await AsyncStorage.setItem('userAgreement08', 'false'); // Sözleşme iptal edildi
       setIsAgreed(false);
       clearTimeout(timeoutRef.current); // Yönlendirmeyi durdur
     } catch (error) {
@@ -77,7 +79,7 @@ const AppSplashScreen = () => {
         <TouchableOpacity onPress={handleCheckboxPress}>
           <Icon 
               name={isAgreed ? "check-box" : "check-box-outline-blank"} 
-              size={16} 
+              size={height * 0.02 } 
               color={isAgreed ? colors.uygulamaRengi : '#d3d3d3'} 
           />
         </TouchableOpacity>
@@ -157,82 +159,78 @@ const styles = StyleSheet.create({
         backgroundColor: colors.MainContainerBackground,
     },
     logo: {
-        width: 250, // Logonun boyutunu biraz küçültün
-        height: 250,
+        width: height * 0.3, 
+        height: height * 0.3,
     },
     appName: {
-        fontSize: 60, // Başlığı büyütün
+        fontSize: height * 0.07, 
         fontWeight: 'bold',
         color: colors.uygulamaRengi,
-        marginBottom: 40, // Başlık ile sözleşme arasındaki boşluğu artırın
+        marginBottom: colors.mainPadingHorizantal, 
     },
     agreementContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        marginVertical: colors.mainPadingHorizantal
     },
     textContainer: {
         flexDirection: 'row', // Align text elements horizontally
         alignItems: 'center',  // Center vertically within this container
     },
     agreementText: {
-        fontSize: 12,
+      fontSize: height * 0.015,
         color: 'black', // Default text color
     },
     agreementHighlight: {
         color: colors.uygulamaRengi,
-        fontSize: 12,
-        marginLeft: 4,
+        fontSize: height * 0.015,
+        marginLeft: height * 0.01,
     },
     modalView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white', // Arka plan rengini beyaz yap
-        padding: 20,
-        borderRadius: 10, // İsteğe bağlı: köşeleri yuvarlamak için
+        padding: colors.mainPadingHorizantal,
+        borderRadius: height * 0.012, // İsteğe bağlı: köşeleri yuvarlamak için
     },
     modalHeader: {
-        fontSize: 24,
+        fontSize: colors.fontSizeTextMaxi,
         fontWeight: 'bold',
         color: colors.text, // Başlık rengini koruyun veya istediğiniz renge ayarlayın
-        marginBottom: 20,
+        marginBottom: colors.mainPadingHorizantal,
     },
     modalText: {
         color: colors.text, // Yazı rengini colors.text olarak ayarlayın
-        fontSize: 16,
+        fontSize: colors.fontSizeText,
         textAlign: 'left',
-        lineHeight: 24, // Daha fazla boşluk için lineHeight'ı artırın
-        marginBottom: 15, // Paragraflar arasında boşluk
+        lineHeight: height * 0.028, // Daha fazla boşluk için lineHeight'ı artırın
+        marginBottom: colors.mainPadingHorizantal, // Paragraflar arasında boşluk
     },
     modalTextBold: {
         fontWeight: 'bold',
-        marginTop: 10,
-    },
-    modalList: {
-        marginLeft: 15, // Madde işaretleri için sol kenar boşluğu
-        marginBottom: 15,
+        marginTop: colors.mainPadingHorizantal/2,
     },
 
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        marginTop: 20,
+        marginTop: colors.mainPadingHorizantal,
     },
     closeButton: {
         backgroundColor: 'gray',
-        padding: 10,
-        borderRadius: 5,
+        padding: colors.mainPadingHorizantal/2,
+        borderRadius: height * 0.008,
         flex: 1,
-        marginRight: 10,
+        marginRight: colors.mainPadingHorizantal/2,
     },
     agreeButton: {
         backgroundColor: colors.uygulamaRengi,
-        padding: 10,
-        borderRadius: 5,
+        padding: colors.mainPadingHorizantal/2,
+        borderRadius: height * 0.008,
         flex: 1,
-        marginLeft: 10,
+        marginLeft: colors.mainPadingHorizantal/2,
     },
     buttonText: {
         color: 'white',
@@ -241,4 +239,5 @@ const styles = StyleSheet.create({
 });
 
 export default AppSplashScreen;
+
 
