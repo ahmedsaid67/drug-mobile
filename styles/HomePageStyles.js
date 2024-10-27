@@ -59,12 +59,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',  // Resim, kartın içinde orantılı bir şekilde yer alacak
   },
   cardText: {
-    padding: 14,  // Metin için daha az padding
+    padding: 5,  // Metin için daha az padding
     fontSize: colors.fontSizeTextMini,
     fontWeight: '600',
     textAlign: 'center',
     color: '#444',
-    width: '100%',  // Metin alanının kart genişliğinin tamamını kaplamasını sağla
+    width: '90%',  // Metin alanının kart genişliğinin tamamını kaplamasını sağla
+    maxHeight: width * 0.2,  // Yükseklik sınırı, ikinci satırın çıkmaması için
+    overflow: 'hidden',  // Metin sığmazsa kesilmesini sağlar
+    numberOfLines: 1,  // En fazla 2 satır olacak şekilde sınırla
+    ellipsizeMode: 'tail',  // Metin sığmazsa "..." ile kısaltır
   },
   
   buttonContainer:{
@@ -72,6 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-end',
     position: 'flex',
+    paddingBottom: 40,
   },
 
 

@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   medicineItem: {
     width: '100%',
     padding: 16,
+    borderBottomWidth: 0.2,
   },
   medicineContent: {
     flexDirection: 'row',
@@ -45,14 +46,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   medicineName: {
-    fontSize: 18, // Font boyutunu artırarak daha okunabilir hale getirme
+    fontSize: colors.fontSizeText, // Font boyutunu artırarak daha okunabilir hale getirme
     color: colors.text,
     flex: 1,
   },
   activeIngredient: {
     fontSize: 14,
     color: colors.thirdText,
-    marginTop: 4,
   },
   divider: {
     width: '100%',

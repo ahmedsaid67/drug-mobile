@@ -32,6 +32,7 @@ const ReminderCreate = ({ route, navigation }) => {
     const [lastDate, setLastDate] = useState('');
     const [zamanlama, setZamanlama] = useState([]);
 
+    console.log(dataToSend);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false); // Tarih Seçici için
     const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false); // Bitiş Tarihi Seçici
@@ -332,7 +333,7 @@ const ReminderCreate = ({ route, navigation }) => {
     
 
     if (!loginStatus){
-        navigation.navigate('Login')
+        navigation.navigate('Giriş')
     }
 
     return (

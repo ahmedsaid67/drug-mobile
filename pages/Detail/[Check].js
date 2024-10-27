@@ -37,10 +37,10 @@ const NidSearchPage = ({ route }) => {
 
         <View style={styles.infoContainer}>
           <Ionicons name="warning"  style={styles.icons}/>
-          
+          <Text style={styles.checkInfo}>Kullanım uyarısı</Text>
           
           {item.check_uyari ? (
-              <Text style={styles.warningText}>{item.check_uyari}{item.check_uyari.slice(-1) !== '.' ? '.' : ''}</Text>
+              <Text style={styles.checkText}>{item.check_uyari}{item.check_uyari.slice(-1) !== '.' ? '.' : ''}</Text>
             ) : null}
           
           

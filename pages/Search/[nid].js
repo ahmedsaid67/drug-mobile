@@ -136,12 +136,13 @@ const NidSearchPage = ({ route }) => {
       onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
     >
       <View style={styles.medicineItem}>
+        
         <View style={styles.medicineContent}>
           <Text style={styles.medicineName}>{item.name}</Text>
           <Ionicons name="chevron-forward-outline" size={30} color="#000" />
         </View>
         <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
-        <View style={styles.divider} />
+        
       </View>
     </TouchableOpacity>
   );

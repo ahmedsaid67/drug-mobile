@@ -142,7 +142,6 @@ const NidSearchPage = ({ route }) => {
           <Ionicons name="chevron-forward-outline" size={30} color="#000" />
         </View>
         <Text style={styles.activeIngredient}>{item.activeIngredient}</Text>
-        <View style={styles.divider} />
       </View>
     </TouchableOpacity>
   );

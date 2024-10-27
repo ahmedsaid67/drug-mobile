@@ -100,6 +100,8 @@ const Input = ({ route }) => {
               }
             });
 
+            console.log(ageWeightData);
+
             const { threshold_age } = ageWeightData.data;
 
             if (parseInt(calculatedYear) < threshold_age) {
@@ -198,8 +200,8 @@ const Input = ({ route }) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => birthDate ? handleCalculate() : null}  style={[
-                        styles.forwardButton,
-                        (!(birthDate)) && styles.forwardButtonDisabled
+                        styles.calculateButton,
+                        (!(birthDate)) && styles.calculateButtonDisabled
                     ]}>
           <Text style={styles.buttonText}>Hesapla</Text>
         </TouchableOpacity>

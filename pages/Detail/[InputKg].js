@@ -52,7 +52,7 @@ const Input = ({ route }) => {
         case 5:
           
           apiUrl = API_ROUTES.GET_DECREASING_DOSE_BY_DISEASE_AGE_WEIGHT, 
-          params= { age: item.input_yas, kilo: 10, ilac_id: ilacId, hastalik_id: hastalikId }
+          params= { age: item.input_yas, kilo: inputValue, ilac_id: ilacId, hastalik_id: hastalikId }
             
           break;
 
@@ -139,8 +139,8 @@ const Input = ({ route }) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => inputValue ? handleCalculate() : null} style={[
-                        styles.forwardButton,
-                        (!(inputValue)) && styles.forwardButtonDisabled
+                        styles.calculateButton,
+                        (!(inputValue)) && styles.calculateButtonDisabled
                     ]}>
           <Text style={styles.buttonText}>Hesapla</Text>
         </TouchableOpacity>

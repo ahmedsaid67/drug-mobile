@@ -70,9 +70,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
   },
+  calculateButton: {
+    backgroundColor: colors.uygulamaRengi, // Daha canlı bir mavi ton
+    height: colors.buttonHeight,
+    width: '35%', // Buton genişliği yüzde olarak ayarlanıyor
+    borderRadius: 8,
+    justifyContent: "center",
+  },
+  calculateButtonDisabled: {
+    backgroundColor: colors.uygulamaRengiDisabled, // Daha canlı bir mavi ton
+    height: colors.buttonHeight,
+    width: '35%', // Buton genişliği yüzde olarak ayarlanıyor
+    borderRadius: 8,
+    justifyContent: "center",
+  },
   buttonText: {
     color: '#ffffff', // Beyaz metin
-    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
     textAlign: 'center',
    
   },
@@ -83,9 +97,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoContainer: {
-    padding: 15,
-    borderRadius: 8,
     marginBottom: 15,
+    marginTop: 15,
   },
   medText: {
     fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
@@ -93,7 +106,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   warningText: {
-    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    fontSize: colors.fontSizeText, // Daha büyük metin
     color: colors.text, // Kırmızı uyarı metni
     marginTop: 10,
   },
@@ -105,15 +118,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   resultText: {
-    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    fontSize: colors.fontSizeText, // Daha büyük metin
     color: colors.text, // Kırmızı uyarı metni
   },
   instructionsButton: {
     flex: 1,
-    backgroundColor: "#F2B01D",
+    backgroundColor: colors.uygulamaIkinciRengi,
     padding: 15,
     marginHorizontal: 5,
     borderRadius: 5,  
+    justifyContent: "center",
   },
   instructionsButtonText: {
     color: '#ffffff',
@@ -143,18 +157,16 @@ const styles = StyleSheet.create({
     fontSize: colors.fontSizeTextMaxi, // Daha büyük metin
     color:colors.text, // Turuncu metin
     fontWeight: "900",
-    marginTop: 25,
     textAlign: "center",
   },
   checkText: {
-    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
-    marginTop: 15,
-    padding: 5,
+    fontSize: colors.fontSizeText, // Daha büyük metin
+    color: colors.text, // Kırmızı uyarı metni
+    marginTop: 10,
     textAlign: "center",
-    color: colors.text, // Turuncu metin
   },
   checkTextSecond: {
-    fontSize: colors.fontSizeTextLarge, // Daha büyük metin
+    fontSize: colors.fontSizeText, // Daha büyük metin
     marginTop: 15,
     padding: 5,
     color: colors.text, // Turuncu metin

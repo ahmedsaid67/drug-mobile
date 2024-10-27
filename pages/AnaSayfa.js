@@ -95,7 +95,7 @@ const HomePage = () => {
 
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
     <View >
       
        

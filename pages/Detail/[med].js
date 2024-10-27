@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'rea
 import styles from '../../styles/MedicineStyles';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../styles/colors';
-import { useInterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+import { useInterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads'
+import Ionicons from 'react-native-vector-icons/Ionicons';;
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
@@ -14,45 +15,43 @@ const NidSearchPage = ({ route }) => {
     requestNonPersonalizedAdsOnly: true,
   });
 
+  useEffect(() => {
+    if (item.message === "0 ölçek kullanın.") {
+      item.message = "Kullanımı önerilmez."; // Değişiklik burada
+    }
+  }, [item.message]);
+
   const handleNavigateReminder = () => {
-    const handleNavigateReminder = () => {
-      // Mesaj ve diğer koşulları kontrol et
-      if (
-        item.message !== "Kullanımı önerilmez." ||
-        item.message !== "Kullanımı önerilmez"
-      ) {
-        // Boş bir nesne oluştur
-        const dataToSend = {};
-    
-        dataToSend.name = item.name;
-    
-        // item.doz, item.bilgi ve item.form değerlerini kontrol et
-        if (item.doz) {
-          dataToSend.kuvvet = item.doz;
-        }
-        
-        if (item.bilgi) {
-          dataToSend.bilgi = item.bilgi; // Farklı bir anahtar kullanıyoruz
-        }
+    // Mesaj "Kullanımı önerilmez." veya "Kullanımı önerilmez" değilse devam et
+    if (item.message !== "Kullanımı önerilmez." || item.message !== "Kullanımı önerilmez") {
+      // Boş bir nesne oluştur
+      const dataToSend = {};
       
-        if (item.message) {
-          dataToSend.message = item.message; // Mesajı ekliyoruz
-        }
-        
-        if (item.ilac_form && item.ilac_form.name) { // ilac_form var mı kontrol et
-          dataToSend.form = item.ilac_form.name;
-        }
+      dataToSend.name = item.name;
       
-        // Navigasyonu gerçekleştir
-        navigation.navigate('Hatırlatıcı Oluşturma', {
-          dataToSend
-        });
+      // item.doz, item.bilgi ve item.form değerlerini kontrol et
+      if (item.doz) {
+        dataToSend.kuvvet = item.doz;
       }
-    };    
-  };
-  
-
-
+      
+      if (item.bilgi) {
+        dataToSend.bilgi = item.bilgi; // Farklı bir anahtar kullanıyoruz
+      }
+      
+      if (item.message) {
+        dataToSend.message = item.message; // Mesajı ekliyoruz
+      }
+      
+      if (item.ilac_form && item.ilac_form.name) { // ilac_form var mı kontrol et
+        dataToSend.form = item.ilac_form.name;
+      }
+    
+      // Navigasyonu gerçekleştir
+      navigation.navigate('Hatırlatıcı Oluşturma', {
+        dataToSend
+      });
+    }
+  };   
 
   // Reklam yükle
   useEffect(() => {
@@ -89,7 +88,7 @@ const NidSearchPage = ({ route }) => {
     ) : (
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.infoContainer}>
-          <Text style={styles.medText}>{item.name} id {item.id}</Text>
+          <Text style={styles.medText}>{item.name}</Text>
           
           {item.hastaliklar && item.hastaliklar.name && (
             <Text style={styles.ingredientText}>{item.hastaliklar.name} hastalığı için</Text>
@@ -135,7 +134,14 @@ const NidSearchPage = ({ route }) => {
           </TouchableOpacity>
 
           <TouchableOpacity 
-             style={item.message === "Kullanımı önerilmez." || item.message === "Kullanımı önerilmez" ? styles.remindersButton : styles.remindersButtonDisable}
+            style={styles.instructionsButton} 
+            onPress={() => navigation.navigate('Ana Sayfa')}
+          >
+            <Text style={styles.remindersButtonText}>Ana Sayfa</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+             style={item.message === "Kullanımı önerilmez." || item.message === "Kullanımı önerilmez" ? styles.remindersButtonDisable : styles.remindersButton}
             onPress={handleNavigateReminder}
           >
             <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>

@@ -41,7 +41,7 @@ const NidSearchPage = ({ route }) => {
     // Seçilen supplement'i item'in içerisine ekleyerek güncelleme
    
     // MedicineDetail'e yönlendirme yaparken güncellenmiş item'i gönderiyoruz
-    navigation.navigate('VitSearch', { item: supplement });
+    navigation.navigate('Besin Takviyeleri', { item: supplement });
   };
 
   return (

@@ -125,7 +125,7 @@ const App = () => {
             <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
           ) : null}
         
-        <View style={styles.divider} />
+        
       </View>
     </TouchableOpacity>
   );
