@@ -35,7 +35,7 @@ const Hatirlaticilar = () => {
   const screenWidth = Dimensions.get('window').width;
 
   const handlePress = () => {
-    navigation.replace('Arama');
+    navigation.replace('Arama', { showModal: false });
   };
 
   

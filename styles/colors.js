@@ -41,4 +41,7 @@ export const colors = {
     iconHeight:iconHeight,
     loadingSize:loadingSize,
     uygulamaIkinciRengi:'#5F1DF2',
+    uygulamaIkinciRengiDisabled:'#E0B0FF',
+    uygulamaGoogleRengi:'#F4B400',
+    uygulamaGoogleRengiDisabled:'#E0D500 ',
   };

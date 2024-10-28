@@ -7,13 +7,48 @@ import { useNavigation } from '@react-navigation/native'; // navigate fonksiyonu
 import axios from 'axios';
 import { colors } from '../../styles/colors';
 
-const App = () => {
+const App = ({ route }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [medicines, setMedicines] = useState([]);
   const navigation = useNavigation(); // useNavigation kullanımı
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [showModalImmediately, setShowModalImmediately] = useState(true); // Modalın hemen gösterilip gösterilmeyeceğini kontrol eden durum
+  
+  
+  useEffect(() => {
+    console.log(route.params);
+    if (Object.keys(route.params).length === 0) { // Eğer route.params boşsa
+      setShowModalImmediately(true);
+    }
+    else
+    {
+      if (route.params?.showSearch === false) { 
+        console.log("showSearch durumu aktif");
+       // setIsSearching(true); // Arama kutusunu aç şimdilik kalsın klavye açılıp kapanıyor çok sorunlu bir şekilde
+        console.log(isSearching);
+        Keyboard.dismiss();
+      } else if (route.params?.showModal === false) {
+        console.log("showModal durumu aktif");
+        // Burada showModal'e özel işlemler yapılabilir
+        setShowModalImmediately(false);
+      }
+
+    }
+  }, [route.params]);
+
+  useEffect(() => {
+    console.log("isSearching updated:", isSearching);
+  }, [isSearching]);
+
+
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+
 
   const createReminder = () => {
     navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
@@ -30,23 +65,28 @@ const App = () => {
   };
 
 
-  // Modalı açan fonksiyon
-  const openModal = (item) => {
-    setSelectedItem(item); // Tıklanan item'i state'e kaydet
-    setModalVisible(true); // Modalı aç3
-  };
+  // Optimized modal open function
+const openModal = (item) => {
+  setSelectedItem(item);
+  if (showModalImmediately) {
+    setModalVisible(true);
+  } else {
+    navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+  }
+};
 
   const closeModal = () => {
     setSelectedItem(null); // selectedItem sıfırlanıyor
     setModalVisible(false); // Modal kapanıyor
   };
 
+  
+
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
         const response = await axios.get(API_ROUTES.COMBINED);
         setMedicines(response.data);
-        console.log("data",response.data);
 
       } catch (error) {
         // console.error('Error fetching data:', error);
@@ -118,11 +158,11 @@ const App = () => {
     >
       <View style={styles.medicineItem}>
         <View style={styles.medicineContent}>
-          <Text style={styles.medicineName}>{item.name}</Text>
+          <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
           <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
         {item.etken_madde ? (
-            <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
+            <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
           ) : null}
         
         

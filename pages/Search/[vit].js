@@ -54,6 +54,11 @@ const NidSearchPage = ({ route }) => {
     setModalVisible(false); // Modalı kapat
   };
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
 
   // Modalı açan fonksiyon
   const openModal = (item) => {
@@ -135,13 +140,18 @@ const NidSearchPage = ({ route }) => {
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
+      
     >
       <View style={styles.medicineItem}>
         <View style={styles.medicineContent}>
-          <Text style={styles.medicineName}>{item.name}</Text>
-          <Ionicons name="chevron-forward-outline" size={30} color="#000" />
+          <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
+          <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
-        <Text style={styles.activeIngredient}>{item.activeIngredient}</Text>
+        {item.etken_madde ? (
+            <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
+          ) : null}
+        
+        
       </View>
     </TouchableOpacity>
   );

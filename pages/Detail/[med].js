@@ -10,20 +10,40 @@ const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
   const [loading, setLoading] = useState(false); 
   const navigation = useNavigation();
+  const [isNotRecommended, setIsNotRecommended] = useState(false); // Yeni durum eklendi
 
   const { isLoaded, isClosed, load, show } = useInterstitialAd(TestIds.INTERSTITIAL, {
     requestNonPersonalizedAdsOnly: true,
   });
 
   useEffect(() => {
-    if (item.message === "0 ölçek kullanın.") {
-      item.message = "Kullanımı önerilmez."; // Değişiklik burada
+    // message, doz veya bilgi alanlarını kontrol et
+    if (
+      item.message === "0 ölçek kullanın." || 
+      item.message === "Kullanımı önerilmez." || 
+      item.message === "Kullanımı önerilmez" || 
+      item.doz === "0 ölçek kullanın." || 
+      item.doz === "Kullanımı önerilmez." || 
+      item.doz === "Kullanımı önerilmez" || 
+      item.bilgi === "0 ölçek kullanın." || 
+      item.bilgi === "Kullanımı önerilmez." ||
+      item.bilgi === "Kullanımı önerilmez"
+    ) {
+      setIsNotRecommended(true); // Durum true yapıldı
+      console.log(isNotRecommended);
     }
-  }, [item.message]);
+  }, [item]);
+
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+
 
   const handleNavigateReminder = () => {
     // Mesaj "Kullanımı önerilmez." veya "Kullanımı önerilmez" değilse devam et
-    if (item.message !== "Kullanımı önerilmez." || item.message !== "Kullanımı önerilmez") {
+    
       // Boş bir nesne oluştur
       const dataToSend = {};
       
@@ -35,11 +55,11 @@ const NidSearchPage = ({ route }) => {
       }
       
       if (item.bilgi) {
-        dataToSend.bilgi = item.bilgi; // Farklı bir anahtar kullanıyoruz
+        dataToSend.kuvvet = item.bilgi; // Farklı bir anahtar kullanıyoruz
       }
       
       if (item.message) {
-        dataToSend.message = item.message; // Mesajı ekliyoruz
+        dataToSend.kuvvet = item.message; // Mesajı ekliyoruz
       }
       
       if (item.ilac_form && item.ilac_form.name) { // ilac_form var mı kontrol et
@@ -50,7 +70,7 @@ const NidSearchPage = ({ route }) => {
       navigation.navigate('Hatırlatıcı Oluşturma', {
         dataToSend
       });
-    }
+    
   };   
 
   // Reklam yükle
@@ -88,16 +108,16 @@ const NidSearchPage = ({ route }) => {
     ) : (
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.infoContainer}>
-          <Text style={styles.medText}>{item.name}</Text>
+          <Text style={styles.medText}>{capitalizeFirstLetter(item.name)}</Text>
           
           {item.hastaliklar && item.hastaliklar.name && (
-            <Text style={styles.ingredientText}>{item.hastaliklar.name} hastalığı için</Text>
+            <Text style={styles.ingredientText}>{capitalizeFirstLetter(item.hastaliklar.name)} hastalığı için</Text>
           )}
           {item.etken_madde && (
-            <Text style={styles.ingredientText}>{item.etken_madde}</Text>
+            <Text style={styles.ingredientText}>{capitalizeFirstLetter(item.etken_madde)}</Text>
           )}
           {item.ilac_kategori && item.ilac_kategori.name && (
-            <Text style={styles.ingredientText}>{item.ilac_kategori.name}</Text>
+            <Text style={styles.ingredientText}>{capitalizeFirstLetter(item.ilac_kategori.name)}</Text>
           )}
         </View>
 
@@ -106,26 +126,32 @@ const NidSearchPage = ({ route }) => {
             <Text style={styles.resultText}>{result}</Text>
           ) : (
             <>
-              {item.message && (
-                <Text style={styles.resultText}
-                >Doz Miktarı: {item.message}{item.message.slice(-1) !== '.' ? '.' : ''}</Text>
-              )}
-              {item.message !== "Kullanımı önerilmez." && item.message !== "Kullanımı önerilmez." && item.kullanim_sikligi && (
-                <Text style={styles.resultText}>
-                Kullanım Sıklığı: {item.kullanim_sikligi}{item.kullanim_sikligi.slice(-1) !== '.' ? '.' : ''}
-                </Text>
-              )}
-              {item.doz && (
-                <Text style={styles.resultText}>{item.doz}{item.doz.slice(-1) !== '.' ? '.' : ''}</Text>
-              )}
-              {item.bilgi && (
-                <Text style={styles.resultText}>{item.bilgi}{item.bilgi.slice(-1) !== '.' ? '.' : ''}</Text>
+               {isNotRecommended ? ( // isNotRecommended kontrolü
+                <Text style={styles.resultText}>Kullanımı önerilmez.</Text>
+              ) : (
+                <>
+                  {item.message && (
+                    <Text style={styles.resultText}
+                    >Doz Miktjarı: {item.message}{item.message.slice(-1) !== '.' ? '.' : ''}</Text>
+                  )}
+                  {item.kullanim_sikligi && (
+                    <Text style={styles.resultText}>
+                    Kullanım Sıklığı: {item.kullanim_sikligi}{item.kullanim_sikligi.slice(-1) !== '.' ? '.' : ''}
+                    </Text>
+                  )}
+                  {item.doz && (
+                    <Text style={styles.resultText}>{item.doz}{item.doz.slice(-1) !== '.' ? '.' : ''}</Text>
+                  )}
+                  {item.bilgi && (
+                    <Text style={styles.resultText}>{item.bilgi}{item.bilgi.slice(-1) !== '.' ? '.' : ''}</Text>
+                  )}
+                </>
               )}
             </>
           )}
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainer2}>
           <TouchableOpacity 
             style={styles.instructionsButton} 
             onPress={handlePress}
@@ -134,18 +160,19 @@ const NidSearchPage = ({ route }) => {
           </TouchableOpacity>
 
           <TouchableOpacity 
-            style={styles.instructionsButton} 
+            style={styles.homeButton} 
             onPress={() => navigation.navigate('Ana Sayfa')}
           >
             <Text style={styles.remindersButtonText}>Ana Sayfa</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity 
-             style={item.message === "Kullanımı önerilmez." || item.message === "Kullanımı önerilmez" ? styles.remindersButtonDisable : styles.remindersButton}
-            onPress={handleNavigateReminder}
-          >
-            <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
-          </TouchableOpacity>
+          {!isNotRecommended && (
+            <TouchableOpacity 
+            style={isNotRecommended ? styles.remindersButtonDisable : styles.remindersButton}
+            onPress={isNotRecommended ? null : handleNavigateReminder}
+            >
+              <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
+            </TouchableOpacity> 
+          )}
         </View>
       </ScrollView>
     )

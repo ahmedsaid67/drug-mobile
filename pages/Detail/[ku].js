@@ -53,7 +53,10 @@ const UseInfo = ({ route }) => {
   };
   
 
-
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
 // burada eğer hastalıklar var ise hastalığa yoksa ınputa bunun seçimi yapılacak
   const handleAccept = () => {
    
@@ -88,7 +91,7 @@ const UseInfo = ({ route }) => {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.infoContainer}>
         <Ionicons name="information-circle"  style={styles.icons}/>
-          <Text style={styles.medText}>{data.name}  </Text>
+          <Text style={styles.medText}>{capitalizeFirstLetter(data.name)}  </Text>
         
           
           <Text style={styles.warningText}>Uygulama, yalnızca bilgilendirme amaçlıdır ve tıbbi tavsiye niteliği taşımaz. Kullanıcı, sağlık durumu ile ilgili her zaman doktoruna veya bir sağlık uzmanına danışmalıdır.

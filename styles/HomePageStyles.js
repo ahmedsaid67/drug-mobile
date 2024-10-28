@@ -103,9 +103,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   loadingContainer:{
-    height: width * 0.38,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1, // Tüm alanı kapla
+    backgroundColor: colors.MainContainerBackground,
+    justifyContent: 'center', // Dikey ortalama
+    alignItems: 'center', // Yatay ortalama
 
   }
 });

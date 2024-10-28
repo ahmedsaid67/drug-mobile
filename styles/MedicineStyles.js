@@ -49,6 +49,15 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
   },
+  buttonContainer2: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
   backButton: {
     backgroundColor: '#9e9e9e', // Daha yumuşak bir gri ton
     height: colors.buttonHeight,
@@ -123,9 +132,19 @@ const styles = StyleSheet.create({
   },
   instructionsButton: {
     flex: 1,
+    backgroundColor: colors.uygulamaRengi,
+    padding: 15,
+    marginHorizontal: 5,
+    marginVertical: 5,
+    borderRadius: 5,  
+    justifyContent: "center",
+  },
+  homeButton: {
+    flex: 1,
     backgroundColor: colors.uygulamaIkinciRengi,
     padding: 15,
     marginHorizontal: 5,
+    marginVertical: 5,
     borderRadius: 5,  
     justifyContent: "center",
   },
@@ -136,14 +155,14 @@ const styles = StyleSheet.create({
   },
   remindersButton: {
     flex: 1,
-    backgroundColor: colors.uygulamaRengi,
+    backgroundColor: colors.uygulamaGoogleRengi,
     padding: 15,
     marginHorizontal: 5,
     borderRadius: 5,  
   },
   remindersButtonDisable: {
     flex: 1,
-    backgroundColor: colors.uygulamaRengiDisabled,
+    backgroundColor: colors.uygulamaGoogleRengiDisabled,
     padding: 15,
     marginHorizontal: 5,
     borderRadius: 5,  

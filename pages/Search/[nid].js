@@ -128,6 +128,12 @@ const NidSearchPage = ({ route }) => {
     }
   };
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+
   const navigate = useNavigation();
  
   const renderItem = ({ item }) => (
@@ -138,10 +144,10 @@ const NidSearchPage = ({ route }) => {
       <View style={styles.medicineItem}>
         
         <View style={styles.medicineContent}>
-          <Text style={styles.medicineName}>{item.name}</Text>
+          <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
           <Ionicons name="chevron-forward-outline" size={30} color="#000" />
         </View>
-        <Text style={styles.activeIngredient}>{item.etken_madde}</Text>
+        <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
         
       </View>
     </TouchableOpacity>

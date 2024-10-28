@@ -44,7 +44,10 @@ const HomePage = () => {
       }
       finally {
         
+        
           setLoading(false); 
+        
+          
         
        
       }
@@ -95,6 +98,11 @@ const HomePage = () => {
 
 
   return (
+    loading ? ( 
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.uygulamaRengi} />
+      </View>
+    ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
     <View >
       
@@ -105,7 +113,7 @@ const HomePage = () => {
         placeholder="Ara..."
         value={searchTerm}
         onChangeText={setSearchTerm}
-        onPress={() => navigateToScreen('Arama')} // Tıklanıldığında arama sayfasına yönlendir
+        onPress={() => navigateToScreen('Arama', { showSearch: false })} // Tıklanıldığında arama sayfasına yönlendir
       />
 
       {/* İlaçlar */}
@@ -157,7 +165,7 @@ const HomePage = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.reminderButton}
-        onPress={() => navigateToScreen('ReminderSearch')}>
+        onPress={() => navigateToScreen('Arama', { showModal: false })}>
           
             <Text style={styles.reminderText}>Hatırlatıcı Ekle</Text>
             <Ionicons name="timer-outline" size={30} color="#fff" />
@@ -165,7 +173,9 @@ const HomePage = () => {
       </View>
     </View>
     </ScrollView>
+    )
   );
+  
 };
 
 export default HomePage;
