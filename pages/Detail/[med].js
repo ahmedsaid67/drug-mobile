@@ -70,7 +70,7 @@ const NidSearchPage = ({ route }) => {
     
 
       if (user.id) {
-        navigation.navigate('Hatırlatıcı Oluştur', {dataToSend });
+        navigation.navigate('Hatırlatıcı Oluşturma', {dataToSend });
       } else {
         navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
       }
