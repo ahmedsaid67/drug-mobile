@@ -154,10 +154,6 @@ const NidSearchPage = ({ route }) => {
           <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
           <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
-        {item.etken_madde ? (
-            <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
-          ) : null}
-        
         
       </View>
     </TouchableOpacity>

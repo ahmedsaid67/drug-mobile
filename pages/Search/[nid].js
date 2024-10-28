@@ -147,15 +147,21 @@ const NidSearchPage = ({ route }) => {
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
+      
     >
       <View style={styles.medicineItem}>
-        
-        <View style={styles.medicineContent}>
+
+        <View  style={styles.firstContainer}>
           <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
-          <Ionicons name="chevron-forward-outline" size={30} color="#000" />
+          
+          {item.etken_madde ? (
+            <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
+          ) : null}
         </View>
-        <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
+          <View style={styles.medicineContent}>
         
+          <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
+        </View>
       </View>
     </TouchableOpacity>
   );
