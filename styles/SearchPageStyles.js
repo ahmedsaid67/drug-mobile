@@ -5,9 +5,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.MainContainerBackground,
+    padding: colors.mainPadingVertical,
+    paddingBottom: 0,
   },
   searchBoxContainer: {
-    padding: 16,
     color: colors.text,
   },
   searchBox: {
@@ -35,10 +36,20 @@ const styles = StyleSheet.create({
   searchResultsContainer: {
     flex: 1,
   },
+  firstContainer: {
+    width: "85%"
+  },
+  searchResultsContainer: {
+    flex: 1,
+  },
   medicineItem: {
     width: '100%',
-    padding: 16,
-    borderBottomWidth: 0.2,
+    paddingVertical: colors.mainPadingHorizantal,
+    borderBottomWidth: 1,
+    borderColor: colors.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   medicineContent: {
     flexDirection: 'row',

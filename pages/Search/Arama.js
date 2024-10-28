@@ -157,15 +157,18 @@ const openModal = (item) => {
       
     >
       <View style={styles.medicineItem}>
-        <View style={styles.medicineContent}>
+
+        <View  style={styles.firstContainer}>
           <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
-          <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
-        </View>
-        {item.etken_madde ? (
+          
+          {item.etken_madde ? (
             <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
           ) : null}
+        </View>
+          <View style={styles.medicineContent}>
         
-        
+          <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
+        </View>
       </View>
     </TouchableOpacity>
   );

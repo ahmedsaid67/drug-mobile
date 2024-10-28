@@ -158,14 +158,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.uygulamaGoogleRengi,
     padding: 15,
     marginHorizontal: 5,
+    marginVertical: 5,
     borderRadius: 5,  
+    justifyContent: "center",
   },
   remindersButtonDisable: {
     flex: 1,
     backgroundColor: colors.uygulamaGoogleRengiDisabled,
     padding: 15,
     marginHorizontal: 5,
+    marginVertical: 5,
     borderRadius: 5,  
+    justifyContent: "center", 
   },
   remindersButtonText: {
     color: '#ffffff',
