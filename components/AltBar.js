@@ -4,12 +4,29 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Import Ionicons
 import styles from '../styles/AltBarStyles';
 import { colors } from '../styles/colors'; 
+import { useSelector } from 'react-redux';
 
 const AltBar = ({ currentRoute }) => {
   const navigate = useNavigation();
+  const user = useSelector((state) => state.user);
 
   const navigateToScreen = (screenName, params = {}) => {
-    navigate.navigate(screenName, params);
+    
+    if (screenName==="Hatırlatıcılar"){
+      if (user.id) {
+        navigate.navigate(screenName, params);
+      } else {
+        navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
+      }
+    }else if ("Bildirimler") {
+      if (user.id) {
+        navigate.navigate(screenName, params);
+      } else {
+        navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
+      }
+    }else{
+      navigate.navigate(screenName, params);
+    }
   };
 
   const getIconColor = (screenName) => {
