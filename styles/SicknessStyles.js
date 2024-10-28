@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     
   },
   hastalikText: {
-    fontSize: colors.fontSizeTextLarge,
+    fontSize: colors.fontSizeText,
     color: "black",
     textAlign: 'left',  // Sol hizalı metin
   },

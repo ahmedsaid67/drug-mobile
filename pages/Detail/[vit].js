@@ -5,12 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { API_ROUTES } from '../../utils/constant';
 import axios from 'axios';
 import { colors } from '../../styles/colors';
+import { useSelector } from 'react-redux';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; // Get selected item
   const [data, setData] = useState(null); // Gelen veriyi duruma kaydetmek için null ile başlattık
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true); 
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +56,12 @@ const NidSearchPage = ({ route }) => {
       <TouchableOpacity 
           style={styles.instructionsButton} 
           onPress={() => {
-            navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+            
+            if (user.id) {
+              navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+            } else {
+              navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+            }
           }}
         >
           <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>

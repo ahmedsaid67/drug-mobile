@@ -102,28 +102,7 @@ const Login = () => {
 
   useEffect(() => {
     if (loginStatus) {
-      const previousRoute = navigation.getState()?.routes[navigation.getState().index - 1]?.name;
-      const twoStepsBackRoute = navigation.getState()?.routes[navigation.getState().index - 2]?.name;
-  
-      // Eğer bir önceki sayfa 'Arama' veya 'Ana Sayfa' ise 'Ana Sayfa'ya yönlendir
-      if (previousRoute === 'Arama' || previousRoute === 'Ana Sayfa') {
-        navigation.navigate('Ana Sayfa');
-      }
-      // Eğer bir önceki sayfa 'Bildirimler', 'Hatırlatıcılar' ise geri git
-      else if (previousRoute === 'Bildirimler' || previousRoute === 'Hatırlatıcılar') {
-        navigation.replace(previousRoute);
-      }
-      // Eğer 'Hatırlatıcı Oluştur' sayfası ise 2 önceki sayfaya yönlendir
-      else if (previousRoute === 'Hatırlatıcı Oluştur' && twoStepsBackRoute) {
-        navigation.navigate(twoStepsBackRoute); // İki önceki sayfaya yönlendirme
-      }
-      // Diğer tüm durumlarda 'Ana Sayfa'ya yönlendir
-      else {
-        navigation.navigate('Ana Sayfa');
-      }
-  
-      // // Uygulama başlangıcında bildirimleri kontrol et
-      // checkNotificationsOnAppStart();
+      navigation.navigate('Ana Sayfa');
     }
   }, [loginStatus, navigation]);
   

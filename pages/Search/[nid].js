@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_ROUTES } from '../../utils/constant';
 import { colors } from '../../styles/colors';
+import { useSelector } from 'react-redux';
 
 // Sembolleri temizlemek için yardımcı fonksiyon
 const cleanString = (str) => {
@@ -44,8 +45,14 @@ const NidSearchPage = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const user = useSelector((state) => state.user);
+
   const createReminder = () => {
-    navigate.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    if (user.id) {
+      navigate.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    } else {
+      navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
+    }
     setModalVisible(false); // Modalı kapat
   };
 
@@ -214,6 +221,7 @@ const NidSearchPage = ({ route }) => {
         onEndReached={handleLoadMore} // Yeni sayfa yüklemek için
         onEndReachedThreshold={0.5} // Yükleme eşiği
         ListFooterComponent={loadingMore ? <ActivityIndicator size="small" color={colors.uygulamaRengi} /> : null} // Daha fazla yükleniyor mesajı
+        showsVerticalScrollIndicator={false}
       />
     </View>
   )

@@ -94,7 +94,7 @@ const Hatirlaticilar = () => {
     if (loginStatus){
       fetchData();
     }else{
-      navigation.navigate('Giriş')
+      navigation.navigate('Üyelik')
     }
 
     

@@ -40,7 +40,7 @@ function Bildirimler() {
     if (loginStatus) {
       fetchNotifications();
     } else {
-      navigation.navigate('Giriş');
+      navigation.navigate('Üyelik');
     }
   }, [page]); // Fetch notifications whenever the page changes
   

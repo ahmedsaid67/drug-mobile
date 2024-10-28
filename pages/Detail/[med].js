@@ -5,12 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../styles/colors';
 import { useInterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads'
 import Ionicons from 'react-native-vector-icons/Ionicons';;
+import { useSelector } from 'react-redux';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
   const [loading, setLoading] = useState(false); 
   const navigation = useNavigation();
   const [isNotRecommended, setIsNotRecommended] = useState(false); // Yeni durum eklendi
+  const user = useSelector((state) => state.user);
 
   const { isLoaded, isClosed, load, show } = useInterstitialAd(TestIds.INTERSTITIAL, {
     requestNonPersonalizedAdsOnly: true,
@@ -66,10 +68,12 @@ const NidSearchPage = ({ route }) => {
         dataToSend.form = item.ilac_form.name;
       }
     
-      // Navigasyonu gerçekleştir
-      navigation.navigate('Hatırlatıcı Oluşturma', {
-        dataToSend
-      });
+
+      if (user.id) {
+        navigation.navigate('Hatırlatıcı Oluştur', {dataToSend });
+      } else {
+        navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+      }
     
   };   
 

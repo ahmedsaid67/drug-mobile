@@ -371,7 +371,7 @@ const ReminderCreate = ({ route, navigation }) => {
     
 
     if (!loginStatus){
-        navigation.navigate('Giriş')
+        navigation.navigate('Üyelik')
     }
 
     return (

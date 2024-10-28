@@ -37,6 +37,7 @@ import InputKg from "./Detail/[InputKg].js";
 import InputAge from "./Detail/[InputAge].js";
 import Check from "./Detail/[Check].js";
 
+import LoginPromptScreen from './LoginPromptScreen.js'
 
 const Stack = createNativeStackNavigator();
 
@@ -233,6 +234,7 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="Kilo Bilgisi" component={InputKg} />
         <Stack.Screen name="Yaş Bilgisi" component={InputAge} />
         <Stack.Screen name="Uyarı" component={Check} />
+        <Stack.Screen name="Üyelik" component={LoginPromptScreen} />
       </Stack.Navigator>
     </Layout>
   );

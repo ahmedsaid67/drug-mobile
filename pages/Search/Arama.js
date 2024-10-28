@@ -6,6 +6,7 @@ import { API_ROUTES } from '../../utils/constant';
 import { useNavigation } from '@react-navigation/native'; // navigate fonksiyonu için
 import axios from 'axios';
 import { colors } from '../../styles/colors';
+import { useSelector } from 'react-redux';
 
 const App = ({ route }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,7 +16,7 @@ const App = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModalImmediately, setShowModalImmediately] = useState(true); // Modalın hemen gösterilip gösterilmeyeceğini kontrol eden durum
-  
+  const user = useSelector((state) => state.user);
   
   useEffect(() => {
     console.log(route.params);
@@ -26,7 +27,7 @@ const App = ({ route }) => {
     {
       if (route.params?.showSearch === false) { 
         console.log("showSearch durumu aktif");
-       // setIsSearching(true); // Arama kutusunu aç şimdilik kalsın klavye açılıp kapanıyor çok sorunlu bir şekilde
+        // setIsSearching(true); // Arama kutusunu aç şimdilik kalsın klavye açılıp kapanıyor çok sorunlu bir şekilde
         console.log(isSearching);
         Keyboard.dismiss();
       } else if (route.params?.showModal === false) {
@@ -51,7 +52,11 @@ const App = ({ route }) => {
 
 
   const createReminder = () => {
-    navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    if (user.id) {
+      navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    } else {
+      navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+    }
     setModalVisible(false); // Modalı kapat
   };
 
@@ -71,7 +76,11 @@ const openModal = (item) => {
   if (showModalImmediately) {
     setModalVisible(true);
   } else {
-    navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+    if (user.id) {
+      navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    } else {
+      navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+    }
   }
 };
 
@@ -220,6 +229,7 @@ const openModal = (item) => {
           data={filteredMedicines} // data prop'u FlatList'e eklenmeli
           keyExtractor={item => item.id.toString()}
           renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

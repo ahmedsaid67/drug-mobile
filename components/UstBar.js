@@ -29,22 +29,19 @@ const UstBar = ({ showBars, currentRoute }) => {
   : currentRoute;
 
   const navigatorHandle =()=>{
-    if (currentRoute === 'Giriş') {
+    if (currentRoute === 'Üyelik') {
       const previousRoute = navigation.getState()?.routes[navigation.getState().index - 1]?.name;
       const twoStepsBackRoute = navigation.getState()?.routes[navigation.getState().index - 2]?.name;
+      console.log("check")
 
-      // Eğer bir önceki sayfa Ana Sayfa veya Arama ise
-      if (previousRoute === 'Ana Sayfa' || previousRoute === 'Arama') {
-          navigation.goBack(); // Bir önceki sayfaya yönlendir
-      } 
-      // Eğer Bildirimler veya Hatırlatıcılar ise iki önceki sayfaya yönlendir
-      else if (previousRoute === 'Bildirimler' || previousRoute === 'Hatırlatıcılar' || previousRoute === 'Hatırlatıcı Oluştur') {
+      if (previousRoute === 'Bildirimler' || previousRoute === 'Hatırlatıcılar') {
           navigation.navigate(twoStepsBackRoute);
-      } else {
-          navigation.navigate('Ana Sayfa'); // Eğer giriş sayfasındaysan Ana Sayfa'ya git
+      }else{
+        navigation.goBack();
       }
     } else {
         navigation.goBack(); // Diğer durumlar için geri git
+        console.log("check2")
     }
   }
 
