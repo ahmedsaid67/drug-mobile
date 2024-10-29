@@ -136,7 +136,7 @@ const NidSearchPage = ({ route }) => {
                 <>
                   {item.message && (
                     <Text style={styles.resultText}
-                    >Doz Miktjarı: {item.message}{item.message.slice(-1) !== '.' ? '.' : ''}</Text>
+                    >Doz Miktarı: {item.message}{item.message.slice(-1) !== '.' ? '.' : ''}</Text>
                   )}
                   {item.kullanim_sikligi && (
                     <Text style={styles.resultText}>
