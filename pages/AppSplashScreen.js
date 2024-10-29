@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',  // Center vertically within this container
     },
     agreementText: {
-      fontSize: height * 0.015,
+      fontSize: height * 0.016,
         color: 'black', // Default text color
     },
     agreementHighlight: {
         color: colors.uygulamaRengi,
-        fontSize: height * 0.015,
+        fontSize: height * 0.016,
         marginLeft: height * 0.01,
     },
     modalView: {
