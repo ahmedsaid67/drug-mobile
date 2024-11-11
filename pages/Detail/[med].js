@@ -14,7 +14,7 @@ const NidSearchPage = ({ route }) => {
   const [isNotRecommended, setIsNotRecommended] = useState(false); // Yeni durum eklendi
   const user = useSelector((state) => state.user);
 
-  const { isLoaded, isClosed, load, show } = useInterstitialAd(TestIds.INTERSTITIAL, {
+  const { isLoaded, isClosed, load, show } = useInterstitialAd('ca-app-pub-9748836659878475/6132721205', {
     requestNonPersonalizedAdsOnly: true,
   });
 

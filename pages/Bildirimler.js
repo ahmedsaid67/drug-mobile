@@ -91,20 +91,39 @@ function Bildirimler() {
 
 
   const renderNotification = ({ item }) => {
-    const formattedTime = item.saat.split(':').slice(0, 2).join(':'); 
+    // notificationMessage'ı parçalıyoruz
+    const [title, strength, details] = item.explanations.split(' - ');
+    console.log("title:",title)
+    console.log("strength:",strength)
+    console.log("details:",details)
+  
+    // Saat ve tarihi formatlıyoruz
+    const formattedTime = item.saat.split(':').slice(0, 2).join(':');
     const formattedDate = item.tarih.split('-').reverse().join('.');
+  
     return (
       <View key={item.id} style={styles.notificationCard}>
         <View style={styles.notificationContent}>
-            <Text style={styles.description}>{item.explanations}</Text>
-            <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
+          {/* Başlık kısmı */}
+          <Text style={styles.description}>{title}</Text>
+          
+          {/* Kuvvet kısmı */}
+          {strength && <Text style={styles.descriptionSecond}>{strength}</Text>}
+          
+          {/* Detaylar kısmı */}
+          {details &&  <Text style={styles.descriptionSecond}>{details}</Text>}
+  
+          {/* Tarih ve saat */}
+          <Text style={styles.date}>{formattedDate} - {formattedTime}</Text> 
         </View>
-        <TouchableOpacity style={styles.iconContainer}  onPress={() => copyToClipboard(item.explanations, item.tarih, item.saat)}>
-            <Icon name="copy-outline" size={colors.iconHeight} color={colors.uygulamaRengi} />
+        
+        <TouchableOpacity style={styles.iconContainer} onPress={() => copyToClipboard(item.explanations, item.tarih, item.saat)}>
+          <Icon name="copy-outline" size={colors.iconHeight} color={colors.uygulamaRengi} />
         </TouchableOpacity>
       </View>
     );
   };
+
   const renderLoader = () => {
     return (
       loading ?

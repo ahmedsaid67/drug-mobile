@@ -34,9 +34,14 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.005,
     fontWeight: 'bold',
   },
+  descriptionSecond: {
+    fontSize: colors.fontSizeText,
+    color: colors.text,
+  },
   date: {
     fontSize: colors.fontSizeTextMini,
     color: colors.thirdText,
+    marginTop: height * 0.005,
   },
   iconContainer :{
     justifyContent:"flex-end",

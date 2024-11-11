@@ -192,7 +192,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         minute: parseInt(time.split(':')[1]),
                     });
     
-                    const notificationMessage = `${name} - ${kuvvet} (${form})`;
+                    const notificationMessage = `${name} - ${kuvvet} - ${form}`;
     
                     const notificationId = uuidv4();  // Benzersiz bir ID oluştur
     
