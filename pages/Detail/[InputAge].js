@@ -134,6 +134,46 @@ const Input = ({ route }) => {
           params = {ilac_id: ilacId, hastalik_id: hastalikId, yas: calculatedAge,  yas_birimi: "ay" }
           break;
         
+        case 9:
+          try {
+            const ageWeightData = await axios.get(API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AGE_AND_WEIGHT_DATA_AGE, {
+              params: {
+                ilac_id: ilacId,
+                hastalik_id: hastalikId,
+                age: calculatedYear
+              }
+            });
+
+
+            const { threshold_age } = ageWeightData.data;
+            console.log(ageWeightData.data);
+
+            if (parseInt(calculatedYear) > threshold_age) {
+              // Yaş eşik değerden küçükse kilo bilgisi isteniyor
+              console.log("Yaş eşik değerden büyük, kilo bilgisi isteniyor");
+              console.log("selamlar");
+              
+              const updatedItem = {
+                ...item,
+                input_yas: calculatedYear // Yaşı ekliyoruz
+              };
+              navigation.navigate('Kilo Bilgisi', { item: updatedItem });
+              
+              return; // Burada işlem bitiyor, bir sonraki aşamaya geçilmiyor.
+            }
+            
+            // Yaş kontrolü geçildi, ama kilo bilgisi gerekiyor olabilir
+            apiUrl = API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AGE_AND_WEIGHT;
+            params = { age: calculatedAge, ilac_id: ilacId, hastalik_id: hastalikId,  }
+           
+            
+
+          } catch (error) {
+            console.error("Hata oluştu: ", error);
+          }
+          
+          break;
+        
         default:
           setError('Geçersiz ID');
           return;

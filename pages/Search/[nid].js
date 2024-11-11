@@ -146,7 +146,10 @@ const NidSearchPage = ({ route }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
+      onPress={() => {
+        setSelectedItem(item); // Seçilen item'ı state'e kaydet
+        setModalVisible(true); // Modalı aç
+      }} // Modalı açmak ve item'i iletmek için
       
     >
       <View style={styles.medicineItem}>
@@ -176,6 +179,27 @@ const NidSearchPage = ({ route }) => {
     }
   };
 
+  const CustomModal = ({ visible, onClose, item, onNavigateToDoseCalculation, onCreateReminder }) => (
+    <Modal
+      transparent={true}
+      visible={visible}
+      animationType="none"
+      onRequestClose={onClose} // Geri tuşuna basılınca modal kapansın
+    >
+      <TouchableOpacity style={styles.modalBackground} onPress={onClose} activeOpacity={1}>
+        <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
+          <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
+          <TouchableOpacity style={styles.button} onPress={() => onNavigateToDoseCalculation(item)}>
+            <Text style={styles.buttonText}>Doz Hesaplama</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSecond} onPress={() => onCreateReminder(item)}>
+            <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
+  );
+
   
 
   return (
@@ -197,25 +221,14 @@ const NidSearchPage = ({ route }) => {
           onSubmitEditing={() => setIsSearching(false)}
         />
       </View>
-      {/* Modal */}
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        animationType="none"
-        onRequestClose={closeModal} // Geri tuşuna basılınca modal kapansın
-      >
-        <TouchableOpacity style={styles.modalBackground} onPress={closeModal} activeOpacity={1}>
-          <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
-            <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
-            <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
-              <Text style={styles.buttonText}>Doz Hesaplama</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSecond} onPress={createReminder}>
-              <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+      
+      <CustomModal 
+        visible={modalVisible} 
+        onClose={closeModal} 
+        item={selectedItem} 
+        onNavigateToDoseCalculation={navigateToDoseCalculation} 
+        onCreateReminder={createReminder} 
+      />
 
       {/* Eğer arama aktifse filtrelenmiş veriyi göster, değilse pagination verisini göster */}
       <FlatList

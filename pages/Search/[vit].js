@@ -47,17 +47,17 @@ const NidSearchPage = ({ route }) => {
 
   const user = useSelector((state) => state.user);
 
-  const createReminder = () => {
+  const createReminder = (item) => {
     if (user.id) {
-      navigate.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+      navigate.navigate('Hatırlatıcı Oluştur', { name: item.name });
     } else {
       navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
     }
     setModalVisible(false); // Modalı kapat
   };
 
-  const navigateToDoseCalculation = () => {
-    navigate.navigate('Vitamin Bilgisi', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+  const navigateToDoseCalculation = (item) => {
+    navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
     setModalVisible(false); // Modalı kapat
   };
 
@@ -69,7 +69,7 @@ const NidSearchPage = ({ route }) => {
 
   // Modalı açan fonksiyon
   const openModal = (item) => {
-    setSelectedItem(item); // Tıklanan item'i state'e kaydet
+    
     setModalVisible(true); // Modalı aç3
   };
 
@@ -146,15 +146,16 @@ const NidSearchPage = ({ route }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
-      
+      onPress={() => {
+        setSelectedItem(item); // Seçilen item'ı state'e kaydet
+        setModalVisible(true); // Modalı aç
+      }} 
     >
       <View style={styles.medicineItem}>
         <View style={styles.medicineContent}>
           <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
           <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
-        
       </View>
     </TouchableOpacity>
   );
@@ -169,7 +170,27 @@ const NidSearchPage = ({ route }) => {
     }
   };
 
-  
+  const CustomModal = ({ visible, onClose, item, onNavigateToDoseCalculation, onCreateReminder }) => (
+    <Modal
+      transparent={true}
+      visible={visible}
+      animationType="none"
+      onRequestClose={onClose} // Geri tuşuna basılınca modal kapansın
+    >
+      <TouchableOpacity style={styles.modalBackground} onPress={onClose} activeOpacity={1}>
+        <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
+          <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
+          <TouchableOpacity style={styles.button} onPress={() => onNavigateToDoseCalculation(item)}>
+            <Text style={styles.buttonText}>Doz Hesaplama</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSecond} onPress={() => onCreateReminder(item)}>
+            <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
+  );
+
   return (
     loading ? (
       <View style={styles.loadingContainer}>
@@ -190,25 +211,13 @@ const NidSearchPage = ({ route }) => {
         />
       </View>
 
-      {/* Modal */}
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        animationType="none"
-        onRequestClose={closeModal} // Geri tuşuna basılınca modal kapansın
-      >
-        <TouchableOpacity style={styles.modalBackground} onPress={closeModal} activeOpacity={1}>
-          <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
-            <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
-            <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
-              <Text style={styles.buttonText}>Doz Hesaplama</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSecond} onPress={createReminder}>
-              <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+      <CustomModal 
+        visible={modalVisible} 
+        onClose={closeModal} 
+        item={selectedItem} // selectedItem'ı geçiyoruz
+        onNavigateToDoseCalculation={navigateToDoseCalculation} 
+        onCreateReminder={createReminder} 
+      />
 
       {/* Eğer arama aktifse filtrelenmiş veriyi göster, değilse pagination verisini göster */}
       <FlatList

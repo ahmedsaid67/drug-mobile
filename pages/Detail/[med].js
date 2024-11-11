@@ -3,9 +3,14 @@ import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'rea
 import styles from '../../styles/MedicineStyles';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../styles/colors';
-import { useInterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads'
+import { useInterstitialAd, TestIds, AdEventType, BannerAd } from 'react-native-google-mobile-ads'
 import Ionicons from 'react-native-vector-icons/Ionicons';;
 import { useSelector } from 'react-redux';
+
+import { Platform } from 'react-native';
+import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
+
+
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
@@ -13,9 +18,19 @@ const NidSearchPage = ({ route }) => {
   const navigation = useNavigation();
   const [isNotRecommended, setIsNotRecommended] = useState(false); // Yeni durum eklendi
   const user = useSelector((state) => state.user);
+  
 
-  const { isLoaded, isClosed, load, show } = useInterstitialAd('ca-app-pub-9748836659878475/6132721205', {
+  const adUnitId = __DEV__ || Platform.OS === 'ios'  ? TestIds.INTERSTITIAL : AddIdIos.GECİSPDF|| Platform.OS === 'android' ? TestIds.INTERSTITIAL : AddIdAndroid.GECİSPDF;
+
+  const bannerId =  __DEV__ || Platform.OS === 'ios'  ? TestIds.BANNER : AddIdIos.BANNERILAC|| Platform.OS === 'android' ? TestIds.BANNER : AddIdAndroid.BANNERILAC;
+
+
+
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
+    
     requestNonPersonalizedAdsOnly: true,
+    keywords: keywords.healthcare,
+    
   });
 
   useEffect(() => {
@@ -93,6 +108,7 @@ const NidSearchPage = ({ route }) => {
     if (item.document) {
       if (isLoaded) {
         // Reklam yüklendiyse, göster
+        console.log("reklam yüklendi");
         show();
       } else {
         // Reklam yüklenmediği durumda doğrudan navigate et
@@ -154,6 +170,8 @@ const NidSearchPage = ({ route }) => {
             </>
           )}
         </View>
+
+       
 
         <View style={styles.buttonContainer2}>
           <TouchableOpacity 

@@ -58,9 +58,32 @@ const Input = ({ route }) => {
 
          // hastalıklı artan kilo	FALSE	8
         case 8:
-          apiUrl = API_ROUTES.GET_INCREASING_DOSAGE_BY_DISEASE_AND_WEIGHT;
+          apiUrl = API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AND_WEIGHT;
           params = {kilo: inputValue, ilac_id: ilacId, hastalik_id: hastalikId}
           break;
+          
+        case 9:
+        // hastalık hem yas hem kilo artan
+          apiUrl = API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AGE_AND_WEIGHT, 
+          params= { age: item.input_yas, kilo: inputValue, ilac_id: ilacId, hastalik_id: hastalikId }
+            
+          break;
+
+        case 10:
+        // artan kilo
+          apiUrl = API_ROUTES.GET_DOSAGE_INCREASING_WEIGHT;
+          params = {kilo: inputValue, ilac_id: ilacId}
+
+          break;
+        
+        case 11:
+          // hastalık artan kilo
+          apiUrl = API_ROUTES.GET_INCREASED_DOSAGE_BY_DISEASE_AND_WEIGHT;
+          params = {kilo: inputValue, ilac_id: ilacId, hastalik_id: hastalikId}
+
+          break;
+
+
         default:
           setError('Geçersiz ID');
           return;
@@ -75,25 +98,36 @@ const Input = ({ route }) => {
           console.log(response.data);
           
 
+          function formatAllAmountsInString(input) {
+            return input.replace(/(\d+(\.\d+)?)(\s*ml)/g, (match, number) => {
+              const formattedNumber = formatAmount(number);
+              return formattedNumber;
+            });
+          }
+          
+          function formatAmount(value) {
+            const number = parseFloat(value.replace(",", "."));
+            if (isNaN(number)) return value;
+            return number % 1 === 0 ? `${number.toFixed(0)} ml` : `${number.toFixed(1).replace(".", ",")} ml`;
+          }
+          
+          // Kullanım:
           if (response?.data) {
-            // Check uyarı kontrolü
+            const formattedMessage = formatAllAmountsInString(response.data.message);
+          
+            const updatedItem = {
+              ...item,
+              ...response.data,
+              message: formattedMessage
+            };
+          
             if (response.data.check_uyari) {
-              const updatedItem = {
-                ...item,        // Mevcut item'deki tüm verileri koruyoruz
-                ...response.data // response.data'daki verileri item'a ekliyoruz
-              };
-            
-              navigation.navigate("Uyarı", {item: updatedItem});
+              navigation.navigate("Uyarı", { item: updatedItem });
             } else {
-              // Check uyarı yoksa sonuçları ayarla buradada med.js e gideceğiz
-              const updatedItem = {
-                ...item,        // Mevcut item'deki tüm verileri koruyoruz
-                ...response.data // response.data'daki verileri item'a ekliyoruz
-              }
-              navigation.navigate('İlaç Bilgisi',  { item: updatedItem  });
+              navigation.navigate("İlaç Bilgisi", { item: updatedItem });
             }
           } else {
-            setError('API çağrısı başarısız oldu');
+            setError("API çağrısı başarısız oldu");
           }
       
       

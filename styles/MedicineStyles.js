@@ -126,6 +126,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 15,
   },
+  adContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  adText: {
+    fontSize: colors.fontSizeText,
+    color: '#555',
+  },
+
   resultText: {
     fontSize: colors.fontSizeText, // Daha büyük metin
     color: colors.text, // Kırmızı uyarı metni

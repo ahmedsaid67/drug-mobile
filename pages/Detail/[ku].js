@@ -46,7 +46,7 @@ const UseInfo = ({ route }) => {
         ...response.data // Merge new data from response
       };
   
-      navigation.navigate('MedicineDetail', { item: updatedItem });
+      navigation.navigate('İlaç Bilgisi', { item: updatedItem });
     } catch (error) {
       console.error("Error fetching dosage:", error);
     }
@@ -63,9 +63,9 @@ const UseInfo = ({ route }) => {
     if(data.hastaliklar.length === 0 ){
       console.log("selamlar");
       const id = data.hassasiyet_turu.id;
-      if ([2,3,4,8].includes(id)) {
+      if ([2,3,4,8,10,11].includes(id)) {
         navigation.navigate('Kilo Bilgisi', { item: data  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-      } else if ([1,5,6].includes(id)) {
+      } else if ([1,5,6,9].includes(id)) {
         navigation.navigate('Yaş Bilgisi', { item: data  }); // 3, 5, 6 için hastalık detayına yönlendir
       }
       else {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator ,ScrollView} from 'react-native';
 import styles from '../../styles/SicknessStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -24,9 +24,9 @@ const NidSearchPage = ({ route }) => {
     
    
       const id = item.hassasiyet_turu.id;
-      if ([2,3,4].includes(id)) {
+      if ([2,3,4,8,10,11].includes(id)) {
         navigation.navigate('Kilo Bilgisi', { item: updatedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-      } else if ([1,5,6,7,8].includes(id)) {
+      } else if ([1,5,6,9].includes(id)) {
         navigation.navigate('Yaş Bilgisi', { item: updatedItem  }); // 3, 5, 6 için hastalık detayına yönlendir
       }
      
@@ -42,7 +42,7 @@ const NidSearchPage = ({ route }) => {
 
     <View style={styles.container}>
       <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen hastalığı seçiniz.</Text>
-      
+      <ScrollView showsVerticalScrollIndicator={false}>
       {/* Eğer hastalıklar listesi boşsa mesaj göster */}
       {hastaliklar.length === 0 ? (
         <TouchableOpacity 
@@ -63,6 +63,7 @@ const NidSearchPage = ({ route }) => {
           </TouchableOpacity>
         ))
       )}
+      </ScrollView>
     </View>
     )
   );

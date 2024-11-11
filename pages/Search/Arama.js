@@ -34,6 +34,7 @@ const App = ({ route }) => {
         console.log("showModal durumu aktif");
         // Burada showModal'e özel işlemler yapılabilir
         setShowModalImmediately(false);
+        console.log(showModalImmediately);
       }
 
     }
@@ -52,13 +53,18 @@ const App = ({ route }) => {
 
 
   const createReminder = () => {
-    if (user.id) {
-      navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+    if (user && user.id) {
+        if (selectedItem) {
+            navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name }); // selectedItem kontrolü
+        } else {
+            console.warn('Selected item is null'); // Hata mesajı yazdır
+        }
     } else {
-      navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+        navigation.navigate('Üyelik');
     }
-    setModalVisible(false); // Modalı kapat
+    setModalVisible(false);
   };
+
 
   const navigateToDoseCalculation = () => {
     if (selectedItem.sayfa === 'ilac') {
@@ -71,18 +77,18 @@ const App = ({ route }) => {
 
 
   // Optimized modal open function
-const openModal = (item) => {
-  setSelectedItem(item);
-  if (showModalImmediately) {
-    setModalVisible(true);
-  } else {
-    if (user.id) {
-      navigation.navigate('Hatırlatıcı Oluştur', { name: selectedItem.name });
+  const openModal = (item) => {
+    setSelectedItem(item);
+    if (showModalImmediately) {
+      setModalVisible(true);
     } else {
-      navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+      if (user.id) {
+        navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+      } else {
+        navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+      }
     }
-  }
-};
+  };
 
   const closeModal = () => {
     setSelectedItem(null); // selectedItem sıfırlanıyor
@@ -96,6 +102,7 @@ const openModal = (item) => {
       try {
         const response = await axios.get(API_ROUTES.COMBINED);
         setMedicines(response.data);
+        
 
       } catch (error) {
         // console.error('Error fetching data:', error);
@@ -159,11 +166,45 @@ const openModal = (item) => {
     }
   };
 
+  const CustomModal = ({ visible, onClose, item, onNavigateToDoseCalculation, onCreateReminder }) => (
+    <Modal
+      transparent={true}
+      visible={visible}
+      animationType="none"
+      onRequestClose={onClose} // Geri tuşuna basılınca modal kapansın
+    >
+      <TouchableOpacity style={styles.modalBackground} onPress={onClose} activeOpacity={1}>
+        <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
+          <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
+          <TouchableOpacity style={styles.button} onPress={() => onNavigateToDoseCalculation(item)}>
+            <Text style={styles.buttonText}>Doz Hesaplama</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSecond} onPress={() => onCreateReminder(item)}>
+            <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Modal>
+  );
+  
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
-      onPress={() => openModal(item)} // Modalı açmak ve item'i iletmek için
-      
+      onPress={() => {
+        if(showModalImmediately){
+          setSelectedItem(item); // Seçilen item'ı state'e kaydet
+          setModalVisible(true); // Modalı aç
+        }
+        else{
+          if (user.id) {
+            navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+          } else {
+            navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+          }
+        }
+        
+      }} 
     >
       <View style={styles.medicineItem}>
 
@@ -175,10 +216,10 @@ const openModal = (item) => {
           ) : null}
         </View>
           <View style={styles.medicineContent}>
-        
+
           <Ionicons name="chevron-forward-outline" size={colors.iconHeight} color={colors.text}/>
         </View>
-      </View>
+        </View>
     </TouchableOpacity>
   );
 
@@ -194,25 +235,13 @@ const openModal = (item) => {
           onSubmitEditing={handleSearchComplete}
         />
       </View>
-       {/* Modal */}
-       <Modal
-        transparent={true}
-        visible={modalVisible}
-        animationType="none"
-        onRequestClose={closeModal} // Geri tuşuna basılınca modal kapansın
-      >
-        <TouchableOpacity style={styles.modalBackground} onPress={closeModal} activeOpacity={1}>
-          <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
-            <Text style={styles.modalTitle}>Ne yapmak istersiniz?</Text>
-            <TouchableOpacity style={styles.button}  onPress={navigateToDoseCalculation}>
-              <Text style={styles.buttonText}>Doz Hesaplama</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSecond} onPress={createReminder}>
-              <Text style={styles.buttonText}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
+      <CustomModal 
+        visible={modalVisible} 
+        onClose={closeModal} 
+        item={selectedItem} 
+        onNavigateToDoseCalculation={navigateToDoseCalculation} 
+        onCreateReminder={createReminder} 
+      />
 
       {!searchTerm && !isSearching && (
         <ScrollView>
@@ -227,7 +256,7 @@ const openModal = (item) => {
           style={styles.searchResultsContainer}
           keyboardShouldPersistTaps="always"
           data={filteredMedicines} // data prop'u FlatList'e eklenmeli
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item) => `${item.sayfa}_${item.id}`}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
         />

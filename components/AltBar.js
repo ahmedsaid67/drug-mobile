@@ -18,13 +18,16 @@ const AltBar = ({ currentRoute }) => {
       } else {
         navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
       }
-    }else if ("Bildirimler") {
+    }
+    else if (screenName === "Bildirimler") {
       if (user.id) {
         navigate.navigate(screenName, params);
       } else {
         navigate.navigate('Üyelik'); // Navigate to Login if user is not logged in
       }
-    }else{
+      
+    }
+    else{
       navigate.navigate(screenName, params);
     }
   };

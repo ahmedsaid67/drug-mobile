@@ -5,13 +5,11 @@ import styles from '../styles/HomePageStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_ROUTES } from '../utils/constant';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { colors } from '../styles/colors';
 
 
 const { width } = Dimensions.get('window');
 
-const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-9748836659878475/7669164151';
 
 
 const HomePage = () => {
