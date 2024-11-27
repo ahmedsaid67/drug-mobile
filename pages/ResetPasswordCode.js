@@ -89,7 +89,7 @@ const ResetPasswordCode = () => {
             <Text style={styles.title}>Şifre Sıfırlama</Text>
 
             <TextInput
-            style={styles.input}
+            style={[styles.input, errors.email && styles.inputError]}
             placeholder="Email"
             onChangeText={(text) => {
               setEmail(text);

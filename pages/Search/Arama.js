@@ -8,6 +8,11 @@ import axios from 'axios';
 import { colors } from '../../styles/colors';
 import { useSelector } from 'react-redux';
 
+import { useInterstitialAd, TestIds, AdEventType, BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+
+import { Platform } from 'react-native';
+import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
+
 const App = ({ route }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -17,6 +22,30 @@ const App = ({ route }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showModalImmediately, setShowModalImmediately] = useState(true); // Modalın hemen gösterilip gösterilmeyeceğini kontrol eden durum
   const user = useSelector((state) => state.user);
+
+  const adUnitId =  __DEV__ ? TestIds.INTERSTITIAL : Platform.OS === 'ios' ? AddIdIos.GECİSVİTAMİNLER : AddIdAndroid.GECİSVİTAMİNLER;
+
+
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: keywords.healthcare,
+  });
+
+    // Reklam yükle
+    useEffect(() => {
+      load();
+    }, [load]);
+
+    // Reklam kapanırsa veya izlendiyse, navigasyonu gerçekleştirin
+    useEffect(() => {
+      if (isClosed) {
+        setModalVisible(false); // Modalı kapat
+        navigation.navigate('Vitamin Bilgisi', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+       
+      }
+    }, [isClosed]);
+
+    
   
   useEffect(() => {
     console.log(route.params);
@@ -70,7 +99,13 @@ const App = ({ route }) => {
     if (selectedItem.sayfa === 'ilac') {
       navigation.navigate('Kullanım Uyarısı', { item: selectedItem }); // İlaca yönlendirme
     } else if (selectedItem.sayfa === 'besin takviyesi') {
-      navigation.navigate('Vitamin Bilgisi', { item: selectedItem }); // Takviyeye yönlendirme
+      if (isLoaded) {
+        // Reklam yüklendiyse, göster
+        console.log("reklam yüklendi");
+        show();
+      } else {
+        navigation.navigate('Vitamin Bilgisi', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+      }
     }
     setModalVisible(false); // Modalı kapat
   };
@@ -189,6 +224,8 @@ const App = ({ route }) => {
   
 
   const renderItem = ({ item }) => (
+
+    
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() => {
@@ -253,13 +290,46 @@ const App = ({ route }) => {
 
       {searchTerm && isSearching && (
         <FlatList
-          style={styles.searchResultsContainer}
-          keyboardShouldPersistTaps="always"
-          data={filteredMedicines} // data prop'u FlatList'e eklenmeli
-          keyExtractor={(item) => `${item.sayfa}_${item.id}`}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-        />
+        style={styles.searchResultsContainer}
+        keyboardShouldPersistTaps="always"
+        data={filteredMedicines} // data prop'u FlatList'e eklenmeli
+        keyExtractor={(item) => `${item.sayfa}_${item.id}`}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={
+          filteredMedicines.length < 3 && !showModalImmediately && (
+            <TouchableOpacity
+              style={styles.addNewButton}
+              onPress={() => {
+                const newItem = {
+                  id: `${searchTerm}-${Date.now()}`, // Benzersiz bir ID oluştur
+                  name: searchTerm, // Arama terimini öğe adı olarak ata
+                  sayfa: 'özel', // Yeni öğe için bir tür belirle
+                };
+                if (user.id) {
+                  navigation.navigate('Hatırlatıcı Oluştur', { name: newItem.name });
+                } else {
+                  navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
+                }
+              }}
+            >
+              <View style={styles.medicineItem}>
+
+                <View  style={styles.firstContainer}>
+                  <Text style={styles.medicineNameNew}>Yeni İlaç Ekle: {searchTerm}</Text>
+                  
+                 
+                </View>
+                  <View style={styles.medicineContent}>
+
+                  <Ionicons name="add-circle-outline" size={colors.iconHeight} color={colors.uygulamaRengi}/>
+                </View>
+                </View>
+            </TouchableOpacity>
+            
+          )
+        }
+      />
       )}
     </View>
   );

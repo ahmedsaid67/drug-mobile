@@ -8,6 +8,14 @@ import { API_ROUTES } from '../../utils/constant';
 import { colors } from '../../styles/colors';
 import { useSelector } from 'react-redux';
 
+import { useInterstitialAd, TestIds, AdEventType, BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+
+import { Platform } from 'react-native';
+import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
+
+
+
+
 // Sembolleri temizlemek için yardımcı fonksiyon
 const cleanString = (str) => {
   return str.replace(/[^\w\sğüşıöçĞÜŞİÖÇ]/g, '').trim(); // Türkçe karakterleri koruyarak sembolleri temizler
@@ -47,6 +55,28 @@ const NidSearchPage = ({ route }) => {
 
   const user = useSelector((state) => state.user);
 
+  const adUnitId =  __DEV__ ? TestIds.INTERSTITIAL : Platform.OS === 'ios' ? AddIdIos.GECİSVİTAMİNLER : AddIdAndroid.GECİSVİTAMİNLER;
+
+
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: keywords.healthcare,
+  });
+
+    // Reklam yükle
+    useEffect(() => {
+      load();
+    }, [load]);
+
+    // Reklam kapanırsa veya izlendiyse, navigasyonu gerçekleştirin
+    useEffect(() => {
+      if (isClosed) {
+        setModalVisible(false); // Modalı kapat
+        navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+       
+      }
+    }, [isClosed]);
+
   const createReminder = (item) => {
     if (user.id) {
       navigate.navigate('Hatırlatıcı Oluştur', { name: item.name });
@@ -57,8 +87,16 @@ const NidSearchPage = ({ route }) => {
   };
 
   const navigateToDoseCalculation = (item) => {
-    navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-    setModalVisible(false); // Modalı kapat
+
+    if (isLoaded) {
+      // Reklam yüklendiyse, göster
+      console.log("reklam yüklendi");
+      show();
+    } else {
+      navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+      setModalVisible(false); // Modalı kapat
+    }
+    
   };
 
   const capitalizeFirstLetter = (string) => {

@@ -106,7 +106,7 @@ const handlePasswordReset = async () => {
         <View style={styles.container}>
         <Text style={styles.title}>Yeni Şifre</Text>
             <TextInput
-            style={styles.input}
+            style={[styles.input, errors.password && styles.inputError]}
             placeholder="6 haneli kodu giriniz"
             onChangeText={(text) => {
                 setCode(text)
@@ -117,18 +117,18 @@ const handlePasswordReset = async () => {
             placeholderTextColor={colors.text}
             />
             {errors.code && <Text style={styles.errorText}>{errors.code}</Text>}
-            <View style={styles.passwordContainer}>
+            <View style={[styles.passwordContainer, errors.password && styles.inputError]}>
               <TextInput
-                style={[styles.passwordInput, errors.password && styles.inputError]}
-                placeholder="Şifre"
-                onChangeText={(text) => {
-                  setPassword(text);
-                  if (text) setErrors((prev) => ({ ...prev, password: '' }));
-                }}
-                value={password}
-                secureTextEntry={!showPassword}
-                placeholderTextColor={colors.text}
-              />
+                style={styles.passwordInput}
+                    placeholder="Şifre"
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      if (text) setErrors((prev) => ({ ...prev, password: '' }));
+                    }}
+                    value={password}
+                    secureTextEntry={!showPassword}
+                    placeholderTextColor={colors.text}
+                  />
               <TouchableOpacity
                 style={styles.eyeIcon}
                 onPress={() => setShowPassword(!showPassword)}

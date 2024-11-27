@@ -61,6 +61,11 @@ const styles = StyleSheet.create({
     color: colors.text,
     flex: 1,
   },
+  medicineNameNew: {
+    fontSize: colors.fontSizeText, // Font boyutunu artırarak daha okunabilir hale getirme
+    color: colors.text,
+    flex: 1,
+  },
   activeIngredient: {
     fontSize: 14,
     color: colors.thirdText,

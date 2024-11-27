@@ -7,6 +7,7 @@ const fontSizeText = height * 0.018
 const fontSizeTextMini = height * 0.013
 const fontSizeTextLarge = height * 0.023
 const fontSizeTextMaxi = height * 0.023
+const searchHeight = height * 0.06
 
 const buttonHeight = height * 0.065
 const inputHeight = height * 0.08
@@ -39,6 +40,7 @@ export const colors = {
     inputHeight:inputHeight,
     buttonHeight: buttonHeight,
     iconHeight:iconHeight,
+    searchHeight:searchHeight,
     loadingSize:loadingSize,
     uygulamaIkinciRengi:'#5F1DF2',
     uygulamaIkinciRengiDisabled:'#E0B0FF',

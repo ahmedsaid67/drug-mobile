@@ -104,9 +104,9 @@ const Register = () => {
         />
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
-        <View style={styles.passwordContainer}>
+        <View style={[styles.passwordContainer, errors.password && styles.inputError]}>
           <TextInput
-            style={[styles.passwordInput, errors.password && styles.inputError]}
+            style={styles.passwordInput}
             placeholder="Şifre"
             onChangeText={(text) => {
               setPassword(text);

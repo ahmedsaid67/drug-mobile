@@ -12,7 +12,7 @@ import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
 
 
 
-const NidSearchPage = ({ route }) => {
+const NidwwdPage = ({ route }) => {
   const { item } = route.params; 
   const [loading, setLoading] = useState(false); 
   const navigation = useNavigation();
@@ -33,6 +33,8 @@ const NidSearchPage = ({ route }) => {
     keywords: keywords.healthcare,
     
   });
+
+
 
 
   const closeModal = () => {
@@ -65,18 +67,9 @@ const NidSearchPage = ({ route }) => {
             <Text style={styles.buttonTextModal}>Kullanım Talimatları</Text>
           </TouchableOpacity>
 
-            <TouchableOpacity 
-            style={styles.buttonModal} 
-            onPress={() => navigateInfo("nedir")}
-          >
-            <Text style={styles.buttonTextModal}>Nedir?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.buttonModal} 
-            onPress={() => navigateInfo("ne için")}
-          >
-            <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
-          </TouchableOpacity>
+        
+          
+          
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigation.navigate('Ana Sayfa')}
@@ -89,37 +82,6 @@ const NidSearchPage = ({ route }) => {
     </Modal>
     
   );
-
-  const navigateInfo = (string) => {
-    
-  
-    // Gelen string'e göre güncellenmiş item'i oluştur
-    if (string === "nedir") {
-      const updatedItem = {
-        ...item, // Mevcut tüm verileri koru
-        newTitle: "Nedir", // Yeni bir alan ekle
-        bilgiEkstra: "Bu nedir başlığı altındaki bilgiler", // İkinci yeni alan
-      };
-  
-      // Yeni item ile 'Bilgi' ekranına git
-      setModalVisible(false); // Modal'ı kapat
-      navigation.navigate("Bilgi", { item: updatedItem });
-    } else if (string === "ne için") {
-      const updatedItem = {
-        ...item,
-        newTitle: "Ne için kullanılır?", // Yeni bir başlık
-        bilgiEkstra: "Bu kullanım amacı bilgileri", // İkinci yeni alan
-      };
-  
-      // Yeni item ile 'Bilgi' ekranına git
-      setModalVisible(false); // Modal'ı kapat
-      navigation.navigate("Bilgi", { item: updatedItem });
-    }
-  };
-  
-
-
-
 
   useEffect(() => {
     // message, doz veya bilgi alanlarını kontrol et
@@ -217,7 +179,7 @@ const NidSearchPage = ({ route }) => {
     ) : (
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.infoContainer}>
-          <Text style={styles.medText}>{capitalizeFirstLetter(item.name)}</Text>
+          <Text style={styles.medText}>{capitalizeFirstLetter(item.name)} {capitalizeFirstLetter(item.newTitle)}</Text>
           
           {item.hastaliklar && item.hastaliklar.name && (
             <Text style={styles.ingredientText}>{capitalizeFirstLetter(item.hastaliklar.name)} hastalığı için</Text>
@@ -276,31 +238,6 @@ const NidSearchPage = ({ route }) => {
             onClose={closeModal} 
           />
 
-       
-
-        {/* <View style={styles.buttonContainer2}>
-          <TouchableOpacity 
-            style={styles.instructionsButton} 
-            onPress={handlePress}
-          >
-            <Text style={styles.instructionsButtonText}>Kullanım Talimatları</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.homeButton} 
-            onPress={() => navigation.navigate('Ana Sayfa')}
-          >
-            <Text style={styles.remindersButtonText}>Ana Sayfa</Text>
-          </TouchableOpacity>
-          {!isNotRecommended && (
-            <TouchableOpacity 
-            style={isNotRecommended ? styles.remindersButtonDisable : styles.remindersButton}
-            onPress={isNotRecommended ? null : handleNavigateReminder}
-            >
-              <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity> 
-          )}
-        </View> */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Text style={styles.buttonText}>Geri</Text>
@@ -315,4 +252,4 @@ const NidSearchPage = ({ route }) => {
   );
 };
 
-export default NidSearchPage;
+export default NidwwdPage;

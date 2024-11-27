@@ -14,9 +14,10 @@ const PdfViewer = ({ route }) => {
   const [pdfPath, setPdfPath] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const bannerId =   __DEV__ || Platform.OS === 'ios'  ? TestIds.BANNER : AddIdIos.BANNERPDF1 || Platform.OS === 'android' ? TestIds.BANNER : AddIdAndroid.BANNERPDF1;
+  const bannerId = __DEV__ ? TestIds.BANNER : Platform.OS === 'ios' ? AddIdIos.BANNERPDF1 : AddIdAndroid.BANNERPDF1;
 
-  const bannerId2 = __DEV__ || Platform.OS === 'ios'  ? TestIds.BANNER : AddIdIos.BANNERPDF2 || Platform.OS === 'android' ? TestIds.BANNER : AddIdAndroid.BANNERPDF2;
+
+  const bannerId2 = __DEV__ ? TestIds.BANNER : Platform.OS === 'ios' ? AddIdIos.BANNERPDF2 : AddIdAndroid.BANNERPDF2;
 
   useEffect(() => {
     const downloadPdf = async () => {

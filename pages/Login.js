@@ -127,9 +127,9 @@ const Login = () => {
         />
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
-        <View style={styles.passwordContainer}>
+        <View style={[styles.passwordContainer, errors.password && styles.inputError]}>
           <TextInput
-            style={[styles.passwordInput, errors.password && styles.inputError]}
+            style={styles.passwordInput}
             placeholder="Şifre"
             onChangeText={(text) => {
               setPassword(text);
@@ -162,7 +162,7 @@ const Login = () => {
           </TouchableOpacity>
         )}
 
-        {mailLoading ? (
+        {/* {mailLoading ? (
           <TouchableOpacity style={styles.googleButton} disabled={true}>
             <ActivityIndicator size="small" color={colors.loadingColor} />
           </TouchableOpacity>
@@ -170,7 +170,9 @@ const Login = () => {
           <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
             <Text style={styles.buttonText}>Google ile Devam Et</Text>
           </TouchableOpacity>
-        )}
+        )} */}
+
+        
         <TouchableOpacity style={styles.registerContainer} onPress={() => navigation.navigate('Sıfırlama')}>
           <Text style={styles.forgotPasswordText}>Şifremi unuttum</Text>
         </TouchableOpacity>

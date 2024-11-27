@@ -6,7 +6,7 @@ import { API_ROUTES } from '../../utils/constant';
 import axios from 'axios';
 import { colors } from '../../styles/colors';
 import { useSelector } from 'react-redux';
-import { useInterstitialAd, TestIds, AdEventType, BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+import { TestIds,  BannerAd } from 'react-native-google-mobile-ads'
 
 import { Platform } from 'react-native';
 import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
@@ -18,30 +18,11 @@ const NidSearchPage = ({ route }) => {
   const [loading, setLoading] = useState(true); 
   const user = useSelector((state) => state.user);
 
-  const adUnitId = __DEV__ || Platform.OS === 'ios'  ? TestIds.INTERSTITIAL : AddIdIos.GECİSVİTAMİNLER|| Platform.OS === 'android' ? TestIds.INTERSTITIAL : AddIdAndroid.GECİSVİTAMİNLER;
-
-  const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
-    requestNonPersonalizedAdsOnly: true,
-    keywords: keywords.healthcare,
-  });
 
 
-  const bannerId =  __DEV__ || Platform.OS === 'ios'  ? TestIds.BANNER : AddIdIos.BANNERVİTAMİNLER|| Platform.OS === 'android' ? TestIds.BANNER : AddIdAndroid.BANNERVİTAMİNLER;
 
-  // Reklam yükle
-  useEffect(() => {
-    const showAd = () => {
-      if (isLoaded && !isClosed) { // Reklam yüklendi ve kapatılmadıysa
-        console.log("yüklendi vitamin");
-        show();
-      } else {
-        console.log("yüklenmedi vitamin");
-      }
-    };
+  const bannerId = __DEV__ ? TestIds.BANNER : Platform.OS === 'ios' ? AddIdIos.BANNERVİTAMİNLER : AddIdAndroid.BANNERVİTAMİNLER;
 
-    load();
-    showAd(); // Reklamı gösterme kontrolü
-  }, [load, isLoaded, isClosed]); // isLoaded ve isClosed bağımlılıkları eklendi
 
 
   useEffect(() => {
@@ -108,19 +89,21 @@ const NidSearchPage = ({ route }) => {
           <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.remindersButton} 
-          onPress={() => {
-            if (data.satin_al_link) {
-              // Eğer satin_al_link mevcutsa, kullanıcıyı o linke yönlendir
-              Linking.openURL(data.satin_al_link).catch(err => console.error('Link açılamadı:', err));
-            } else {
-              console.log('Satın alma bağlantısı mevcut değil.');
-            }
-          }}
-        >
-          <Text style={styles.instructionsButtonText}>Şimdi Satın Al</Text>
-        </TouchableOpacity>
+          {data.satin_al_link && (
+          <TouchableOpacity 
+            style={styles.remindersButton} 
+            onPress={() => {
+              if (data.satin_al_link) {
+                // Eğer satin_al_link mevcutsa, kullanıcıyı o linke yönlendir
+                Linking.openURL(data.satin_al_link).catch(err => console.error('Link açılamadı:', err));
+              } else {
+                console.log('Satın alma bağlantısı mevcut değil.');
+              }
+            }}
+          >
+            <Text style={styles.instructionsButtonText}>Ürüne Git</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
 

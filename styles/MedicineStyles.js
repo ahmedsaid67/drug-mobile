@@ -224,6 +224,43 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#333',
   },
+
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'flex-end', // Modal ekranın altından gelsin
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Arkayı hafif karartmak için
+  },
+  modalBackgroundSecond: {
+    flex: 1,
+    justifyContent: 'flex-end', // Modal ekranın altından gelsin
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Arkayı hafif karartmak için
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20, // Köşeleri yuvarlatmak için
+    borderTopRightRadius: 20,
+    padding: 20,
+    paddingVertical: 35,
+    minHeight: 200, // Modalın yüksekliği (ayarlanabilir)
+    width: '100%', // Tüm genişliği kapsasın
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.text,
+    marginBottom: 10,
+    textAlign: 'center', // Başlığı ortala
+  },
+  buttonModal: {
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'flex-start', // Butonu ortala
+  },
+  buttonTextModal: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   // Diğer stiller...
 });
 

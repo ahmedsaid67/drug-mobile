@@ -2,47 +2,55 @@ import React, { useState, useRef, useEffect } from 'react';
 import UserProvider from '../context/provider';
 import Router from './Router';
 import { NavigationContainer } from '@react-navigation/native';
-import { useInterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+import { AppOpenAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 import { Platform } from 'react-native';
 import { AddIdAndroid, AddIdIos, keywords } from '../utils/addId';
 
 const App = () => {
   const [currentRoute, setCurrentRoute] = useState('');
   const navigationRef = useRef();
-  const yazilimmodu = false;
 
-  const adUnitId =__DEV__ || Platform.OS === 'ios'  ? TestIds.INTERSTITIAL : AddIdIos.UYGULAMAACIKKEN|| Platform.OS === 'android' ? TestIds.INTERSTITIAL : AddIdAndroid.UYGULAMAACIKKEN;
+  const adUnitId =  __DEV__ ? TestIds.APP_OPEN : Platform.OS === 'ios' ? AddIdIos.UYGULAMAACIKKEN : AddIdAndroid.UYGULAMAACIKKEN;
 
-  const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
+  // const adUnitId =  __DEV__ ? TestIds.APP_OPEN : Platform.OS === 'ios' ? AddIdIos.UYGULAMAACIKKEN : AddIdAndroid.UYGULAMAACIKKEN;
+
+  const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: keywords.healthcare,
   });
 
-  // Reklam yükle ve göster
   useEffect(() => {
-    const loadAndShowAd = () => {
-      load(); // Reklamı yükle
-      if (isLoaded && !isClosed) { // Reklam yüklendi ve kapatılmadıysa
-        console.log("Reklam yüklendi, gösteriliyor");
-        if(!yazilimmodu){
-          show(); // Reklamı göster
-        }
-        
-      } else {
-        console.log("Reklam yüklenmedi");
+    let isInitialLoad = true;
+
+    const loadAd = async () => {
+      try {
+        await appOpenAd.load();
+        console.log('Açılış reklamı yüklendi');
+      } catch (error) {
+        console.log('Reklam yükleme hatası:', error);
       }
     };
 
-    // İlk reklamı göster
-    loadAndShowAd();
+    // İlk yüklemeyi yap
+    loadAd();
 
-    // 2 dakika (120,000 ms) aralıklarla reklam gösterme
-    const intervalId = setInterval(loadAndShowAd, 120000);
+    const unsubscribeLoaded = appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
+      // Sadece ilk yüklemede reklamı göster
+      if (isInitialLoad) {
+        appOpenAd.show();
+        isInitialLoad = false;
+      }
+    });
 
-    // Cleanup: interval temizlenmeli
-    return () => clearInterval(intervalId);
+    const unsubscribeError = appOpenAd.addAdEventListener(AdEventType.ERROR, (error) => {
+      console.log('Reklam hatası:', error);
+    });
 
-  }, [load, isLoaded, isClosed, show]); // Gerekli bağımlılıklar
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeError();
+    };
+  }, []);
 
   return (
     <UserProvider>
