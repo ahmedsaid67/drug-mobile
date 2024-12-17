@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     padding: 20,
     paddingVertical: 35,
-    minHeight: 200, // Modalın yüksekliği (ayarlanabilir)
+    minHeight: "auto", // Modalın yüksekliği (ayarlanabilir)
     width: '100%', // Tüm genişliği kapsasın
   },
   modalTitle: {

@@ -521,6 +521,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         mode="date"
                         onConfirm={handleConfirmStartDate}
                         onCancel={hideDatePicker}
+                        minimumDate={new Date()}
                     />
 
                     <DateTimePickerModal
@@ -528,6 +529,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         mode="date"
                         onConfirm={handleConfirmEndDate}
                         onCancel={hideEndDatePicker}
+                        minimumDate={new Date()}
                     />
 
                     <FormModel  formModalVisible={formModalVisible} setFormModalVisible={setFormModalVisible} setForm={setForm}/>

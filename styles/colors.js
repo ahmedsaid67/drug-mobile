@@ -21,18 +21,18 @@ const loadingSize =  height * 0.04
 
 
 export const colors = {
-    MainContainerBackground: '#f8f7fc', // White background
+    MainContainerBackground: '#F6F5FA', // White background
     mainPadingHorizantal : mainPadingHorizantal,
     mainPadingVertical : mainPadingVertical,
     loadingColor:'#fff', // loading anımasyonun rengidir, beyazdır. genelde arka planı renkli butonlarda kullanılır.
-    uygulamaRengi:'#1D64F2', // buton arka planı için, ayırt edici textler için, uyarı textler için, uyarı border rengi için kullanılır, sayfada kullanılan ayırt edici icon için.
-    uygulamaRengiDisabled:'#A3C2F8',
-    text: '#14171a', // text rengidir. genelde kullanılan text rengi budur.
+    uygulamaRengi:'#1F69FF', // buton arka planı için, ayırt edici textler için, uyarı textler için, uyarı border rengi için kullanılır, sayfada kullanılan ayırt edici icon için.
+    uygulamaRengiDisabled:'#A5C4FA',
+    text: '#121417', // text rengidir. genelde kullanılan text rengi budur.
     secondText:'#fff', // arka planı koyu olan text ler için oluşturulmuş text rengidir, beyazdır.
-    thirdText:'#657786',
-    border: '#e0d7ef', // border rengidir.
+    thirdText:'#637685',
+    border: '#E3DAF2', // border rengidir.
     icon: '#000000', // iconların rengidir, şuan için siyah rengidir.
-    deleteIcon:"#C8102E",
+    deleteIcon:"#C9102F",
     fontSizeText: fontSizeText,
     fontSizeTextMini : fontSizeTextMini,
     fontSizeTextMaxi: fontSizeTextMaxi,
@@ -42,8 +42,8 @@ export const colors = {
     iconHeight:iconHeight,
     searchHeight:searchHeight,
     loadingSize:loadingSize,
-    uygulamaIkinciRengi:'#5F1DF2',
-    uygulamaIkinciRengiDisabled:'#E0B0FF',
-    uygulamaGoogleRengi:'#F4B400',
-    uygulamaGoogleRengiDisabled:'#E0D500 ',
+    uygulamaIkinciRengi:'#601DF0',
+    uygulamaIkinciRengiDisabled:'#DDAEFC',
+    uygulamaGoogleRengi:'#F2B200',
+    uygulamaGoogleRengiDisabled:'#DED300 ',
   };

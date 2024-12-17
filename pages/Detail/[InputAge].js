@@ -32,6 +32,10 @@ const Input = ({ route }) => {
   const [calculatedYear, setCalculatedYear] = useState('');
   const [dateStep, setDateStep] = useState('Yıl'); // Adım takibi için state
 
+
+  
+  console.log(new Date());
+  
   const showDatePicker = () => {
     setDatePickerVisibility(true);
     setDateStep('Yıl'); // İlk adım olarak yılı ayarla
@@ -247,16 +251,18 @@ const Input = ({ route }) => {
         </TouchableOpacity>
       </View>
 
-        <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
+          <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          maximumDate={new Date()}
+          />
      
      
     </View>
   );
+
 };
 
 export default Input;
