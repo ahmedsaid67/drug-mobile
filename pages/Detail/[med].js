@@ -57,14 +57,15 @@ const NidSearchPage = ({ route }) => {
             >
               <Text style={styles.buttonTextModal}>Hatırlatıcı Oluştur</Text>
             </TouchableOpacity>)}
-            
-          <TouchableOpacity 
-            style={styles.buttonModal} 
-            onPress={handlePress}
-          >
-            <Text style={styles.buttonTextModal}>Kullanım Talimatları</Text>
-          </TouchableOpacity>
-
+            {item.document && (
+              <TouchableOpacity 
+                style={styles.buttonModal} 
+                onPress={handlePress}
+              >
+                <Text style={styles.buttonTextModal}>Kullanım Talimatları</Text>
+            </TouchableOpacity>
+            )}
+        {/*
             <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigateInfo("nedir")}
@@ -76,7 +77,7 @@ const NidSearchPage = ({ route }) => {
             onPress={() => navigateInfo("ne için")}
           >
             <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigation.navigate('Ana Sayfa')}
@@ -194,6 +195,7 @@ const NidSearchPage = ({ route }) => {
   }, [isClosed]);
 
   const handlePress = () => {
+    setModalVisible(false);
     if (item.document) {
       if (isLoaded) {
         // Reklam yüklendiyse, göster

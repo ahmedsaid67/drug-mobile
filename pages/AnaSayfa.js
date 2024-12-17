@@ -5,6 +5,7 @@ import styles from '../styles/HomePageStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_ROUTES } from '../utils/constant';
+import { useSelector } from 'react-redux';
 import { colors } from '../styles/colors';
 
 
@@ -17,6 +18,8 @@ const HomePage = () => {
   const [medicines,setMedicines] = useState([]);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(true); 
+  const user = useSelector((state) => state.user);
+
 
   
 
@@ -163,7 +166,16 @@ const HomePage = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.reminderButton}
-        onPress={() => navigateToScreen('Arama', { showModal: false })}>
+        onPress={() => {
+          if (user && user.id)
+          {
+           navigateToScreen('Arama', { showModal: false });
+          } 
+          else 
+          {
+            navigate.navigate('Üyelik');
+          }
+      }}>
           
             <Text style={styles.reminderText}>Hatırlatıcı Ekle</Text>
             <Ionicons name="timer-outline" size={30} color="#fff" />

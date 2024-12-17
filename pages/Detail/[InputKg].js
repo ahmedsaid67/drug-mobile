@@ -17,8 +17,13 @@ const Input = ({ route }) => {
   const hastalikId = item.hastaliklar.id;
   const navigation = useNavigation();
 
+  // Sayısal giriş kontrolü için yeni fonksiyon
+  const handleInputChange = (text) => {
+    // Sadece pozitif tam sayılara izin ver ve öndeki sıfırları kaldır
+    const sanitizedInput = text.replace(/[^0-9]/g, '').replace(/^0+/, '');
+    setInputValue(sanitizedInput);
+  };
 
-  
   const handleCalculate = async () => {
     try {
       setError(''); // Hata mesajını sıfırla
@@ -157,14 +162,15 @@ const Input = ({ route }) => {
       <View style={styles.inputRow}>
         <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen kişinin kilogram bilgisini giriniz.</Text>
         <TouchableOpacity style={styles.inputTouchable}>
-        <TextInput
-          style={styles.input}
-          placeholder="Kilogram giriniz"
-          keyboardType="numeric"
-           mode="outlined"
-          value={inputValue}
-          onChangeText={setInputValue}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Kilogram giriniz"
+            keyboardType="number-pad"
+            mode="outlined"
+            value={inputValue}
+            onChangeText={handleInputChange}
+            maxLength={3}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>

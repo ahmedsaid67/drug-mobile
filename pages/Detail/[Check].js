@@ -11,13 +11,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
-  const [inputValue, setInputValue] = useState('');
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false); 
-  const navigation = useNavigation(); // 'navigate' yerine 'navigation'
-
-  console.log(item);
-  
+  const navigation = useNavigation(); 
   const handleAccept = () => {
    
     navigation.navigate('İlaç Bilgisi',  { item: item  })
