@@ -209,9 +209,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   iconSmall:{
-    fontSize: 35,
-    color: colors.uygulamaRengi,
+    fontSize: 18,
+    color: colors.thirdText,
+    marginRight: 10,
   },
+  iconTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+},
   pickerContainer: {
     height: 200,
     width: 100,

@@ -55,34 +55,53 @@ const NidSearchPage = ({ route }) => {
             style={styles.buttonModal}
             onPress={isNotRecommended ? null : handleNavigateReminder}
             >
-              <Text style={styles.buttonTextModal}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity>)}
-            {item.document && (
-              <TouchableOpacity 
-                style={styles.buttonModal} 
-                onPress={handlePress}
-              >
-                <Text style={styles.buttonTextModal}>Kullanım Talimatları</Text>
+              <View style={styles.iconTextContainer}>
+                <Ionicons name="notifications-outline" style={styles.iconSmall}/>
+                <Text style={styles.buttonTextModal}>Hatırlatıcı Oluştur</Text>
+              </View>
             </TouchableOpacity>
-            )}
-        {/*
+          )}
+        
+         {item.document && (
             <TouchableOpacity 
+              style={styles.buttonModal} 
+              onPress={handlePress}
+            >
+              <View style={styles.iconTextContainer}>
+                <Ionicons name="document-outline" style={styles.iconSmall}/>
+                <Text style={styles.buttonTextModal}>Kullanım Talimatları</Text>
+              </View>
+            </TouchableOpacity>
+            
+            )}
+           
+            {/* <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigateInfo("nedir")}
           >
-            <Text style={styles.buttonTextModal}>Nedir?</Text>
+             <View style={styles.iconTextContainer}>
+                <Ionicons name="help-circle-outline" style={styles.iconSmall}/>
+                <Text style={styles.buttonTextModal}>Nedir?</Text>
+              </View>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigateInfo("ne için")}
           >
-            <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
-          </TouchableOpacity> */}
+            <View style={styles.iconTextContainer}>
+                <Ionicons name="information-circle-outline" style={styles.iconSmall}/>
+                <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
+              </View>
+            </TouchableOpacity> */}
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigation.navigate('Ana Sayfa')}
           >
-            <Text style={styles.buttonTextModal}>Ana Sayfa</Text>
+             <View style={styles.iconTextContainer}>
+                <Ionicons name="home-outline" style={styles.iconSmall}/>
+                
+              <Text style={styles.buttonTextModal}>Ana Sayfa</Text>
+              </View>
           </TouchableOpacity>
           
         </TouchableOpacity>
@@ -137,7 +156,9 @@ const NidSearchPage = ({ route }) => {
     ) {
       setIsNotRecommended(true); // Durum true yapıldı
       console.log(isNotRecommended);
+      
     }
+    console.log(isNotRecommended);
   }, [item]);
 
   const capitalizeFirstLetter = (string) => {
