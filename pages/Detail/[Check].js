@@ -11,7 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(true); 
   const navigation = useNavigation(); 
   const handleAccept = () => {
    
@@ -19,6 +19,13 @@ const NidSearchPage = ({ route }) => {
 
    
   };
+
+  useEffect(() => {
+      if(item){
+        
+          setLoading(false);
+      }
+    }, [item]);
 
 
   return (

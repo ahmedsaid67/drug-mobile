@@ -125,6 +125,10 @@ const styles = StyleSheet.create({
     color: colors.text,
     borderRadius: 8,
     marginBottom: 15,
+    maxHeight: '60%', // Adjust the height as needed
+  },
+  scrollView: {
+    flexGrow: 0,
   },
   adContainer: {
     justifyContent: 'center',

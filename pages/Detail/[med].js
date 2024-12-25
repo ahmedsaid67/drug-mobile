@@ -14,9 +14,9 @@ import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
 
 const NidSearchPage = ({ route }) => {
   const { item } = route.params; 
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(true); 
   const navigation = useNavigation();
-  const [isNotRecommended, setIsNotRecommended] = useState(false); // Yeni durum eklendi
+  const [isNotRecommended, setIsNotRecommended] = useState(false);
   const user = useSelector((state) => state.user);
   const [modalVisible, setModalVisible] = useState(false);
   
@@ -36,7 +36,7 @@ const NidSearchPage = ({ route }) => {
 
 
   const closeModal = () => {
-    setModalVisible(false); // Modal kapanıyor
+    setModalVisible(false); 
   };
 
 
@@ -45,7 +45,7 @@ const NidSearchPage = ({ route }) => {
       transparent={true}
       visible={visible}
       animationType="none"
-      onRequestClose={onClose} // Geri tuşuna basılınca modal kapansın
+      onRequestClose={onClose} 
     >
      <TouchableOpacity style={styles.modalBackgroundSecond} onPress={onClose} activeOpacity={1}>
         <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
@@ -74,8 +74,8 @@ const NidSearchPage = ({ route }) => {
             </TouchableOpacity>
             
             )}
-           
-            {/* <TouchableOpacity 
+            {item.nedir && (
+            <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigateInfo("nedir")}
           >
@@ -84,6 +84,8 @@ const NidSearchPage = ({ route }) => {
                 <Text style={styles.buttonTextModal}>Nedir?</Text>
               </View>
           </TouchableOpacity>
+           )}
+          {item.ne_icin_kullanilir && ( 
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigateInfo("ne için")}
@@ -92,7 +94,8 @@ const NidSearchPage = ({ route }) => {
                 <Ionicons name="information-circle-outline" style={styles.iconSmall}/>
                 <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
               </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
+            )}
           <TouchableOpacity 
             style={styles.buttonModal} 
             onPress={() => navigation.navigate('Ana Sayfa')}
@@ -215,6 +218,13 @@ const NidSearchPage = ({ route }) => {
     }
   }, [isClosed]);
 
+  useEffect(() => {
+    if(item){
+      
+        setLoading(false);
+    }
+  }, [item]);
+
   const handlePress = () => {
     setModalVisible(false);
     if (item.document) {
@@ -299,31 +309,6 @@ const NidSearchPage = ({ route }) => {
             onClose={closeModal} 
           />
 
-       
-
-        {/* <View style={styles.buttonContainer2}>
-          <TouchableOpacity 
-            style={styles.instructionsButton} 
-            onPress={handlePress}
-          >
-            <Text style={styles.instructionsButtonText}>Kullanım Talimatları</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.homeButton} 
-            onPress={() => navigation.navigate('Ana Sayfa')}
-          >
-            <Text style={styles.remindersButtonText}>Ana Sayfa</Text>
-          </TouchableOpacity>
-          {!isNotRecommended && (
-            <TouchableOpacity 
-            style={isNotRecommended ? styles.remindersButtonDisable : styles.remindersButton}
-            onPress={isNotRecommended ? null : handleNavigateReminder}
-            >
-              <Text style={styles.remindersButtonText}>Hatırlatıcı Oluştur</Text>
-            </TouchableOpacity> 
-          )}
-        </View> */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Text style={styles.buttonText}>Geri</Text>
