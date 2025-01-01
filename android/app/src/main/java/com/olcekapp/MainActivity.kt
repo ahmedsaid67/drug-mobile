@@ -1,4 +1,4 @@
-package com.drugapp
+package com.olcekapp
 
 import android.content.Intent
 import com.facebook.react.ReactActivity

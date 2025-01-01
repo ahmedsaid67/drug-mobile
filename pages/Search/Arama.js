@@ -316,7 +316,7 @@ const App = ({ route }) => {
               <View style={styles.medicineItem}>
 
                 <View  style={styles.firstContainer}>
-                  <Text style={styles.medicineNameNew}>Yeni İlaç Ekle: {searchTerm}</Text>
+                  <Text style={styles.medicineNameNew}>Yeni Ekle: {searchTerm}</Text>
                   
                  
                 </View>

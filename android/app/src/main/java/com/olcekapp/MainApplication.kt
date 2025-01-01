@@ -1,4 +1,4 @@
-package com.drugapp
+package com.olcekapp
 
 import android.app.Application
 import com.facebook.react.PackageList

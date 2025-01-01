@@ -53,29 +53,39 @@ const Input = ({ route }) => {
 
   const calculateAge = (birthDate) => {
     const today = new Date();
-    const birthYear = birthDate.getFullYear();
-    const birthMonth = birthDate.getMonth();
-    const birthDay = birthDate.getDay();
+    const birth = new Date(birthDate);
+    
+    let ageYear = today.getFullYear() - birth.getFullYear();
+    let ageMonth = today.getMonth() - birth.getMonth();
+    let ageDay = today.getDate() - birth.getDate();
 
-    let ageYear = today.getFullYear() - birthYear;
-    let ageMonth = today.getMonth() - birthMonth;
-    let ageDay = today.getDay() - birthDay;
-
+    // Adjust for negative months or days
     if (ageMonth < 0 || (ageMonth === 0 && ageDay < 0)) {
       ageYear--;
       ageMonth += 12;
     }
 
     if (ageDay < 0) {
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      ageDay += lastMonth.getDate();
       ageMonth--;
-      ageDay += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
     }
+
+    // Ensure we don't have negative values
+    ageYear = Math.max(0, ageYear);
+    ageMonth = Math.max(0, ageMonth);
+    ageDay = Math.max(0, ageDay);
 
     const totalMonths = ageYear * 12 + ageMonth;
     setCalculatedYear(ageYear);
     setCalculatedAge(totalMonths);
-    setInfoAge(`Yaşınız: ${ageYear} Yıl, ${ageMonth} Ay`);
     
+    // Only show months if less than 2 years old
+    if (ageYear < 2) {
+      setInfoAge(`Yaşınız: ${totalMonths} Ay`);
+    } else {
+      setInfoAge(`Yaşınız: ${ageYear} Yıl, ${ageMonth} Ay`);
+    }
   };
 
   const handleCalculate = async () => {

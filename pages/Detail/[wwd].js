@@ -191,9 +191,10 @@ const NidwwdPage = ({ route }) => {
     ) : (
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.infoContainer}>
-          <Text style={styles.medText}>{capitalizeFirstLetter(item.baslik)}</Text>
-          
-         
+          <Text style={styles.medText}>
+            {capitalizeFirstLetter(item.baslik.replace('nedir ve ne için kullanılır?', '').trim())} 
+            {item.newTitle === 'Nedir' ? ' nedir?' : item.newTitle === 'Ne için kullanılır?' ? ' ne için kullanılır?' : ''}
+          </Text>
         </View>
         
         <View style={styles.resultContainer}>

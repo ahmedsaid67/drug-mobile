@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:323503007313:android:00c0bf248f5164cf5a3a70",
         "android_client_info": {
-          "package_name": "com.drugapp"
+          "package_name": "com.olcekapp"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "323503007313-10rg7id42546nqlbh4mnu4lq1upapieg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.drugapp",
+            "package_name": "com.olcekapp",
             "certificate_hash": "edc391e2f60120511352dc7545068e370f879575"
           }
         },

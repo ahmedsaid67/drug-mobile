@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity,ActivityIndicator ,ScrollView} from 'react-native';
 import styles from '../../styles/SicknessStyles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -54,7 +54,7 @@ const NidSearchPage = ({ route }) => {
     <View style={styles.container}>
 
     <Text style={styles.inputLabel}>Doz hesaplamaya devam edebilmek için lütfen besin takviyesi seçiniz.</Text>
-      
+      <ScrollView showsVerticalScrollIndicator={false}>
       {/* Eğer supplement listesi boşsa mesaj göster */}
       {supplements.length === 0 ? (
         <TouchableOpacity 
@@ -75,6 +75,7 @@ const NidSearchPage = ({ route }) => {
           </TouchableOpacity>
         ))
       )}
+      </ScrollView>
     </View>
     </>
     )

@@ -39,6 +39,7 @@ const HomePage = () => {
         
         setMedicines(fetchedData);
         setProduct(fetchedDataProd);
+        console.log(fetchedDataProd);
       } catch (error) {
         // console.error('Error fetching data:', error);
         // Alert.alert('Error fetching data');
@@ -73,9 +74,9 @@ const HomePage = () => {
   const navigateToNidProd = (item) =>{
     
       const id = item.id;
-      if ([1, 4].includes(id)) {
+      if ([1, 3,5,7,8].includes(id)) {
         navigate.navigate('Takviye Seçimi', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-      } else if ([2, 3, 5, 6].includes(id)) {
+      } else if ([2,4, 6,9].includes(id)) {
         navigate.navigate('Besin Takviyeleri', { item }); // 3, 5, 6 için hastalık detayına yönlendir
       }
     
