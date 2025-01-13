@@ -54,6 +54,25 @@ const PdfViewer = ({ route }) => {
             requestOptions={{
               requestNonPersonalizedAdsOnly: true,
               keywords: keywords.healthcare,
+              // Add content filtering
+              contentRating: ['G', 'PG'],
+              // Yasaklı kategoriler
+              restrictedCategories: keywords.restrictedCategories,
+              // Ek kısıtlamalar
+              tag: 'health_wellness',
+              maxAdContentRating: 'G',
+              // Belirli ağlar veya reklam türlerini engelle
+              blockedNetworks: [
+                  'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+              ],
+              // Reklam türü kısıtlamaları
+              preventAppDownloadAds: true,
+              // Sıkı reklam inceleme ve onay
+              adReviewRequired: true,
+              // Otomatik filtreleme sistemi
+              autoAdFiltering: true,
+              // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+              blockDynamicAds: true
             }}
         />
       </View>
@@ -82,6 +101,25 @@ const PdfViewer = ({ route }) => {
                 requestOptions={{
                   requestNonPersonalizedAdsOnly: true,
                   keywords: keywords.healthcare,
+                  // Add content filtering
+                  contentRating: ['G', 'PG'],
+                  // Yasaklı kategoriler
+                  restrictedCategories: keywords.restrictedCategories,
+                  // Ek kısıtlamalar
+                  tag: 'health_wellness',
+                  maxAdContentRating: 'G',
+                  // Belirli ağlar veya reklam türlerini engelle
+                  blockedNetworks: [
+                      'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+                  ],
+                  // Reklam türü kısıtlamaları
+                  preventAppDownloadAds: true,
+                  // Sıkı reklam inceleme ve onay
+                  adReviewRequired: true,
+                  // Otomatik filtreleme sistemi
+                  autoAdFiltering: true,
+                  // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+                  blockDynamicAds: true
                 }}
             />
           </View>

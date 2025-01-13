@@ -40,6 +40,7 @@ import Check from "./Detail/[Check].js";
 import LoginPromptScreen from './LoginPromptScreen.js'
 
 import WhyDetail from "./Detail/[wwd].js";
+import WhyDetailVit from "./Products/[wwd].js";
 
 const Stack = createNativeStackNavigator();
 
@@ -238,6 +239,7 @@ const Router = ({ currentRoute }) => {
         <Stack.Screen name="Uyarı" component={Check} />
         <Stack.Screen name="Üyelik" component={LoginPromptScreen} />
         <Stack.Screen name="Bilgi" component={WhyDetail} />
+        <Stack.Screen name="Kullanım Bilgisi" component={WhyDetailVit} />
         
       </Stack.Navigator>
     </Layout>

@@ -253,6 +253,7 @@ const ReminderCreate = ({ route, navigation }) => {
                 message: 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
                 variant: 'error',
             })); 
+            console.log(error.response.data);
             
         }finally {
             setLoading(false); // İşlem tamamlandığında loading'i kapat
@@ -390,13 +391,15 @@ const ReminderCreate = ({ route, navigation }) => {
                             <Text style={styles.label}>Ölçek</Text>
                             <View style={styles.formRightContainer}>
                                 {kuvvet ? (
-                                    <Text style={styles.inputForm}>{kuvvet}</Text>
+                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.inputForm}>{kuvvet}</Text>
                                 ) : (
                                     <Text style={styles.Tree}>-</Text>
                                 )}
                                 <Ionicons name="chevron-forward-outline" size={height * 0.0225} color={colors.thirdText} />
                             </View>
                         </TouchableOpacity>
+
+                                
                         <TouchableOpacity style={styles.inputContainer} onPress={openFormModal}>
                                 <Text style={styles.label}>Form</Text>
                                 <View style={styles.formRightContainer}>
@@ -470,6 +473,7 @@ const ReminderCreate = ({ route, navigation }) => {
                                         keyboardType="numeric"
                                         value={kuvvetValue}
                                         onChangeText={setKuvvetValue}
+                                        maxLength={500}
                                     />
                                 </View>
 

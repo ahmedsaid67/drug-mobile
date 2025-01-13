@@ -81,6 +81,7 @@ const NidSearchPage = ({ route }) => {
           `${API_ROUTES.MEDICINE_FORM_NO_PAGINATIONS}${item.id}`
         );
         setDataNoPagination(noPaginationResponse.data);
+        console.log(`${API_ROUTES.MEDICINE_FORM_NO_PAGINATIONS}${item.id}`);
         
         // İlk sayfa verisini al
         await fetchPaginationData(1); // İlk sayfayı yükle

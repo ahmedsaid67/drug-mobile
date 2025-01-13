@@ -32,6 +32,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: '#6200ee', // Modern bir renk
+  },searchHintContainer: {
+    width: '80%',
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  searchHintText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#666',
   },
   searchResultsContainer: {
     flex: 1,

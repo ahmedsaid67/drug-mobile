@@ -14,6 +14,8 @@ import { AddIdAndroid, AddIdIos, keywords } from '../../utils/addId';
 
 const NidwwdPage = ({ route }) => {
   const { item } = route.params; 
+  console.log("gelen veriler")
+  console.log(item);
   const [loading, setLoading] = useState(true); 
   const navigation = useNavigation();
  
@@ -21,11 +23,19 @@ const NidwwdPage = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   
 
-
-  const bannerId = __DEV__ ? TestIds.BANNER : Platform.OS === 'ios' ? AddIdIos.BANNERWWD : AddIdAndroid.BANNERWWD;
-
+  const bannerId = __DEV__ ? TestIds.BANNER : Platform.OS === 'ios' ? AddIdIos.BANNERWWDVIT : AddIdAndroid.BANNERWWDVIT;
 
 
+
+  const removeQuotes = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/[“”"]/g, '')  // Remove all types of quotes
+      .trim()
+      .replace(/[^a-zA-Z0-9üÜğĞışİŞçÇöÖ\s]+$/, '')  // Remove special chars at end except period
+      .replace(/\.+$/, '.')  // Replace multiple periods with single
+      .replace(/[^.]\s*$/, match => match.trim() + '.'); // Add period if missing
+  };
 
 
 
@@ -44,8 +54,7 @@ const NidwwdPage = ({ route }) => {
      <TouchableOpacity style={styles.modalBackgroundSecond} onPress={onClose} activeOpacity={1}>
         <TouchableOpacity style={styles.modalContainer} activeOpacity={1}>
 
-            
-           
+
             {item.newTitle !== 'Nedir' &&  item.nedir &&(
             <TouchableOpacity 
               style={styles.buttonModal} 
@@ -65,7 +74,7 @@ const NidwwdPage = ({ route }) => {
             >
               <View style={styles.iconTextContainer}>
                 <Ionicons name="information-circle-outline" style={styles.iconSmall}/>
-                <Text style={styles.buttonTextModal}>Ne için kullanır?</Text>
+                <Text style={styles.buttonTextModal}>Ne için kullanır / Sağlık beyanı</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -91,6 +100,11 @@ const NidwwdPage = ({ route }) => {
     
   );
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
 
   const navigateInfo = (string) => {
     
@@ -105,7 +119,7 @@ const NidwwdPage = ({ route }) => {
   
       // Yeni item ile 'Bilgi' ekranına git
       setModalVisible(false); // Modal'ı kapat
-      navigation.navigate("Bilgi", { item: updatedItem });
+      navigation.navigate("Kullanım Bilgisi", { item: updatedItem });
     } else if (string === "ne için") {
       const updatedItem = {
         ...item,
@@ -115,13 +129,9 @@ const NidwwdPage = ({ route }) => {
   
       // Yeni item ile 'Bilgi' ekranına git
       setModalVisible(false); // Modal'ı kapat
-      navigation.navigate("Bilgi", { item: updatedItem });
+      navigation.navigate("Kullanım Bilgisi", { item: updatedItem });
     }
   };
-
-  
-
-   
 
 
   useEffect(() => {
@@ -143,14 +153,14 @@ const NidwwdPage = ({ route }) => {
         <View style={styles.infoContainer}>
           <Text style={styles.medText}>
             
-            {item.newTitle === 'Nedir' ? ' Nedir?' : item.newTitle === 'Ne için kullanılır?' ? 'Ne için kullanır?' : ''}
+            {item.newTitle === 'Nedir' ? ' Nedir?' : item.newTitle === 'Ne için kullanılır?' ? 'Ne için kullanır / Sağlık beyanı' : ''}
           </Text>
         </View>
         
         <View style={styles.resultContainer}>
           <ScrollView style={styles.scrollView}>
             <Text style={styles.resultText}>
-              {item.newTitle === 'Nedir' ? item.nedir : item.newTitle === 'Ne için kullanılır?' ? item.ne_icin_kullanilir : null}
+              {item.newTitle === 'Nedir' ? removeQuotes(item.nedir) : item.newTitle === 'Ne için kullanılır?' ? removeQuotes(item.ne_icin_kullanilir) : null}
             </Text>
            
           </ScrollView>
@@ -182,7 +192,6 @@ const NidwwdPage = ({ route }) => {
                   autoAdFiltering: true,
                   // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
                   blockDynamicAds: true
-
                 }}
             />
           </View>

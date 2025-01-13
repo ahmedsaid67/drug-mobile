@@ -29,6 +29,13 @@ const App = ({ route }) => {
   const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: keywords.healthcare,
+    // Add content filtering
+    contentRating: ['G', 'PG'],
+    // Restrict specific categories
+    restrictedCategories: ['gambling', 'betting', 'casino'],
+    // Additional restrictions
+    tag: 'health_wellness',
+    maxAdContentRating: 'G'
   });
 
     // Reklam yükle
@@ -77,6 +84,11 @@ const App = ({ route }) => {
   const capitalizeFirstLetter = (string) => {
     if (!string) return '';
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  const capitalizeFirstLetterFirst = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
 
@@ -246,7 +258,11 @@ const App = ({ route }) => {
       <View style={styles.medicineItem}>
 
         <View  style={styles.firstContainer}>
-          <Text style={styles.medicineName}>{capitalizeFirstLetter(item.name)}</Text>
+        <Text style={styles.medicineName}>
+          {item.sayfa === "besin takviyesi" 
+            ? capitalizeFirstLetterFirst(item.name)
+            : capitalizeFirstLetter(item.name)}
+        </Text>
           
           {item.etken_madde ? (
             <Text style={styles.activeIngredient}>{capitalizeFirstLetter(item.etken_madde)}</Text>
@@ -267,6 +283,7 @@ const App = ({ route }) => {
           style={styles.searchBox}
           placeholder="Ara..."
           value={searchTerm}
+          maxLength={150}
           onChangeText={handleSearchInput}
           onFocus={() => setIsSearching(true)}
           onSubmitEditing={handleSearchComplete}
@@ -282,8 +299,10 @@ const App = ({ route }) => {
 
       {!searchTerm && !isSearching && (
         <ScrollView>
-          <View style={styles.popularSearchesContainer}>
-            
+          <View style={styles.searchHintContainer}>
+            <Text style={styles.searchHintText}>
+              Besin takviyesi veya ilaç aramayı dene
+            </Text>
           </View>
         </ScrollView>
       )}

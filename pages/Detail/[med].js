@@ -31,6 +31,25 @@ const NidSearchPage = ({ route }) => {
     
     requestNonPersonalizedAdsOnly: true,
     keywords: keywords.healthcare,
+    // Add content filtering
+    contentRating: ['G', 'PG'],
+    // Yasaklı kategoriler
+    restrictedCategories: keywords.restrictedCategories,
+    // Ek kısıtlamalar
+    tag: 'health_wellness',
+    maxAdContentRating: 'G',
+    // Belirli ağlar veya reklam türlerini engelle
+    blockedNetworks: [
+        'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+    ],
+    // Reklam türü kısıtlamaları
+    preventAppDownloadAds: true,
+    // Sıkı reklam inceleme ve onay
+    adReviewRequired: true,
+    // Otomatik filtreleme sistemi
+    autoAdFiltering: true,
+    // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+    blockDynamicAds: true
     
   });
 
@@ -74,10 +93,13 @@ const NidSearchPage = ({ route }) => {
             </TouchableOpacity>
             
             )}
-            {item.nedir && (
+            {item.nedir && item.nedir !== "nan" && (
             <TouchableOpacity 
             style={styles.buttonModal} 
-            onPress={() => navigateInfo("nedir")}
+            onPress={() => {
+              onClose();
+              navigateInfo("nedir");
+            }}
           >
              <View style={styles.iconTextContainer}>
                 <Ionicons name="help-circle-outline" style={styles.iconSmall}/>
@@ -85,20 +107,26 @@ const NidSearchPage = ({ route }) => {
               </View>
           </TouchableOpacity>
            )}
-          {item.ne_icin_kullanilir && ( 
+          {item.ne_icin_kullanilir && item.ne_icin_kullanilir !== "nan" && ( 
           <TouchableOpacity 
             style={styles.buttonModal} 
-            onPress={() => navigateInfo("ne için")}
+            onPress={() => {
+              onClose();
+              navigateInfo("ne için");
+            }}
           >
             <View style={styles.iconTextContainer}>
                 <Ionicons name="information-circle-outline" style={styles.iconSmall}/>
-                <Text style={styles.buttonTextModal}>Ne için kullanılır</Text>
+                <Text style={styles.buttonTextModal}>Ne için kullanır?</Text>
               </View>
             </TouchableOpacity>
             )}
           <TouchableOpacity 
             style={styles.buttonModal} 
-            onPress={() => navigation.navigate('Ana Sayfa')}
+            onPress={() => {
+              onClose();
+              navigation.navigate('Ana Sayfa');
+            }}
           >
              <View style={styles.iconTextContainer}>
                 <Ionicons name="home-outline" style={styles.iconSmall}/>
@@ -176,6 +204,7 @@ const NidSearchPage = ({ route }) => {
     
       // Boş bir nesne oluştur
       setModalVisible(false);
+      
       const dataToSend = {};
       
       dataToSend.name = item.name;
@@ -199,7 +228,13 @@ const NidSearchPage = ({ route }) => {
     
 
       if (user.id) {
-        navigation.navigate('Hatırlatıcı Oluşturma', {dataToSend });
+        if(item.hassasiyet_turu.id === 7){
+          navigation.navigate('Hatırlatıcı Oluştur', { name: item.name });
+        }
+        else{
+          navigation.navigate('Hatırlatıcı Oluşturma', {dataToSend });
+        }
+        
       } else {
         navigation.navigate('Üyelik'); // Navigate to Login if user is not logged in
       }
@@ -225,19 +260,47 @@ const NidSearchPage = ({ route }) => {
     }
   }, [item]);
 
-  const handlePress = () => {
+  const handlePress = async () => {
     setModalVisible(false);
     if (item.document) {
       if (isLoaded) {
-        // Reklam yüklendiyse, göster
-        console.log("reklam yüklendi");
-        show();
+        try {
+          // Reklam bilgilerini kontrol et
+          const adInfo = await show();
+          
+          // Reklam kısıtlamalarını kontrol et
+          const isAdAppropriate = () => {
+            if (!adInfo || !adInfo.contentRating) {
+              return false;
+            }
+
+            const isValidRating = ['G', 'PG'].includes(adInfo.contentRating);
+            const isValidCategory = !['gambling', 'betting', 'casino'].some(
+              category => adInfo.categories?.includes(category)
+            );
+            const isValidNetwork = !['gambling_network_1', 'adult_network_1', 'app_download_network'].some(
+              network => adInfo.network === network
+            );
+            const isNotAppDownload = !(adInfo.type === 'app_download');
+
+            return isValidRating && isValidCategory && isValidNetwork && isNotAppDownload;
+          };
+
+          if (!isAdAppropriate()) {
+            console.log("Uygun reklam bulunamadı, direkt yönlendiriliyor");
+            navigation.navigate('Kullanım Talimatı', { documentUrl: item.document });
+          } else {
+            console.log("Uygun reklam bulundu, gösteriliyor");
+          }
+        } catch (error) {
+          console.log("Reklam gösteriminde hata:", error);
+          navigation.navigate('Kullanım Talimatı', { documentUrl: item.document });
+        }
       } else {
         // Reklam yüklenmediği durumda doğrudan navigate et
         navigation.navigate('Kullanım Talimatı', { documentUrl: item.document });
       }
     } else {
-      
       console.log('Belge bulunamadı.');
     }
   };
@@ -274,18 +337,18 @@ const NidSearchPage = ({ route }) => {
                 <>
                   {item.message && (
                     <Text style={styles.resultText}
-                    >Doz Miktarı: {item.message}{item.message.slice(-1) !== '.' ? '.' : ''}</Text>
+                    >Doz Miktarı: {item.message.trimEnd().replace(/\.+$/, '')}.</Text>
                   )}
                   {item.kullanim_sikligi && (
                     <Text style={styles.resultText}>
-                    Kullanım Sıklığı: {item.kullanim_sikligi}{item.kullanim_sikligi.slice(-1) !== '.' ? '.' : ''}
+                    Kullanım Sıklığı: {item.kullanim_sikligi.trimEnd().replace(/\.+$/, '')}.
                     </Text>
                   )}
                   {item.doz && (
-                    <Text style={styles.resultText}>{item.doz}{item.doz.slice(-1) !== '.' ? '.' : ''}</Text>
+                    <Text style={styles.resultText}>{item.doz.trimEnd().replace(/\.+$/, '')}.</Text>
                   )}
                   {item.bilgi && (
-                    <Text style={styles.resultText}>{item.bilgi}{item.bilgi.slice(-1) !== '.' ? '.' : ''}</Text>
+                    <Text style={styles.resultText}>{item.bilgi.trimEnd().replace(/\.+$/, '')}.</Text>
                   )}
                 </>
               )}
@@ -300,6 +363,25 @@ const NidSearchPage = ({ route }) => {
                 requestOptions={{
                   requestNonPersonalizedAdsOnly: true,
                   keywords: keywords.healthcare,
+                  // Add content filtering
+                  contentRating: ['G', 'PG'],
+                  // Yasaklı kategoriler
+                  restrictedCategories: keywords.restrictedCategories,
+                  // Ek kısıtlamalar
+                  tag: 'health_wellness',
+                  maxAdContentRating: 'G',
+                  // Belirli ağlar veya reklam türlerini engelle
+                  blockedNetworks: [
+                      'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+                  ],
+                  // Reklam türü kısıtlamaları
+                  preventAppDownloadAds: true,
+                  // Sıkı reklam inceleme ve onay
+                  adReviewRequired: true,
+                  // Otomatik filtreleme sistemi
+                  autoAdFiltering: true,
+                  // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+                  blockDynamicAds: true
                 }}
             />
           </View>

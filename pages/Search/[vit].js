@@ -60,7 +60,25 @@ const NidSearchPage = ({ route }) => {
 
   const { isLoaded, isClosed, load, show } = useInterstitialAd(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
-    keywords: keywords.healthcare,
+    // Add content filtering
+    contentRating: ['G', 'PG'],
+    // Yasaklı kategoriler
+    restrictedCategories: keywords.restrictedCategories,
+    // Ek kısıtlamalar
+    tag: 'health_wellness',
+    maxAdContentRating: 'G',
+    // Belirli ağlar veya reklam türlerini engelle
+    blockedNetworks: [
+        'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+    ],
+    // Reklam türü kısıtlamaları
+    preventAppDownloadAds: true,
+    // Sıkı reklam inceleme ve onay
+    adReviewRequired: true,
+    // Otomatik filtreleme sistemi
+    autoAdFiltering: true,
+    // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+    blockDynamicAds: true
   });
 
     // Reklam yükle
@@ -72,7 +90,7 @@ const NidSearchPage = ({ route }) => {
     useEffect(() => {
       if (isClosed) {
         setModalVisible(false); // Modalı kapat
-        navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
+        navigate.navigate('Vitamin Bilgisi', { item: selectedItem  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
        
       }
     }, [isClosed]);
@@ -86,23 +104,58 @@ const NidSearchPage = ({ route }) => {
     setModalVisible(false); // Modalı kapat
   };
 
-  const navigateToDoseCalculation = (item) => {
+  
 
+  const navigateToDoseCalculation = async (item) => {
     if (isLoaded) {
-      // Reklam yüklendiyse, göster
-      console.log("reklam yüklendi");
-      show();
+      try {
+        // Reklam bilgilerini kontrol et
+        const adInfo = await show();
+        
+        // Reklam kısıtlamalarını kontrol et
+        const isAdAppropriate = () => {
+          if (!adInfo || !adInfo.contentRating) {
+            return false;
+          }
+
+          const isValidRating = ['G', 'PG'].includes(adInfo.contentRating);
+          const isValidCategory = !['gambling', 'betting', 'casino'].some(
+            category => adInfo.categories?.includes(category)
+          );
+          const isValidNetwork = !['gambling_network_1', 'adult_network_1', 'app_download_network'].some(
+            network => adInfo.network === network
+          );
+          const isNotAppDownload = !(adInfo.type === 'app_download');
+
+          return isValidRating && isValidCategory && isValidNetwork && isNotAppDownload;
+        };
+
+        if (isAdAppropriate()) {
+          console.log("Uygun reklam bulundu, gösteriliyor");
+          setSelectedItem(item);
+        } else {
+          console.log("Uygun reklam bulunamadı, direkt yönlendiriliyor");
+          navigate.navigate('Vitamin Bilgisi', { item: item });
+          setModalVisible(false);
+        }
+      } catch (error) {
+        console.log("Reklam gösteriminde hata:", error);
+        navigate.navigate('Vitamin Bilgisi', { item: item });
+        setModalVisible(false);
+      }
     } else {
-      navigate.navigate('Vitamin Bilgisi', { item: item  }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-      setModalVisible(false); // Modalı kapat
+      navigate.navigate('Vitamin Bilgisi', { item: item });
+      setModalVisible(false);
     }
-    
   };
 
   const capitalizeFirstLetter = (string) => {
     if (!string) return '';
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
+  
+
 
 
   // Modalı açan fonksiyon
@@ -129,6 +182,7 @@ const NidSearchPage = ({ route }) => {
         await fetchPaginationData(1); // İlk sayfayı yükle
       } catch (error) {
         console.error('Error fetching data:', error);
+        console.log(error.response.data);
         Alert.alert('Error fetching data');
       } finally {
        
@@ -149,6 +203,7 @@ const NidSearchPage = ({ route }) => {
       
       const newData = paginationResponse.data.results;
       setDataPagination(prevData => [...prevData, ...newData]); // Yeni verileri öncekiyle birleştir
+      console.log( `${API_ROUTES.PRODUCT_CATEGORY_BY_PRODUCT}${item.id}&page=${pageNumber}`);
       setNextUrl(paginationResponse.data.next); // next varsa kaydet
     } catch (error) {
       console.error('Error fetching pagination data:', error);
@@ -256,6 +311,8 @@ const NidSearchPage = ({ route }) => {
         onNavigateToDoseCalculation={navigateToDoseCalculation} 
         onCreateReminder={createReminder} 
       />
+
+      
 
       {/* Eğer arama aktifse filtrelenmiş veriyi göster, değilse pagination verisini göster */}
       <FlatList

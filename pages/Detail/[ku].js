@@ -43,12 +43,18 @@ const UseInfo = ({ route }) => {
   
       const updatedItem = {
         ...item,        // Preserve existing item data
+        ...data,
         ...response.data // Merge new data from response
       };
-  
-      navigation.navigate('İlaç Bilgisi', { item: updatedItem });
+      
+      if (response.data.check_uyari) {
+        navigation.navigate("Uyarı", { item: updatedItem });
+      } else {
+        navigation.navigate("İlaç Bilgisi", { item: updatedItem });
+      }
     } catch (error) {
       console.error("Error fetching dosage:", error);
+      console.log(error.response.data);
     }
   };
   

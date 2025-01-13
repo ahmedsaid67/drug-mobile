@@ -56,6 +56,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        flex:1, // yeni eklendi
+        justifyContent: 'flex-end', // yeni eklendi
+
     },
     label: {
         fontSize: colors.fontSizeText,
@@ -65,7 +68,10 @@ const styles = StyleSheet.create({
     inputForm: {
         color: colors.thirdText,
         fontSize: colors.fontSizeText,
-        marginRight: height * 0.0125,
+        marginHorizontal: height * 0.0125, 
+        flex: 0, 
+        textAlign:"right"
+
     },
 
     inputContainerZaman: {

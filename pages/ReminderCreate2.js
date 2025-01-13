@@ -55,6 +55,9 @@ const ReminderCreate = ({ route, navigation }) => {
     const [alertMessageBlockedPermission, setAlertMessageBlockedPermission] = useState('');
     const [alertTitleBlockedPermission, setAlertTitleBlockedPermission] = useState('');
 
+    const MAX_KUVVET_LENGTH = 50; // Maksimum karakter uzunluğu
+
+    
     const showAlertBlockedPermission = (title, message) => {
         setAlertTitleBlockedPermission(title);
         setAlertMessageBlockedPermission(message);
@@ -350,9 +353,9 @@ const ReminderCreate = ({ route, navigation }) => {
 
                         <View style={styles.inputContainer}>
                             <Text style={styles.label}>Ölçek</Text>
-                            
-                            <Text style={styles.input} numberOfLines={1} ellipsizeMode="tail">{kuvvet}</Text>
-                              
+                            <Text style={styles.input} numberOfLines={1} ellipsizeMode="tail">
+                                {kuvvet}
+                            </Text>
                         </View>
                         <View style={styles.inputContainer} >
                                 <Text style={styles.label}>Form</Text>
@@ -408,6 +411,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         mode="date"
                         onConfirm={handleConfirmStartDate}
                         onCancel={hideDatePicker}
+                        minimumDate={new Date()}
                     />
 
                     <DateTimePickerModal
@@ -415,6 +419,7 @@ const ReminderCreate = ({ route, navigation }) => {
                         mode="date"
                         onConfirm={handleConfirmEndDate}
                         onCancel={hideEndDatePicker}
+                        minimumDate={new Date()}
                     />
 
                     

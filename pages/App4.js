@@ -17,10 +17,30 @@ const App = () => {
   const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
     requestNonPersonalizedAdsOnly: true,
     keywords: keywords.healthcare,
+    // Add content filtering
+    contentRating: ['G', 'PG'],
+    // Yasaklı kategoriler
+    restrictedCategories: keywords.restrictedCategories,
+    // Ek kısıtlamalar
+    tag: 'health_wellness',
+    maxAdContentRating: 'G',
+    // Belirli ağlar veya reklam türlerini engelle
+    blockedNetworks: [
+        'gambling_network_1', 'adult_network_1', 'app_download_network', 'alcohol_network'
+    ],
+    // Reklam türü kısıtlamaları
+    preventAppDownloadAds: true,
+    // Sıkı reklam inceleme ve onay
+    adReviewRequired: true,
+    // Otomatik filtreleme sistemi
+    autoAdFiltering: true,
+    // Dinamik/kullanıcı tarafından oluşturulan içerikleri engelle
+    blockDynamicAds: true
   });
 
   useEffect(() => {
     let isInitialLoad = true;
+    let timeoutId;
 
     const loadAd = async () => {
       try {
@@ -31,14 +51,43 @@ const App = () => {
       }
     };
 
-    // İlk yüklemeyi yap
-    loadAd();
+    // 60 saniyelik gecikme ile reklam yükleme
+    timeoutId = setTimeout(() => {
+      loadAd();
+    }, 60000);
 
-    const unsubscribeLoaded = appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
-      // Sadece ilk yüklemede reklamı göster
+    const unsubscribeLoaded = appOpenAd.addAdEventListener(AdEventType.LOADED, async () => {
       if (isInitialLoad) {
-        appOpenAd.show();
-        isInitialLoad = false;
+        try {
+          const adInfo = await appOpenAd.show();
+          
+          const isAdAppropriate = () => {
+            if (!adInfo || !adInfo.contentRating) {
+              return false;
+            }
+
+            const isValidRating = ['G', 'PG'].includes(adInfo.contentRating);
+            const isValidCategory = !['gambling', 'betting', 'casino'].some(
+              category => adInfo.categories?.includes(category)
+            );
+            const isValidNetwork = !['gambling_network_1', 'adult_network_1', 'app_download_network'].some(
+              network => adInfo.network === network
+            );
+            const isNotAppDownload = !(adInfo.type === 'app_download');
+
+            return isValidRating && isValidCategory && isValidNetwork && isNotAppDownload;
+          };
+
+          if (!isAdAppropriate()) {
+            console.log("Uygun olmayan reklam, gösterilmiyor");
+            return;
+          }
+          
+          console.log("Uygun reklam gösteriliyor");
+          isInitialLoad = false;
+        } catch (error) {
+          console.log("Reklam gösteriminde hata:", error);
+        }
       }
     });
 
@@ -47,6 +96,7 @@ const App = () => {
     });
 
     return () => {
+      clearTimeout(timeoutId);
       unsubscribeLoaded();
       unsubscribeError();
     };

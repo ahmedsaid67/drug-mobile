@@ -32,26 +32,30 @@ const HomePage = () => {
           image: item.img || 'https://via.placeholder.com/500'  // Eğer img null ise placeholder kullan
         }));
         const responseProd = await axios.get(API_ROUTES.SUPPLEMENT);
-        const fetchedDataProd = responseProd.data.map(item => ({
-          ...item,
-          image: item.img || 'https://via.placeholder.com/500'  // Eğer img null ise placeholder kullan
+        const fetchedDataProd = await Promise.all(responseProd.data.map(async item => {
+          let product_id = item.id;
+          
+          if (item.product_category_count === 1) {
+            const responseProductId = await axios.get(`${API_ROUTES.SUPPLEMENT_BY_PRODUCT_CATEGORY}${item.id}`);
+            product_id = responseProductId.data[0].id;
+          }
+          
+          return {
+            ...item,
+            image: item.img || 'https://via.placeholder.com/500',
+            product_id: product_id
+          };
         }));
         
         setMedicines(fetchedData);
         setProduct(fetchedDataProd);
-        console.log(fetchedDataProd);
       } catch (error) {
         // console.error('Error fetching data:', error);
         // Alert.alert('Error fetching data');
       }
       finally {
         
-        
           setLoading(false); 
-        
-          
-        
-       
       }
     };
 
@@ -71,16 +75,17 @@ const HomePage = () => {
     navigate.navigate('İlaçlar', { item });
   };
 
-  const navigateToNidProd = (item) =>{
-    
-      const id = item.id;
-      if ([1, 3,5,7,8].includes(id)) {
-        navigate.navigate('Takviye Seçimi', { item }); // 1, 2, 4, 7, 8 için ilaca yönlendir
-      } else if ([2,4, 6,9].includes(id)) {
-        navigate.navigate('Besin Takviyeleri', { item }); // 3, 5, 6 için hastalık detayına yönlendir
-      }
-    
-  }
+  const navigateToNidProd = (item) => {
+    if (item.product_category_count > 1) {
+      navigate.navigate('Takviye Seçimi', { item });
+    } else {
+      const updatedItem = {
+        ...item,
+        id: item.product_id
+      };
+      navigate.navigate('Besin Takviyeleri', { item: updatedItem });
+    }
+  };
 
   const renderCardProd = ({ item }) => (
    <TouchableOpacity style={styles.card} onPress={() => navigateToNidProd(item)}>
