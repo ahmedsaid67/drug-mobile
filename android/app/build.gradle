@@ -81,8 +81,8 @@ android {
         applicationId "com.olcekapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.00"
+        versionCode 3
+        versionName "1.02"
     }
     signingConfigs {
         release {

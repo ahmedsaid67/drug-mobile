@@ -1,6 +1,6 @@
 {
-  "name": "ReminderApp",
-  "displayName": "ReminderApp",
+  "name": "olcekapp",
+  "displayName": "olcekapp",
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-3360528085261998~6299532695",
     "ios_app_id": "ca-app-pub-3360528085261998~7397023768"
